@@ -1,0 +1,4 @@
+# while on dev periode and sting not having a stable schema
+# TODO remove this file from gitignore when you are ready to deploy
+/migrations
+

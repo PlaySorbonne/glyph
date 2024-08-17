@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.env
 
 # dependencies
 /node_modules
@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Auto Generated PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/fallback-*.js
