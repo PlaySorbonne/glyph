@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
 }
 
 datasource db {
@@ -14,22 +14,14 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String  @map("user_id")
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  type         String
+  providerID   String?  @map("provider_id")
+  CreationDate DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
@@ -43,16 +35,69 @@ model Session {
   @@map("sessions")
 }
 
+// table pour gérer tout de qui est interface web
+model TheGame {
+  id          Int     @id @default(1)
+  description String?
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?   @unique
+  displayName   String?
+  icon          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
-  sessions      Session[]
+  isAdmin       Boolean   @default(false)
+  score         Int       @default(0)
+
+  fraternityId Int?
+  fraternity   Fraternity? @relation(fields: [fraternityId], references: [id])
+
+  accounts Account[]
+  sessions Session[]
 
   @@map("users")
+}
+
+model Fraternity {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  score Int    @default(0)
+
+  users User[]
+}
+
+model Quest {
+  id          Int       @id @default(autoincrement())
+  title       String
+  img         String?
+  description String?
+  lore        String?
+  global      Boolean
+  points      Int       @default(1)
+  starts      DateTime?
+  ends        DateTime?
+}
+
+model hasFinished {
+  playerName String
+  questId    Int
+
+  date    DateTime? @default(now())
+  expires DateTime?
+
+  @@id([playerName, questId])
+}
+
+model PointsHistory {
+  id          Int      @id @default(autoincrement())
+  playerName  String
+  questId     Int?
+  points      Int
+  date        DateTime @default(now())
+  description String?
 }
 
 model VerificationToken {
@@ -65,5 +110,3 @@ model VerificationToken {
 }
 
 // Above is needed for NextAuth.js
-
-

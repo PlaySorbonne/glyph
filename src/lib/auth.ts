@@ -44,8 +44,8 @@ export const { auth, handlers } = NextAuth({
       },
     }),
   ],
-  /*   callbacks: {
-        async signIn({ account, profile }) {
+  callbacks: {
+    async signIn({ account, profile }) {
       if (account?.provider === "google" && profile?.verified_email === true) {
         return true;
       }
@@ -53,5 +53,5 @@ export const { auth, handlers } = NextAuth({
       // pour l'instant on connecte tout le monde, on verra après
       return true;
     },
-  }, */
+  },
 });
