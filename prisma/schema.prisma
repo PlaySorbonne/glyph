@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -16,12 +16,13 @@ datasource db {
 model Account {
   id           String   @id @default(cuid())
   userId       String   @map("user_id")
-  type         String
+  provider     String
   providerID   String?  @map("provider_id")
   CreationDate DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([provider, providerID])
   @@map("accounts")
 }
 

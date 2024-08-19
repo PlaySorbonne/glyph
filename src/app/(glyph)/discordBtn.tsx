@@ -1,4 +1,4 @@
-import { discordCallback, signIn } from "@/lib/auth";
+import { discordCallback } from "@/lib/auth/discord";
 import Link from "next/link";
 
 export default function DiscordBtn() {
