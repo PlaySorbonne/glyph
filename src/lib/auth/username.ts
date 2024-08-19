@@ -4,7 +4,24 @@ import prisma from "../db";
 
 export type nameSignInData = { name: string; type: "name" };
 
-export async function signInWithName(data: nameSignInData) {
+export async function signInWithName(data: nameSignInData): Promise<
+  | {
+      error: true;
+      msg: string;
+    }
+  | {
+      error: false;
+      name: string;
+      session: string;
+    }
+> {
+  if (!data?.name) {
+    return {
+      error: true,
+      msg: "Name is required",
+    };
+  }
+
   let [user, ..._] = await prisma.user.findMany({
     where: {
       name: data.name,
@@ -32,13 +49,17 @@ export async function signInWithName(data: nameSignInData) {
       },
     });
     return {
+      error: false,
       name: data.name,
       session: session.sessionToken,
-    }
+    };
   }
 
   if (user.accounts.length > 0) {
-    return null
+    return {
+      error: true,
+      msg: "Please use a provider to sign in",
+    };
   }
 
   let session = await prisma.session.create({
@@ -52,7 +73,8 @@ export async function signInWithName(data: nameSignInData) {
     },
   });
   return {
+    error: false,
     name: data.name,
-    session: session.sessionToken
-  }
+    session: session.sessionToken,
+  };
 }
