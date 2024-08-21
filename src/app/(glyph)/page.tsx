@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import DiscordBtn from "./discordBtn";
-import GoogleBtn from "./googleBtn";
+import DiscordBtn from "./components/discordBtn";
+import GoogleBtn from "./components/googleBtn";
 
 export default async function Home() {
 

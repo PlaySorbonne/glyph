@@ -23,17 +23,19 @@ export async function getQuest(id: string) {
 }
 
 export async function createQuest(data: QuestInput, code?: string) {
-  const validatedData = questSchema.parse(data);
-  console.log("code", code)
+  const validatedData = questSchema.safeParse(data);
+  if (!validatedData.success) {
+    console.error('Validation error:', validatedData.error);
+    throw new Error('Invalid quest data');
+  }
   let parsedCode = codeFormat.optional().safeParse(code);
-  console.log("parsedCode", parsedCode.error)
-  
   if (!parsedCode.success) {
+    console.error('Invalid code:', parsedCode.error);
     throw new Error("Invalid code");
   }
   
   const quest = await prisma.quest.create({
-    data: validatedData,
+    data: validatedData.data,
   });
 
   if (code) {

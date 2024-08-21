@@ -13,5 +13,3 @@ export async function signIn(data: signInData) {
 
   return signInWithName(data);
 }
-
-export * from "../../actions/auth";
