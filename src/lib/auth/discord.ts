@@ -88,7 +88,7 @@ export async function signInWithDiscord(data: discordSignInData): Promise<{
     if (discordInfo.verified === false || !discordInfo.email) {
       return {
         error: true,
-        msg: "Email not verified",
+        msg: "Email not verified, can't register",
       };
     }
 

@@ -80,6 +80,13 @@ export async function signInWithGoogle(data: googleSignInData): Promise<{
   });
 
   if (!account) {
+    if (!googleInfo.verified_email) {
+      return {
+        error: true,
+        msg: "Email not verified, can't register",
+      };
+    }
+
     let [user] = await prisma.user.findMany({
       where: {
         email: googleInfo.email,

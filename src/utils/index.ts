@@ -12,12 +12,12 @@ export function generateSession(id: string) {
     .join("")}`;
 }
 
-export function generateCode() {
+export function generateCode(): `${string}-${string}-${string}` {
   function getRandomElement(array: string[]) {
     return array[Math.floor(Math.random() * array.length)];
   }
   
-  const words = fs.readFileSync("src/utils/words.txt", "utf8").split("\n");
+  const words = fs.readFileSync("src/utils/words.txt", "utf8").split("\n").map(word => word.trim());
   
   return `${getRandomElement(words)}-${getRandomElement(words)}-${getRandomElement(words)}`;
 }

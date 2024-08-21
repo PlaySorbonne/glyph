@@ -1,5 +1,5 @@
 import { generateSession } from "@/utils";
-import { SESSION_TTL } from "@/utils/constants";
+import { nameFormat, SESSION_TTL } from "@/utils/constants";
 import prisma from "../db";
 
 export type nameSignInData = { name: string; type: "name" };
@@ -21,6 +21,14 @@ export async function signInWithName(data: nameSignInData): Promise<
       msg: "Name is required",
     };
   }
+  
+  if (!nameFormat.safeParse(data.name).success) {
+    return {
+      error: true,
+      msg: "Invalid name",
+    };
+  }
+
 
   let [user, ..._] = await prisma.user.findMany({
     where: {

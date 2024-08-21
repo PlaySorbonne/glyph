@@ -3,6 +3,7 @@ import { createQuest } from "@/actions/quests";
 import { questSchema, QuestInput } from "@/utils/constants";
 import { ZodError } from "zod";
 import { redirect } from "next/navigation";
+import { generateCode } from "@/utils";
 
 export default function NewQuestPage() {
   const submit = async (formData: FormData) => {
@@ -23,8 +24,10 @@ export default function NewQuestPage() {
         : null,
     };
 
+    const code = (formData.get("code") as string) || generateCode();
+
     try {
-      const newQuest = await createQuest(questData);
+      const newQuest = await createQuest(questData, code);
       redirect("/admin/quest/" + newQuest.id);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -155,6 +158,24 @@ export default function NewQuestPage() {
           id="ends"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         />
+      </div>
+
+      <div>
+        <label
+          htmlFor="code"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Quest Code (optional)
+        </label>
+        <div className="mt-1 flex rounded-md shadow-sm">
+          <input
+            type="text"
+            name="code"
+            id="code"
+            className="flex-1 rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Enter code or leave blank to auto-generate"
+          />
+        </div>
       </div>
 
       <div>

@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { Code, Quest } from "@prisma/client";
-import { questSchema, QuestInput } from "@/utils/constants";
+import { questSchema, QuestInput, codeFormat, codeSchema } from "@/utils/constants";
 import { generateCode } from "@/utils";
 
 export async function getQuests(n?: number): Promise<Quest[]> {
@@ -22,20 +22,31 @@ export async function getQuest(id: string) {
   });
 }
 
-export async function createQuest(data: QuestInput, withCode?: boolean) {
+export async function createQuest(data: QuestInput, code?: string) {
   const validatedData = questSchema.parse(data);
-
-  return await prisma.quest.create({
+  console.log("code", code)
+  let parsedCode = codeFormat.optional().safeParse(code);
+  console.log("parsedCode", parsedCode.error)
+  
+  if (!parsedCode.success) {
+    throw new Error("Invalid code");
+  }
+  
+  const quest = await prisma.quest.create({
     data: validatedData,
-    include: {
-      Code: withCode
-        ? {
-            code: generateCode(),
-            isQuest: true,
-          }
-        : undefined,
-    },
   });
+
+  if (code) {
+    await prisma.code.create({
+      data: {
+        code: code,
+        isQuest: true,
+        questId: quest.id,
+      },
+    });
+  }
+
+  return quest;
 }
 
 export async function updateQuest(id: string, data: Partial<Quest>) {
