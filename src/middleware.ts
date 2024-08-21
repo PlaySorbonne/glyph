@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
     let isAdmin;
     try {
-      const isAdminUrl = new URL(`/api/isAdmin/${encodeURIComponent(session?.value)}`, request.nextUrl.origin);
+      const isAdminUrl = new URL(`/api/isAdmin/${encodeURIComponent(session?.value)}`, process.env.MAIN_URL);
       const response = await fetch(isAdminUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
