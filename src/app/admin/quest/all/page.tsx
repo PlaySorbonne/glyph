@@ -2,6 +2,8 @@ import { getQuests } from "@/actions/quests";
 import Table from "../../components/Table";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AllQuestsPage() {
 
   return (

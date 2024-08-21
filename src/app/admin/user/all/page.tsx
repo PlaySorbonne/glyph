@@ -1,6 +1,8 @@
 import { getUsers } from "@/actions/users"
 import Table from "../../components/Table"
 
+export const dynamic = 'force-dynamic';
+
 export default async function AllUsersPage() {
     return (
         <div>

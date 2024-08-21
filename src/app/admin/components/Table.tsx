@@ -5,7 +5,7 @@ import Link from "next/link";
 type TableProps<
   T extends Record<
     string,
-    string | number | boolean | null | undefined | ((obj: T) => string)
+    string | number | boolean | null | Date | undefined | ((obj: T) => string)
   >
 > = {
   data: T[];
@@ -16,10 +16,9 @@ type TableProps<
 export default function Table<
   T extends Record<
     string,
-    string | number | boolean | null | undefined | ((obj: T) => string)
+    string | number | boolean | null | Date | undefined | ((obj: T) => string)
   >
 >({ data, columns, maxStringLength = 50 }: TableProps<T>) {
-
   if (!data || data.length === 0) {
     return <p>No data available</p>;
   }
@@ -65,16 +64,15 @@ export default function Table<
         <tr>
           {columnNames.map((columnName) => {
             if (columnName === "href") return undefined;
-            return (
-            <th key={columnName}>{columnName}</th>
-          )})}
+            return <th key={columnName}>{columnName}</th>;
+          })}
         </tr>
       </thead>
       <tbody>
         {data.map((item, index) => (
           <tr key={index}>
             {keys.map((key) => (
-                <td key={key}>{renderCell(item, key)}</td>
+              <td key={key}>{renderCell(item, key)}</td>
             ))}
           </tr>
         ))}

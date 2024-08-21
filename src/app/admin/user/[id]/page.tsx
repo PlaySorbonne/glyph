@@ -35,19 +35,13 @@ export default async function EditUserPage({ params }: { params: { id: string } 
     <form action={updateUserAction} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-        <input type="text" id="name" name="name" defaultValue={user.name} required 
+        <input type="text" id="name" name="name" defaultValue={user.name ?? undefined} required 
                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
       </div>
 
       <div>
         <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">Display Name</label>
-        <input type="text" id="displayName" name="displayName" defaultValue={user.displayName} required 
-               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-      </div>
-
-      <div>
-        <label htmlFor="icon" className="block text-sm font-medium text-gray-700">Icon URL</label>
-        <input type="url" id="icon" name="icon" defaultValue={user.icon || ''} 
+        <input type="text" id="displayName" name="displayName" defaultValue={user.displayName ?? undefined} required 
                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
       </div>
 

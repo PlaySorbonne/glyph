@@ -1,3 +1,5 @@
 import { redirect } from "next/navigation";
 
-redirect("/admin/user/all")
+export default function Page() {
+    return redirect("/admin/user/all");
+}

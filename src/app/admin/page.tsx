@@ -5,6 +5,8 @@ import { getQuests } from "@/actions/quests";
 import { getUsers } from "@/actions/users";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
   return (
     <div className="container mx-auto px-4 py-8">
