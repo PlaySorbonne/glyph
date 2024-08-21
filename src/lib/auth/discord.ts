@@ -102,6 +102,7 @@ export async function signInWithDiscord(data: discordSignInData): Promise<{
       user = await prisma.user.create({
         data: {
           email: discordInfo.email,
+          emailVerified: discordInfo.verified,
         },
       });
     }
