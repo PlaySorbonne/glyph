@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function Page() {
-    return redirect("/admin/quest/all");
+  return redirect(new URL("/admin/quest/all", process.env.MAIN_URL).toString());
 }

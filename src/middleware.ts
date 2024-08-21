@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     let session = cookies().get("session");
 
-    if (!session) return NextResponse.redirect(new URL("/", request.url));
+    if (!session) return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
 
     let isAdmin;
     try {
@@ -18,11 +18,11 @@ export async function middleware(request: NextRequest) {
       isAdmin = await response.json();
     } catch (error) {
       console.error('Error checking admin status:', error);
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
     }
 
     if (!isAdmin.isAdmin)
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
   }
 
   return NextResponse.next();

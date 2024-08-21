@@ -28,7 +28,7 @@ export default function NewQuestPage() {
 
     try {
       const newQuest = await createQuest(questData, code);
-      redirect("/admin/quest/" + newQuest.id);
+      redirect(new URL("/admin/quest/" + newQuest.id, process.env.MAIN_URL).toString());
     } catch (error) {
       if (error instanceof ZodError) {
       } else {

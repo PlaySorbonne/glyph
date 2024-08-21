@@ -2,7 +2,6 @@ import React from "react";
 import { updateQuest, getQuest } from "@/actions/quests";
 import { questSchema, QuestInput } from "@/utils/constants";
 import { ZodError } from "zod";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export default async function EditQuestPage({ params }: { params: { id: string } }) {

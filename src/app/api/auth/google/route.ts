@@ -19,5 +19,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
         : new Date(Date.now() + SESSION_TTL),
   });
 
-  return NextResponse.redirect(new URL("/", req.nextUrl));
+  return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
 }
