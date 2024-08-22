@@ -2,22 +2,28 @@ export const SESSION_TTL = -1;
 
 import { z } from "zod";
 
-export const nameFormat = z.custom<string>((val) => {
-  return (
-    typeof val === "string" &&
-    val.length > 3 &&
-    val.length < 20 && // allows string of length 4
-    /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9_-]+$/.test(val)
-  ); // regex for alphanumeric and _- (allows _- only if there is at least one alphanumeric character)
-}, {
-  message: "Le nom doit contenir entre 4 et 20 caractères alphanumériques et ne contenir que des lettres, des chiffres, des tirets et des underscores.",
-});
+export const nameFormat = z.custom<string>(
+  (val) => {
+    return (
+      typeof val === "string" &&
+      val.length > 3 &&
+      val.length < 20 && // allows string of length 4
+      /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9_-]+$/.test(val)
+    ); // regex for alphanumeric and _- (allows _- only if there is at least one alphanumeric character)
+  },
+  {
+    message:
+      "Le nom doit contenir entre 4 et 20 caractères alphanumériques et ne contenir que des lettres, des chiffres, des tirets et des underscores.",
+  }
+);
 
-export const codeFormat = z.custom((val) => {
-  return typeof val === "string" && /[a-z]-[a-z]-[a-z]/.test(val) // && val.length > 5 // SMH ça marche pas ??
-}, {
-  message: "Le code doit contenir 3 mots séparés par des tirets.",
-});
+export const codeFormat = z
+  .string()
+  .min(3)
+  .regex(/^[a-zA-Z0-9_-]+$/, {
+    message:
+      "Le code ne peut contenir que des lettres, des chiffres, des tirets et des underscores. et avoir une longueur minimale de 3 caractères.",
+  });
 
 export const codeSchema = z.union([
   z.object({

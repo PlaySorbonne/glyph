@@ -28,6 +28,7 @@ export async function createQuest(data: QuestInput, code?: string) {
     console.error('Validation error:', validatedData.error);
     throw new Error('Invalid quest data');
   }
+  console.log(`"${code}"`);
   let parsedCode = codeFormat.optional().safeParse(code);
   if (!parsedCode.success) {
     console.error('Invalid code:', parsedCode.error);
@@ -72,5 +73,28 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
       id: parseInt(id),
     },
     data: updatedData,
+  });
+}
+
+export async function getAvailableQuests(userId: number) {
+  return await prisma.quest.findMany(
+    {
+      where: {
+        starts: {
+          lte: new Date(),
+        },
+        ends: {
+          gte: new Date(),
+        },
+      },
+    }
+  )
+}
+
+export async function deleteQuest(id: string) {
+  return await prisma.quest.delete({
+    where: {
+      id: parseInt(id),
+    },
   });
 }

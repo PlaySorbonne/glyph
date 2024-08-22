@@ -60,6 +60,22 @@ export async function updateUser(id: string, data: Partial<UserInput>) {
     console.error('Validation error:', validatedData.error);
     throw new Error('Invalid user data');
   }
+  if (validatedData.data.isAdmin) {
+    let user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        accounts: true,
+      }
+    });
+    let hasProvider = user?.accounts?.length ?? 0 > 0;
+    if (!hasProvider) {
+      console.warn('User has no provider, cannot update isAdmin');
+    }
+    // let emailVerified = user?.emailVerified ?? false;
+    data.isAdmin = Boolean(hasProvider);
+  }
   return await prisma.user.update({
     where: {
       id,
@@ -96,5 +112,29 @@ export async function updateUserSelf(sessionId: string, data: Partial<UserInput>
       id: user.id,
     },
     data: validatedData.data,
+  });
+}
+
+export async function updateUserWelcomed(sessionId: string) {
+  const user = await getUserFromSession(sessionId);
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
+
+  return await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      welcomed: true,
+    },
+  });
+}
+
+export async function deleteUser(id: string) {
+  return await prisma.user.delete({
+    where: {
+      id,
+    },
   });
 }

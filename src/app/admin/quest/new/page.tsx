@@ -33,7 +33,7 @@ export default function NewQuestPage() {
       console.error("Error creating quest:", error);
       return;
     }
-    redirect(new URL("/admin/quest/" + newQuest.id, process.env.MAIN_URL).toString());
+    return redirect(new URL("/admin/quest/" + newQuest.id, process.env.MAIN_URL).toString());
   };
 
   return (

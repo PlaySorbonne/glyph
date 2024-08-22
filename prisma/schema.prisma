@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -53,6 +53,7 @@ model User {
   image         String?
   isAdmin       Boolean @default(false)
   score         Int     @default(0)
+  welcomed      Boolean @default(false)
 
   createdAt DateTime @default(now())
 
@@ -66,9 +67,10 @@ model User {
 }
 
 model Fraternity {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  score Int    @default(0)
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  score       Int     @default(0)
 
   users User[]
 }
