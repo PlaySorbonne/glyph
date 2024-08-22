@@ -18,7 +18,7 @@ export default async function WelcomePage() {
           href="/welcome/1" 
           className="block w-full bg-white text-purple-600 font-bold py-3 px-4 rounded-lg text-center transition duration-300 ease-in-out hover:bg-purple-100"
         >
-          Commencer l'aventure
+          Commencer l&aposaventure
         </Link>
       </div>
     </div>
