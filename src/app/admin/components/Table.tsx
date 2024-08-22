@@ -59,24 +59,28 @@ export default function Table<
   };
 
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          {columnNames.map((columnName) => {
-            if (columnName === "href") return undefined;
-            return <th key={columnName}>{columnName}</th>;
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            {keys.map((key) => (
-              <td key={key}>{renderCell(item, key)}</td>
-            ))}
+    <div className={styles.tableContainer}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            {columnNames.map((columnName) => {
+              if (columnName === "href") return undefined;
+              return <th key={columnName}>{columnName}</th>;
+            })}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              {keys.map((key) => (
+                <td key={key} data-label={key}>
+                  {renderCell(item, key)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

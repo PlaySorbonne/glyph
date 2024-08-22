@@ -18,14 +18,15 @@ export async function signInWithName(data: nameSignInData): Promise<
   if (!data?.name) {
     return {
       error: true,
-      msg: "Name is required",
+      msg: "Le nom est requis",
     };
   }
   
-  if (!nameFormat.safeParse(data.name).success) {
+  let parsed = nameFormat.safeParse(data.name);
+  if (!parsed.success) {
     return {
       error: true,
-      msg: "Invalid name",
+      msg: parsed.error.message,
     };
   }
 
@@ -38,6 +39,7 @@ export async function signInWithName(data: nameSignInData): Promise<
       accounts: true,
     },
   });
+  
 
   // Register
   if (!user) {
@@ -46,6 +48,7 @@ export async function signInWithName(data: nameSignInData): Promise<
         name: data.name,
       },
     });
+
     let session = await prisma.session.create({
       data: {
         userId: newUser.id,
@@ -66,7 +69,7 @@ export async function signInWithName(data: nameSignInData): Promise<
   if (user.accounts.length > 0) {
     return {
       error: true,
-      msg: "Please use a provider to sign in",
+      msg: "Le compte est lié à google ou discord, veuillez vous connecter avec l'un de ces comptes.",
     };
   }
 

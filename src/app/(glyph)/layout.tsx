@@ -16,7 +16,7 @@ async function checkAuth() {
 
   const session = await getSession();
 
-  if (!session && !pathname.endsWith("/login"))
+  if (!session && !pathname.includes("/login"))
     redirect(new URL("/login", process.env.MAIN_URL).toString());
 }
 

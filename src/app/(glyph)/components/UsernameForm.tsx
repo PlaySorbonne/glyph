@@ -1,8 +1,11 @@
 import { signIn } from "@/lib/auth";
+import { SESSION_TTL } from "@/utils/constants";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function UsernameForm() {
-  const handleSubmit = async (formData: FormData) => {
+  async function handleSubmit(formData: FormData) {
     "use server";
 
     const username = formData.get("username") as string;
@@ -12,16 +15,26 @@ export default function UsernameForm() {
     if (result.error) {
       // You might want to handle this error differently in a server component
       console.error(result.msg);
-      return { error: result.msg };
-    } else {
-      redirect(new URL("/", process.env.MAIN_URL).toString());
+      redirect(new URL(`/login?error=${result.msg}`, process.env.MAIN_URL).toString());
     }
-  };
+
+    cookies().set("session", result.session, {
+      expires:
+        SESSION_TTL === -1
+          ? new Date(2147483647000)
+          : new Date(Date.now() + SESSION_TTL),
+    });
+
+    revalidatePath(new URL("/login", process.env.MAIN_URL).toString());
+  }
 
   return (
     <form action={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="username"
+          className="block text-sm font-medium text-gray-700"
+        >
           Username
         </label>
         <input

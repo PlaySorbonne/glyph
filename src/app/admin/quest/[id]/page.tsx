@@ -3,6 +3,7 @@ import { updateQuest, getQuest } from "@/actions/quests";
 import { questSchema, QuestInput } from "@/utils/constants";
 import { ZodError } from "zod";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export default async function EditQuestPage({ params }: { params: { id: string } }) {
   const quest = await getQuest(params.id);
@@ -37,8 +38,11 @@ export default async function EditQuestPage({ params }: { params: { id: string }
       } else {
         console.error("Error updating quest:", error);
       }
-      revalidatePath("/admin/quest/" + params.id);
     }
+      revalidatePath(new URL("/admin/quest/", process.env.MAIN_URL).toString());
+      revalidatePath(new URL("/admin/quest/" + params.id, process.env.MAIN_URL).toString());
+      revalidatePath(new URL("/", process.env.MAIN_URL).toString());
+      redirect(new URL("/admin/quest/", process.env.MAIN_URL).toString());
   };
 
   return (

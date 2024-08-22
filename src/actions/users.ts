@@ -28,8 +28,8 @@ export async function getUserByName(name: string) {
   });
 }
 
-export async function getUsers(data: { n?: number; sortByPoint?: boolean }) {
-  let { n, sortByPoint } = data;
+export async function getUsers(data?: { n?: number; sortByPoint?: boolean }) {
+  let { n, sortByPoint } = data || {};
   return await prisma.user.findMany({
     take: n,
     orderBy: [
@@ -54,8 +54,8 @@ export async function createUser(data: UserInput) {
   });
 }
 
-export async function updateUser(id: string, data: UserInput) {
-  const validatedData = userSchema.safeParse(data);
+export async function updateUser(id: string, data: Partial<UserInput>) {
+  const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error('Validation error:', validatedData.error);
     throw new Error('Invalid user data');
