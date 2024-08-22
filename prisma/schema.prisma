@@ -64,6 +64,7 @@ model User {
   sessions Session[]
 
   @@map("users")
+  History History[]
 }
 
 model Fraternity {
@@ -100,10 +101,12 @@ model hasFinished {
   @@id([playerName, questId])
 }
 
-model PointsHistory {
+model History {
   id          Int      @id @default(autoincrement())
-  playerName  String
-  questId     Int?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeId      Int
+  code        Code?     @relation(fields: [codeId], references: [id], onDelete: Cascade)
   points      Int
   date        DateTime @default(now())
   description String?
@@ -124,7 +127,9 @@ model Code {
   description String?
   isQuest     Boolean   @default(false) // true si c'ça représente la fin d'une quête, faux si c'est juste des points
   questId     Int?
-  quest       Quest?    @relation(fields: [questId], references: [id])
-  points      Int?
+  quest       Quest?    @relation(fields: [questId], references: [id], onDelete: Cascade)
+  points      Int       @default(1)
   expires     DateTime?
+
+  History History[]
 }

@@ -7,7 +7,31 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
 
-  if (request.nextUrl.pathname.startsWith("/admin")) await checkAdmin();
+  if (request.nextUrl.pathname.includes("/admin")) {
+    let session = cookies().get("session");
+
+    if (!session)
+      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+
+    let isAdmin;
+    try {
+      const isAdminUrl = new URL(
+        `/api/isAdmin/${encodeURIComponent(session?.value)}`,
+        process.env.MAIN_URL
+      );
+      const response = await fetch(isAdminUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      isAdmin = await response.json();
+    } catch (error) {
+      console.error("Error checking admin status:", error);
+      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+    }
+
+    if (!isAdmin.isAdmin)
+      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+  }
 
   return NextResponse.next({
     request: {
@@ -15,30 +39,4 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   });
-}
-
-async function checkAdmin() {
-  let session = cookies().get("session");
-
-  if (!session)
-    return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
-
-  let isAdmin;
-  try {
-    const isAdminUrl = new URL(
-      `/api/isAdmin/${encodeURIComponent(session?.value)}`,
-      process.env.MAIN_URL
-    );
-    const response = await fetch(isAdminUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    isAdmin = await response.json();
-  } catch (error) {
-    console.error("Error checking admin status:", error);
-    return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
-  }
-
-  if (!isAdmin.isAdmin)
-    return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
 }

@@ -21,21 +21,17 @@ async function checkAuth() {
     redirect(new URL("/login", process.env.MAIN_URL).toString());
 
   const user = await getUserFromSession(session);
-  if (user!.name) {
-    cookies().set("name", user!.name);
-  }
 
   if (!user && !pathname.includes("/login")) {
-    alert("Something went wrong");
-    cookies().delete("session");
+    console.error("Something went wrong");
     redirect(new URL("/login", process.env.MAIN_URL).toString());
   }
 
   if (
-    (!user!.name || !user!.welcomed) &&
     !pathname.includes("/welcome") &&
     !pathname.includes("/login") &&
-    !pathname.includes("/admin")
+    !pathname.includes("/admin") &&
+    (!user!.name || !user!.welcomed)
   ) {
     redirect(new URL("/welcome", process.env.MAIN_URL).toString());
   }

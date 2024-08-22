@@ -55,6 +55,7 @@ export async function createUser(data: UserInput) {
 }
 
 export async function updateUser(id: string, data: Partial<UserInput>) {
+  console.log
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error('Validation error:', validatedData.error);

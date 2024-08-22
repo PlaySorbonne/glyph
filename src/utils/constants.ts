@@ -25,21 +25,14 @@ export const codeFormat = z
       "Le code ne peut contenir que des lettres, des chiffres, des tirets et des underscores. et avoir une longueur minimale de 3 caractères.",
   });
 
-export const codeSchema = z.union([
-  z.object({
-    code: codeFormat,
-    isQuest: z.literal(true),
-    expires: z.coerce.date().optional().nullable(),
-    questId: z.number().int().positive(),
-    description: z.string().optional().nullable(),
-  }),
-  z.object({
-    code: codeFormat,
-    isQuest: z.literal(false),
-    points: z.number().int().positive().default(1),
-    expires: z.coerce.date().optional().nullable(),
-  }),
-]);
+export const codeSchema = z.object({
+  code: codeFormat,
+  isQuest: z.boolean().default(false),
+  expires: z.coerce.date().optional().nullable(),
+  questId: z.number().int().positive(),
+  description: z.string().optional().nullable(),
+  points: z.number().int().positive().default(1),
+});
 
 export const questSchema = z
   .object({

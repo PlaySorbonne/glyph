@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import Table from "./components/Table";
 import { getQuests } from "@/actions/quests";
 import { getUsers } from "@/actions/users";
+import { getCodes } from "@/actions/code";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export default async function AdminPage({
         <p className="text-red-500 text-sm mb-4">{searchParams.error}</p>
       )}
       <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
-      <div className="">
+      <div className="space-y-8">
         <section className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Quests</h2>
           <Table
@@ -45,6 +46,20 @@ export default async function AdminPage({
             className="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
           >
             Voir tous les utilisateurs
+          </Link>
+        </section>
+        <section className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Codes</h2>
+          <Table
+            data={(await getCodes(3)).map((c) => {
+              return { ...c, href: `/admin/code/${c.id}` };
+            })}
+          />
+          <Link
+            href="/admin/code/all"
+            className="mt-4 inline-block bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Voir tous les codes
           </Link>
         </section>
       </div>

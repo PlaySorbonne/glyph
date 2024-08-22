@@ -34,6 +34,7 @@ CREATE TABLE "users" (
     "image" TEXT,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "score" INTEGER NOT NULL DEFAULT 0,
+    "welcomed" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "fraternityId" INTEGER,
     CONSTRAINT "users_fraternityId_fkey" FOREIGN KEY ("fraternityId") REFERENCES "Fraternity" ("id") ON DELETE SET NULL ON UPDATE CASCADE
@@ -43,6 +44,7 @@ CREATE TABLE "users" (
 CREATE TABLE "Fraternity" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
+    "description" TEXT,
     "score" INTEGER NOT NULL DEFAULT 0
 );
 
@@ -71,13 +73,15 @@ CREATE TABLE "hasFinished" (
 );
 
 -- CreateTable
-CREATE TABLE "PointsHistory" (
+CREATE TABLE "History" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "playerName" TEXT NOT NULL,
-    "questId" INTEGER,
+    "userId" TEXT NOT NULL,
+    "codeId" INTEGER NOT NULL,
     "points" INTEGER NOT NULL,
     "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "description" TEXT
+    "description" TEXT,
+    CONSTRAINT "History_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "History_codeId_fkey" FOREIGN KEY ("codeId") REFERENCES "Code" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -96,7 +100,7 @@ CREATE TABLE "Code" (
     "questId" INTEGER,
     "points" INTEGER,
     "expires" DATETIME,
-    CONSTRAINT "Code_questId_fkey" FOREIGN KEY ("questId") REFERENCES "Quest" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "Code_questId_fkey" FOREIGN KEY ("questId") REFERENCES "Quest" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex
