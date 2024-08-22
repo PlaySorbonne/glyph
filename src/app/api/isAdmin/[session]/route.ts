@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -19,13 +19,17 @@ export async function GET(
       user: true,
     },
   });
-  
+
   if (!session) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   // si l'utilisateur est membre de playsorbonne.fr, il est admin
-  if (session?.user.email && session.user.emailVerified && session.user.email.endsWith("@playsorbonne.fr")) {
+  if (
+    session?.user.email &&
+    session.user.emailVerified &&
+    session.user.email.endsWith("@playsorbonne.fr")
+  ) {
     await prisma.user.update({
       where: {
         id: session.user.id,
@@ -36,7 +40,7 @@ export async function GET(
     });
     session.user.isAdmin = true;
   }
-  
+
   return NextResponse.json({
     id: session.user.id,
     name: session.user.name,

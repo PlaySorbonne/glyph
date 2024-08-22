@@ -2,7 +2,12 @@
 
 import prisma from "@/lib/db";
 import { Code, Quest } from "@prisma/client";
-import { questSchema, QuestInput, codeFormat, codeSchema } from "@/utils/constants";
+import {
+  questSchema,
+  QuestInput,
+  codeFormat,
+  codeSchema,
+} from "@/utils/constants";
 import { generateCode } from "@/utils";
 
 export async function getQuests(n?: number): Promise<Quest[]> {
@@ -25,16 +30,16 @@ export async function getQuest(id: string) {
 export async function createQuest(data: QuestInput, code?: string) {
   const validatedData = questSchema.safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid quest data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid quest data");
   }
   console.log(`"${code}"`);
   let parsedCode = codeFormat.optional().safeParse(code);
   if (!parsedCode.success) {
-    console.error('Invalid code:', parsedCode.error);
+    console.error("Invalid code:", parsedCode.error);
     throw new Error("Invalid code");
   }
-  
+
   const quest = await prisma.quest.create({
     data: validatedData.data,
   });
@@ -77,18 +82,16 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
 }
 
 export async function getAvailableQuests(userId: number) {
-  return await prisma.quest.findMany(
-    {
-      where: {
-        starts: {
-          lte: new Date(),
-        },
-        ends: {
-          gte: new Date(),
-        },
+  return await prisma.quest.findMany({
+    where: {
+      starts: {
+        lte: new Date(),
       },
-    }
-  )
+      ends: {
+        gte: new Date(),
+      },
+    },
+  });
 }
 
 export async function deleteQuest(id: string) {

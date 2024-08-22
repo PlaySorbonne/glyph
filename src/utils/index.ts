@@ -17,7 +17,6 @@ export function generateCode(): `${string}-${string}-${string}` {
     return array[Math.floor(Math.random() * array.length)];
   }
 
-
   return `${getRandomElement(words)}-${getRandomElement(
     words
   )}-${getRandomElement(words)}`;

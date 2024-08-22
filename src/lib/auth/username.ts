@@ -21,7 +21,7 @@ export async function signInWithName(data: nameSignInData): Promise<
       msg: "Le nom est requis",
     };
   }
-  
+
   let parsed = nameFormat.safeParse(data.name);
   if (!parsed.success) {
     return {
@@ -29,7 +29,6 @@ export async function signInWithName(data: nameSignInData): Promise<
       msg: parsed.error.message,
     };
   }
-
 
   let [user, ..._] = await prisma.user.findMany({
     where: {
@@ -39,7 +38,6 @@ export async function signInWithName(data: nameSignInData): Promise<
       accounts: true,
     },
   });
-  
 
   // Register
   if (!user) {

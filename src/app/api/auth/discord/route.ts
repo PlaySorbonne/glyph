@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-
 import { signIn } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_TTL } from "@/utils/constants";

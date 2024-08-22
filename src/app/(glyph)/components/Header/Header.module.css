@@ -7,7 +7,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.hamburger, .account {
+.hamburger,
+.account {
   background: none;
   border: none;
   cursor: pointer;

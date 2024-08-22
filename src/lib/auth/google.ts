@@ -6,14 +6,17 @@ export const googleCallback = "/api/auth/google";
 
 export type googleSignInData = { type: "google"; code?: string | null };
 
-export async function signInWithGoogle(data: googleSignInData): Promise<{
-  error: true;
-  msg: string;
-} | {
-  error: false;
-  name: string | null;
-  session: string;
-}> {
+export async function signInWithGoogle(data: googleSignInData): Promise<
+  | {
+      error: true;
+      msg: string;
+    }
+  | {
+      error: false;
+      name: string | null;
+      session: string;
+    }
+> {
   if (!data.code) {
     return {
       error: true,
@@ -49,9 +52,12 @@ export async function signInWithGoogle(data: googleSignInData): Promise<{
     };
   }
 
-  const userInfoResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-    headers: { Authorization: `Bearer ${tokenData.access_token}` },
-  });
+  const userInfoResponse = await fetch(
+    "https://www.googleapis.com/oauth2/v2/userinfo",
+    {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    }
+  );
 
   if (!userInfoResponse.ok) {
     return {

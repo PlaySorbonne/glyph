@@ -20,9 +20,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
       )
     );
   }
-  
+
   let userId = (await getUserFromSession(session))?.id;
-  
+
   if (!userId) {
     cookies().delete("session");
     return NextResponse.redirect(
@@ -32,23 +32,17 @@ export async function GET(req: NextRequest, res: NextResponse) {
       )
     );
   }
-  
+
   let code = await getCode(codeStr);
 
   if (!code) {
     return NextResponse.redirect(
-      new URL(
-        `/login?error=${"Code invalide"}`,
-        process.env.MAIN_URL
-      )
+      new URL(`/login?error=${"Code invalide"}`, process.env.MAIN_URL)
     );
   }
 
   await userScannedCode(userId, code);
   return NextResponse.redirect(
-    new URL(
-      `/${code.questId}`,
-      process.env.MAIN_URL
-    )
+    new URL(`/${code.questId}`, process.env.MAIN_URL)
   );
 }

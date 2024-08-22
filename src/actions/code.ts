@@ -16,22 +16,22 @@ export async function addCodeToQuest(
 export async function addCode(data: { code: string } & Partial<Code>) {
   const validatedData = codeSchema.safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid code data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid code data");
   }
-  
+
   if (data.isQuest) {
     if (!data.questId) {
-      throw new Error('Quest ID is required');
+      throw new Error("Quest ID is required");
     }
     let quest = await prisma.quest.findUnique({
       where: {
         id: data.questId!,
       },
     });
-    
+
     if (!quest) {
-      throw new Error('Quest not found');
+      throw new Error("Quest not found");
     }
     data.points = quest.points || 1;
   }
@@ -66,8 +66,8 @@ export async function getCodes(n?: number) {
 export async function updateCode(id: string, data: Partial<Code>) {
   const validatedData = codeSchema.partial().safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid code data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid code data");
   }
 
   return await prisma.code.update({

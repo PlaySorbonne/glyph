@@ -24,12 +24,16 @@ export default function NewQuestCodePage({
       console.error("Error adding code to quest:", error);
       return;
     }
-    return redirect(new URL(`/admin/quest/${params.id}/code`, process.env.MAIN_URL).toString());
+    return redirect(
+      new URL(`/admin/quest/${params.id}/code`, process.env.MAIN_URL).toString()
+    );
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Ajouter un code à la quête</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">
+        Ajouter un code à la quête
+      </h1>
       <div className="bg-white shadow-md rounded-lg p-6">
         <form action={handleSubmit} className="space-y-4">
           <div>

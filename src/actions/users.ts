@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { UserInput, userSchema } from "@/utils/constants";
-import { getUserFromSession } from './auth';
+import { getUserFromSession } from "./auth";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -46,8 +46,8 @@ export async function getUsers(data?: { n?: number; sortByPoint?: boolean }) {
 export async function createUser(data: UserInput) {
   const validatedData = userSchema.safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid user data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid user data");
   }
   return await prisma.user.create({
     data: validatedData.data,
@@ -55,11 +55,11 @@ export async function createUser(data: UserInput) {
 }
 
 export async function updateUser(id: string, data: Partial<UserInput>) {
-  console.log
+  console.log;
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid user data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid user data");
   }
   if (validatedData.data.isAdmin) {
     let user = await prisma.user.findUnique({
@@ -68,11 +68,11 @@ export async function updateUser(id: string, data: Partial<UserInput>) {
       },
       include: {
         accounts: true,
-      }
+      },
     });
     let hasProvider = user?.accounts?.length ?? 0 > 0;
     if (!hasProvider) {
-      console.warn('User has no provider, cannot update isAdmin');
+      console.warn("User has no provider, cannot update isAdmin");
     }
     // let emailVerified = user?.emailVerified ?? false;
     data.isAdmin = Boolean(hasProvider);
@@ -96,16 +96,19 @@ export async function addUsername(id: string, username: string) {
   });
 }
 
-export async function updateUserSelf(sessionId: string, data: Partial<UserInput>) {
+export async function updateUserSelf(
+  sessionId: string,
+  data: Partial<UserInput>
+) {
   const user = await getUserFromSession(sessionId);
   if (!user) {
-    throw new Error('User not authenticated');
+    throw new Error("User not authenticated");
   }
 
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
-    console.error('Validation error:', validatedData.error);
-    throw new Error('Invalid user data');
+    console.error("Validation error:", validatedData.error);
+    throw new Error("Invalid user data");
   }
 
   return await prisma.user.update({
@@ -119,7 +122,7 @@ export async function updateUserSelf(sessionId: string, data: Partial<UserInput>
 export async function updateUserWelcomed(sessionId: string) {
   const user = await getUserFromSession(sessionId);
   if (!user) {
-    throw new Error('User not authenticated');
+    throw new Error("User not authenticated");
   }
 
   return await prisma.user.update({

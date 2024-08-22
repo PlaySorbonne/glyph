@@ -15,7 +15,9 @@ export default function UsernameForm() {
     if (result.error) {
       // You might want to handle this error differently in a server component
       console.error(result.msg);
-      redirect(new URL(`/login?error=${result.msg}`, process.env.MAIN_URL).toString());
+      redirect(
+        new URL(`/login?error=${result.msg}`, process.env.MAIN_URL).toString()
+      );
     }
 
     cookies().set("session", result.session, {

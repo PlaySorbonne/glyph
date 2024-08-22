@@ -62,9 +62,9 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  History  History[]
 
   @@map("users")
-  History History[]
 }
 
 model Fraternity {
@@ -106,7 +106,7 @@ model History {
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   codeId      Int
-  code        Code?     @relation(fields: [codeId], references: [id], onDelete: Cascade)
+  code        Code?    @relation(fields: [codeId], references: [id], onDelete: Cascade)
   points      Int
   date        DateTime @default(now())
   description String?

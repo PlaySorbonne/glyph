@@ -33,12 +33,16 @@ export default function NewQuestPage() {
       console.error("Error creating quest:", error);
       return;
     }
-    return redirect(new URL("/admin/quest/" + newQuest.id, process.env.MAIN_URL).toString());
+    return redirect(
+      new URL("/admin/quest/" + newQuest.id, process.env.MAIN_URL).toString()
+    );
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Créer une nouvelle quête</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">
+        Créer une nouvelle quête
+      </h1>
       <div className="bg-white shadow-md rounded-lg p-6">
         <form action={handleSubmit} className="space-y-4">
           <div>

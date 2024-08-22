@@ -9,7 +9,7 @@ export default async function EditCodePage({
   params: { id: string };
 }) {
   const code = await getCode(params.id);
-  
+
   console.log(code);
 
   if (!code) {
@@ -35,7 +35,9 @@ export default async function EditCodePage({
       console.error("Error updating code:", error);
       return;
     }
-    return redirect(new URL("/admin/code/all", process.env.MAIN_URL).toString());
+    return redirect(
+      new URL("/admin/code/all", process.env.MAIN_URL).toString()
+    );
   };
 
   const handleDelete = async () => {
@@ -46,7 +48,9 @@ export default async function EditCodePage({
       console.error("Error deleting code:", error);
       return;
     }
-    return redirect(new URL("/admin/code/all", process.env.MAIN_URL).toString());
+    return redirect(
+      new URL("/admin/code/all", process.env.MAIN_URL).toString()
+    );
   };
 
   return (
@@ -129,7 +133,9 @@ export default async function EditCodePage({
               type="datetime-local"
               name="expires"
               id="expires"
-              defaultValue={code.expires ? code.expires.toISOString().slice(0, 16) : ""}
+              defaultValue={
+                code.expires ? code.expires.toISOString().slice(0, 16) : ""
+              }
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>

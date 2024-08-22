@@ -18,10 +18,7 @@ export async function getFraternity(id: number) {
   });
 }
 
-export async function updateFraternity(
-  id: number,
-  name: string,
-) {
+export async function updateFraternity(id: number, name: string) {
   return await prisma.fraternity.update({
     where: {
       id,

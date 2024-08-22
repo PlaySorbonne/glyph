@@ -6,14 +6,17 @@ export const discordCallback = "/api/auth/discord";
 
 export type discordSignInData = { type: "discord"; code?: string | null };
 
-export async function signInWithDiscord(data: discordSignInData): Promise<{
-  error: true;
-  msg: string;
-} | {
-  error: false;
-  name: string | null;
-  session: string;
-}> {
+export async function signInWithDiscord(data: discordSignInData): Promise<
+  | {
+      error: true;
+      msg: string;
+    }
+  | {
+      error: false;
+      name: string | null;
+      session: string;
+    }
+> {
   if (!data.code) {
     return {
       error: true,

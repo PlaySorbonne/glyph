@@ -29,9 +29,9 @@ export const codeSchema = z.object({
   code: codeFormat,
   isQuest: z.boolean().default(false),
   expires: z.coerce.date().optional().nullable(),
-  questId: z.number().int().positive(),
+  questId: z.number().int().positive().optional().nullable(),
   description: z.string().optional().nullable(),
-  points: z.number().int().positive().default(1),
+  points: z.number().int().default(1),
 });
 
 export const questSchema = z
