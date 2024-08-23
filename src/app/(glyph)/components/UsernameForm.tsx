@@ -27,7 +27,7 @@ export default function UsernameForm() {
           : new Date(Date.now() + SESSION_TTL),
     });
 
-    revalidatePath(new URL("/login", process.env.MAIN_URL).toString());
+    redirect(new URL("/", process.env.MAIN_URL).toString());
   }
 
   return (

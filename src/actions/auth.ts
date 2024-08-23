@@ -29,7 +29,6 @@ export async function getUserFromSession(sessionId: string | undefined) {
   if (!sessionId) return null;
 
   let session;
-  try {
     session = await prisma.session.update({
       where: {
         sessionToken: sessionId,
@@ -41,10 +40,6 @@ export async function getUserFromSession(sessionId: string | undefined) {
         user: true,
       },
     });
-  } catch (error) {
-    console.error("Error updating session:", error);
-    return null;
-  }
 
   if (!session) {
     return null;

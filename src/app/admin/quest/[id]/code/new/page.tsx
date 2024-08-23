@@ -22,7 +22,12 @@ export default function NewQuestCodePage({
       await addCodeToQuest(params.id, codeData);
     } catch (error) {
       console.error("Error adding code to quest:", error);
-      return;
+      return redirect(
+        new URL(
+          `/admin/quest/${params.id}/code/new?error=${"Erreur lors de l'ajout du code à la quête"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     return redirect(
       new URL(`/admin/quest/${params.id}/code`, process.env.MAIN_URL).toString()

@@ -20,7 +20,12 @@ export default function NewCodePage() {
       await addCode(codeData);
     } catch (error) {
       console.error("Error adding code:", error);
-      return;
+      return redirect(
+        new URL(
+          `/admin/code/new?error=${"Erreur lors de l'ajout du code"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     return redirect(
       new URL("/admin/code/all", process.env.MAIN_URL).toString()

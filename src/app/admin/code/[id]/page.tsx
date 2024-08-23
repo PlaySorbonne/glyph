@@ -33,7 +33,12 @@ export default async function EditCodePage({
       await updateCode(params.id, codeData);
     } catch (error) {
       console.error("Error updating code:", error);
-      return;
+      return redirect(
+        new URL(
+          `/admin/code/${params.id}?error=${"Erreur lors de la mise à jour du code"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     return redirect(
       new URL("/admin/code/all", process.env.MAIN_URL).toString()
@@ -46,7 +51,12 @@ export default async function EditCodePage({
       await deleteCode(params.id);
     } catch (error) {
       console.error("Error deleting code:", error);
-      return;
+      return redirect(
+        new URL(
+          `/admin/code/${params.id}?error=${"Erreur lors de la suppression du code"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     return redirect(
       new URL("/admin/code/all", process.env.MAIN_URL).toString()

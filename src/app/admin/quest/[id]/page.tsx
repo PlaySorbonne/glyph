@@ -39,6 +39,12 @@ export default async function EditQuestPage({
       const updatedQuest = await updateQuest(params.id, questData);
     } catch (error) {
       console.error("Error updating quest:", error);
+      return redirect(
+        new URL(
+          `/admin/quest/${params.id}?error=${"Erreur lors de la mise à jour de la quête"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     revalidatePath(
       new URL("/admin/quest/all", process.env.MAIN_URL).toString()
@@ -57,6 +63,12 @@ export default async function EditQuestPage({
       await deleteQuest(params.id);
     } catch (error) {
       console.error("Error deleting quest:", error);
+      return redirect(
+        new URL(
+          `/admin/quest/${params.id}?error=${"Erreur lors de la suppression de la quête"}`,
+          process.env.MAIN_URL
+        ).toString()
+      );
     }
     revalidatePath(
       new URL("/admin/quest/all", process.env.MAIN_URL).toString()

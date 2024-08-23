@@ -26,7 +26,12 @@ export async function middleware(request: NextRequest) {
       isAdmin = await response.json();
     } catch (error) {
       console.error("Error checking admin status:", error);
-      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+      return NextResponse.redirect(
+        new URL(
+          `/?error=Error lors de la vérification de votre statut d'administrateur`,
+          process.env.MAIN_URL
+        )
+      );
     }
 
     if (!isAdmin.isAdmin)

@@ -4,7 +4,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function WelcomePage() {
-  await updateUserWelcomed((await getSession()) as string);
+  try {
+    await updateUserWelcomed((await getSession()) as string);
+  } catch (error) {
+    console.error(error);
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex flex-col justify-center items-center p-6 text-white">

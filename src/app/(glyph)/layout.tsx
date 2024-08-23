@@ -9,6 +9,7 @@ import {
 } from "@/actions/auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { updateUserWelcomed } from "@/actions/users";
 
 async function checkAuth() {
   "use server";
@@ -26,13 +27,14 @@ async function checkAuth() {
     console.error("Something went wrong");
     redirect(new URL("/login", process.env.MAIN_URL).toString());
   }
-
+  
   if (
     !pathname.includes("/welcome") &&
     !pathname.includes("/login") &&
     !pathname.includes("/admin") &&
     (!user!.name || !user!.welcomed)
   ) {
+    await updateUserWelcomed((await getSession()) as string);
     redirect(new URL("/welcome", process.env.MAIN_URL).toString());
   }
 }
@@ -44,7 +46,6 @@ export default async function GlyphLayout({
 
   return (
     <>
-      <Header title="Glyph" />
       <main className={styles.main}>{children}</main>
       <Navbar />
     </>
