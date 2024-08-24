@@ -1,8 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { UserInput, userSchema } from "@/utils/constants";
+import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
 import { getUserFromSession } from "./auth";
+import { cookies } from "next/headers";
+import { Session } from "inspector";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -54,8 +56,11 @@ export async function createUser(data: UserInput) {
   });
 }
 
-export async function updateUser(id: string, data: Partial<UserInput>) {
-  console.log;
+export async function updateUser(
+  id: string,
+  data: Partial<UserInput>,
+  setCookie: boolean = false
+) {
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
@@ -77,16 +82,31 @@ export async function updateUser(id: string, data: Partial<UserInput>) {
     // let emailVerified = user?.emailVerified ?? false;
     data.isAdmin = Boolean(hasProvider);
   }
-  return await prisma.user.update({
+  let out = await prisma.user.update({
     where: {
       id,
     },
     data: validatedData.data,
   });
+
+  if (setCookie) {
+    let ttl =
+      SESSION_TTL === -1
+        ? new Date(2147483647000)
+        : new Date(Date.now() + SESSION_TTL);
+    cookies().set("userId", out.id, {
+      expires: ttl,
+    });
+    if (out.name) {
+      cookies().set("name", out.name, {
+        expires: ttl,
+      });
+    }
+  }
 }
 
 export async function addUsername(id: string, username: string) {
-  return await prisma.user.update({
+  let out = await prisma.user.update({
     where: {
       id,
     },
@@ -94,6 +114,13 @@ export async function addUsername(id: string, username: string) {
       name: username,
     },
   });
+  cookies().set("name", out.name!, {
+    expires:
+      SESSION_TTL === -1
+        ? new Date(2147483647000)
+        : new Date(Date.now() + SESSION_TTL),
+  });
+  return out;
 }
 
 export async function updateUserSelf(
@@ -111,23 +138,49 @@ export async function updateUserSelf(
     throw new Error("Invalid user data");
   }
 
-  return await prisma.user.update({
+  let out = await prisma.user.update({
     where: {
       id: user.id,
     },
     data: validatedData.data,
   });
+
+  let ttl =
+    SESSION_TTL === -1
+      ? new Date(2147483647000)
+      : new Date(Date.now() + SESSION_TTL);
+  cookies().set("session", sessionId, {
+    expires: ttl,
+  });
+  if (out.name) {
+    cookies().set("name", out.name!, {
+      expires: ttl,
+    });
+  }
+
+  return out;
 }
 
-export async function updateUserWelcomed(sessionId: string) {
-  const user = await getUserFromSession(sessionId);
-  if (!user) {
+export async function updateUserWelcomed(
+  {userId = undefined, sessionToken = undefined }:
+    | { userId: string; sessionToken: undefined }
+    | { sessionToken: string; userId: undefined }
+) {
+  if (!userId && !sessionToken) {
+    throw new Error("Invalid session data");
+  }
+
+  if (!userId) {
+    userId = (await getUserFromSession(sessionToken))?.id;
+  }
+
+  if (!userId) {
     throw new Error("User not authenticated");
   }
 
   return await prisma.user.update({
     where: {
-      id: user.id,
+      id: userId,
     },
     data: {
       welcomed: true,

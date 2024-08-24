@@ -81,7 +81,7 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
   });
 }
 
-export async function getAvailableQuests(userId: number) {
+export async function getAvailableQuests(userId:string) {
   return await prisma.quest.findMany({
     where: {
       starts: {
@@ -89,6 +89,15 @@ export async function getAvailableQuests(userId: number) {
       },
       ends: {
         gte: new Date(),
+      },
+    },
+    include: {
+      hasFinished: {
+        where: {
+          NOT: {
+            userId: userId,
+          },
+        },
       },
     },
   });

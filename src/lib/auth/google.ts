@@ -1,6 +1,7 @@
 import { generateSession } from "@/utils";
 import prisma from "../db";
 import { SESSION_TTL } from "@/utils/constants";
+import { User } from "@prisma/client";
 
 export const googleCallback = "/api/auth/google";
 
@@ -15,8 +16,11 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
       error: false;
       name: string | null;
       session: string;
+      registered: boolean;
+      user: User;
     }
 > {
+  let registered = false;
   if (!data.code) {
     return {
       error: true,
@@ -106,6 +110,7 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
           emailVerified: googleInfo.verified_email,
         },
       });
+      registered = true;
     }
 
     account = await prisma.account.create({
@@ -138,5 +143,7 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     error: false,
     name: session.user.name,
     session: session.sessionToken,
+    registered,
+    user: session.user,
   };
 }

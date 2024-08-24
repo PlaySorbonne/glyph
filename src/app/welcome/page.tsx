@@ -5,7 +5,10 @@ import { redirect } from "next/navigation";
 
 export default async function WelcomePage() {
   try {
-    await updateUserWelcomed((await getSession()) as string);
+    await updateUserWelcomed({
+      sessionToken: (await getSession()) as string,
+      userId: undefined,
+    });
   } catch (error) {
     console.error(error);
   }

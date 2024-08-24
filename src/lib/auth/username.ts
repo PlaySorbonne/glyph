@@ -1,6 +1,7 @@
 import { generateSession } from "@/utils";
 import { nameFormat, SESSION_TTL } from "@/utils/constants";
 import prisma from "../db";
+import { User } from "@prisma/client";
 
 export type nameSignInData = { name: string; type: "name" };
 
@@ -13,8 +14,11 @@ export async function signInWithName(data: nameSignInData): Promise<
       error: false;
       name: string;
       session: string;
+      registered: boolean;
+      user: User;
     }
 > {
+  let registered = false;
   if (!data?.name) {
     return {
       error: true,
@@ -41,27 +45,15 @@ export async function signInWithName(data: nameSignInData): Promise<
 
   // Register
   if (!user) {
-    let newUser = await prisma.user.create({
+    user = await prisma.user.create({
       data: {
         name: data.name,
       },
-    });
-
-    let session = await prisma.session.create({
-      data: {
-        userId: newUser.id,
-        sessionToken: generateSession(newUser.id),
-        expires:
-          SESSION_TTL === -1
-            ? new Date(2147483647000)
-            : new Date(Date.now() + SESSION_TTL),
+      include: {
+        accounts: true,
       },
     });
-    return {
-      error: false,
-      name: data.name,
-      session: session.sessionToken,
-    };
+    registered = true;
   }
 
   if (user.accounts.length > 0) {
@@ -85,5 +77,7 @@ export async function signInWithName(data: nameSignInData): Promise<
     error: false,
     name: data.name,
     session: session.sessionToken,
+    registered,
+    user,
   };
 }

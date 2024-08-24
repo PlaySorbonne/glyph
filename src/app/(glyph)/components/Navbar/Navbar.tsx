@@ -4,6 +4,29 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
   return (
     <nav className={styles.navbar}>
+      <Link href="/" className={styles.navItem}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="24"
+          height="24"
+        >
+          <path
+            id="Shape"
+            d="M10.75,1.5A2.25,2.25,0,0,1,13,3.75v9.028h1.5V3.75A3.75,3.75,0,0,0,10.75,0H.75a.75.75,0,0,0,0,1.5C1.669,1.5,2,1.831,2,2.75v11A3.75,3.75,0,0,0,5.75,17.5h8V16h-8A2.25,2.25,0,0,1,3.5,13.75v-11A3.392,3.392,0,0,0,3.285,1.5Z"
+            transform="translate(4.25 3.25)"
+            fill="#141124"
+          />
+          <path
+            id="Shape-2"
+            data-name="Shape"
+            d="M7.765,17.5A3.294,3.294,0,0,0,10.738,16H7.754C9.307,16,10,15,10,12.749a.751.751,0,0,1,.751-.75h8a.751.751,0,0,1,.75.75v1a3.755,3.755,0,0,1-3.75,3.75ZM10.738,16H15.75A2.253,2.253,0,0,0,18,13.749V13.5H11.472A5.4,5.4,0,0,1,10.738,16ZM7,16.75A.72.72,0,0,1,7.749,16h0v1.5A.719.719,0,0,1,7,16.75ZM.75,5.5A.751.751,0,0,1,0,4.75v-2a2.75,2.75,0,1,1,5.5,0v2a.751.751,0,0,1-.75.75ZM1.5,2.75V4H4V2.75a1.25,1.25,0,1,0-2.5,0Z"
+            transform="translate(2.25 3.25)"
+            fill="#141124"
+          />
+        </svg>
+      </Link>
       <Link href="/score" className={styles.navItem}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +39,7 @@ export default function Navbar() {
         </svg>
         {/* <span>Trophy</span> */}
       </Link>
-      <Link href="/book" className={styles.navItem}>
+      <Link href="/history" className={styles.navItem}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -39,18 +62,6 @@ export default function Navbar() {
           <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
         </svg>
         {/* <span>Map</span> */}
-      </Link>
-      <Link href="/lock" className={styles.navItem}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          width="24"
-          height="24"
-        >
-          <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zM7 9h2v2H7zm8 0h2v2h-2zm-4 0h2v2h-2z" />
-        </svg>
-        <span>Lock</span>
       </Link>
       <Link href="/account" className={styles.navItem}>
         <svg

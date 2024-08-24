@@ -1,7 +1,7 @@
 import { getSession } from "@/actions/auth";
-import DiscordBtn from "../components/discordBtn";
-import GoogleBtn from "../components/googleBtn";
-import UsernameForm from "../components/UsernameForm";
+import DiscordBtn from "./components/discordBtn";
+import GoogleBtn from "./components/googleBtn";
+import UsernameForm from "./components/UsernameForm";
 import { redirect } from "next/navigation";
 
 export default async function Login({

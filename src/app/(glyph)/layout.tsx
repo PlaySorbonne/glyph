@@ -34,7 +34,7 @@ async function checkAuth() {
     !pathname.includes("/admin") &&
     (!user!.name || !user!.welcomed)
   ) {
-    await updateUserWelcomed((await getSession()) as string);
+    await updateUserWelcomed({userId: user!.id, sessionToken: undefined});
     redirect(new URL("/welcome", process.env.MAIN_URL).toString());
   }
 }

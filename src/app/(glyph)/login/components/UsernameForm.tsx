@@ -1,3 +1,4 @@
+import { updateUserWelcomed } from "@/actions/users";
 import { signIn } from "@/lib/auth";
 import { SESSION_TTL } from "@/utils/constants";
 import { revalidatePath } from "next/cache";
@@ -27,7 +28,15 @@ export default function UsernameForm() {
           : new Date(Date.now() + SESSION_TTL),
     });
 
-    redirect(new URL("/", process.env.MAIN_URL).toString());
+    if (result.registered) {
+      await updateUserWelcomed({
+        userId: result.user.id,
+        sessionToken: undefined,
+      });
+      redirect(new URL("/welcome", process.env.MAIN_URL).toString());
+    } else {
+      redirect(new URL("/", process.env.MAIN_URL).toString());
+    }
   }
 
   return (

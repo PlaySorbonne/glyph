@@ -1,6 +1,7 @@
 import { generateSession } from "@/utils";
 import prisma from "../db";
 import { SESSION_TTL } from "@/utils/constants";
+import { User } from "@prisma/client";
 
 export const discordCallback = "/api/auth/discord";
 
@@ -15,8 +16,11 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
       error: false;
       name: string | null;
       session: string;
+      registered: boolean;
+      user: User;
     }
 > {
+  let registered = false;
   if (!data.code) {
     return {
       error: true,
@@ -120,6 +124,7 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
         user: true,
       },
     });
+    let registered = true;
   }
 
   let session = await prisma.session.create({
@@ -140,5 +145,7 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
     error: false,
     name: session.user.name,
     session: session.sessionToken,
+    registered,
+    user: session.user,
   };
 }

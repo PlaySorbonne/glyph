@@ -1,15 +1,53 @@
 import { discordSignInData, signInWithDiscord } from "./discord";
 import { nameSignInData, signInWithName } from "./username";
 import { googleSignInData, signInWithGoogle } from "./google";
+import { cookies } from "next/headers";
+import { SESSION_TTL } from "@/utils/constants";
+import { User } from "@prisma/client";
 
 type signInData = nameSignInData | discordSignInData | googleSignInData;
 
-export async function signIn(data: signInData) {
+export async function signIn(data: signInData): Promise<
+  | {
+      error: true;
+      msg: string;
+    }
+  | {
+      error: false;
+      session: string;
+      name?: string | null;
+      registered: boolean;
+      user: User;
+    }
+> {
+  let out;
   if (data.type === "discord") {
-    return signInWithDiscord(data);
+    out = await signInWithDiscord(data);
   } else if (data.type === "google") {
-    return signInWithGoogle(data);
+    out = await signInWithGoogle(data);
+  } else if (data.type === "name") {
+    out = await signInWithName(data);
+  } else {
+    return {
+      error: true,
+      msg: "Invalid sign in type",
+    };
   }
 
-  return signInWithName(data);
+  if (!out?.error) {
+    let ttl =
+      SESSION_TTL === -1
+        ? new Date(2147483647000)
+        : new Date(Date.now() + SESSION_TTL);
+    cookies().set("session", out.session, {
+      expires: ttl,
+    });
+    if (out.name) {
+      cookies().set("name", out.name, {
+        expires: ttl,
+      });
+    }
+  }
+
+  return out;
 }
