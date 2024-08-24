@@ -5,6 +5,7 @@ import { getQuests } from "@/actions/quests";
 import { getUsers } from "@/actions/users";
 import { getCodes } from "@/actions/code";
 import Link from "next/link";
+import { getFraternitysWithMembersCount } from "@/actions/fraternity";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,26 @@ export default async function AdminPage({
             className="mt-4 inline-block bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
           >
             Voir tous les codes
+          </Link>
+        </section>
+        <section className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Fraternities</h2>
+          <Table
+            data={(await getFraternitysWithMembersCount())
+              .slice(0, 3)
+              .map((f) => {
+                return {
+                  ...f,
+                  href: `/admin/fraternity/${f.id}`,
+                  _count: f._count.users,
+                };
+              })}
+          />
+          <Link
+            href="/admin/fraternity/all"
+            className="mt-4 inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Voir toutes les fraternités
           </Link>
         </section>
       </div>

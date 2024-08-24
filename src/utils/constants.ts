@@ -31,7 +31,7 @@ export const codeSchema = z.object({
   expires: z.coerce.date().optional().nullable(),
   questId: z.number().int().positive().optional().nullable(),
   description: z.string().optional().nullable(),
-  points: z.number().int().default(1),
+  points: z.number().int().default(1).optional().nullable(),
 });
 
 export const questSchema = z
@@ -68,3 +68,8 @@ export const userSchema = z.object({
 });
 
 export type UserInput = z.infer<typeof userSchema>;
+
+export const fraternitySchema = z.object({
+  name: z.string().min(1),
+  description: z.string().optional().nullable(),
+});

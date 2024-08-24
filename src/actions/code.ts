@@ -36,15 +36,26 @@ export async function addCode(data: { code: string } & Partial<Code>) {
     data.points = quest.points || 1;
   }
 
+  if (!data.points) {
+    throw new Error("Points are required");
+  }
+
   return await prisma.code.create({
     data,
   });
 }
 
-export async function getCode(id: string) {
+export async function getCode(code: string) {
   return await prisma.code.findUnique({
     where: {
-      id: parseInt(id),
+      code,
+    },
+  });
+}
+export async function getCodeById(id: number) {
+  return await prisma.code.findUnique({
+    where: {
+      id,
     },
   });
 }
@@ -63,25 +74,45 @@ export async function getCodes(n?: number) {
   });
 }
 
-export async function updateCode(id: string, data: Partial<Code>) {
+export async function updateCode(id: number, data: Partial<Code>) {
   const validatedData = codeSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
     throw new Error("Invalid code data");
   }
 
+  if (data.isQuest) {
+    if (!data.questId) {
+      throw new Error("Quest ID is required");
+    }
+    let quest = await prisma.quest.findUnique({
+      where: {
+        id: data.questId!,
+      },
+    });
+
+    if (!quest) {
+      throw new Error("Quest not found");
+    }
+    data.points = quest.points || 1;
+  }
+
+  if (!data.points) {
+    throw new Error("Points are required");
+  }
+
   return await prisma.code.update({
     where: {
-      id: parseInt(id),
+      id,
     },
-    data: validatedData.data,
+    data,
   });
 }
 
-export async function deleteCode(id: string) {
+export async function deleteCode(id: number) {
   return await prisma.code.delete({
     where: {
-      id: parseInt(id),
+      id,
     },
   });
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { getCode, updateCode, deleteCode } from "@/actions/code";
+import { getCode, updateCode, deleteCode, getCodeById } from "@/actions/code";
 import { redirect } from "next/navigation";
 import { codeFormat } from "@/utils/constants";
 
@@ -8,7 +8,7 @@ export default async function EditCodePage({
 }: {
   params: { id: string };
 }) {
-  const code = await getCode(params.id);
+  const code = await getCodeById(parseInt(params.id));
 
   console.log(code);
 
@@ -22,20 +22,25 @@ export default async function EditCodePage({
     const codeData = {
       code: formData.get("code") as string,
       description: (formData.get("description") as string) || null,
-      isQuest: formData.get("isQuest") === "on",
+      isQuest: formData.get("questId") != null,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
         ? new Date(formData.get("expires") as string)
         : null,
+      questId: formData.get("questId")
+        ? parseInt(formData.get("questId") as string)
+        : null,
     };
 
     try {
-      await updateCode(params.id, codeData);
+      await updateCode(parseInt(params.id), codeData);
     } catch (error) {
       console.error("Error updating code:", error);
       return redirect(
         new URL(
-          `/admin/code/${params.id}?error=${"Erreur lors de la mise à jour du code"}`,
+          `/admin/code/${
+            params.id
+          }?error=${"Erreur lors de la mise à jour du code"}`,
           process.env.MAIN_URL
         ).toString()
       );
@@ -48,12 +53,14 @@ export default async function EditCodePage({
   const handleDelete = async () => {
     "use server";
     try {
-      await deleteCode(params.id);
+      await deleteCode(parseInt(params.id));
     } catch (error) {
       console.error("Error deleting code:", error);
       return redirect(
         new URL(
-          `/admin/code/${params.id}?error=${"Erreur lors de la suppression du code"}`,
+          `/admin/code/${
+            params.id
+          }?error=${"Erreur lors de la suppression du code"}`,
           process.env.MAIN_URL
         ).toString()
       );
@@ -102,24 +109,11 @@ export default async function EditCodePage({
           </div>
 
           <div>
-            <label htmlFor="isQuest" className="flex items-center">
-              <input
-                type="checkbox"
-                name="isQuest"
-                id="isQuest"
-                defaultChecked={code.isQuest}
-                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              <span className="ml-2 text-sm text-gray-700">Is Quest Code</span>
-            </label>
-          </div>
-
-          <div>
             <label
               htmlFor="points"
               className="block text-sm font-medium text-gray-700"
             >
-              Points
+              Points (laisser prérempli si c'est un code à quêtes)
             </label>
             <input
               required
@@ -146,6 +140,23 @@ export default async function EditCodePage({
               defaultValue={
                 code.expires ? code.expires.toISOString().slice(0, 16) : ""
               }
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="questId"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Quest ID (laisser vide si c'est un code à points)
+            </label>
+            <input
+              type="number"
+              name="questId"
+              id="questId"
+              min={1}
+              defaultValue={code.questId || ""}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>

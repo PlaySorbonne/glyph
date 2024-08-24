@@ -5,6 +5,7 @@ import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
 import { getUserFromSession } from "./auth";
 import { cookies } from "next/headers";
 import { Session } from "inspector";
+import { isFraternityFull } from "./fraternity";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -161,11 +162,12 @@ export async function updateUserSelf(
   return out;
 }
 
-export async function updateUserWelcomed(
-  {userId = undefined, sessionToken = undefined }:
-    | { userId: string; sessionToken: undefined }
-    | { sessionToken: string; userId: undefined }
-) {
+export async function updateUserWelcomed({
+  userId = undefined,
+  sessionToken = undefined,
+}:
+  | { userId: string; sessionToken: undefined }
+  | { sessionToken: string; userId: undefined }) {
   if (!userId && !sessionToken) {
     throw new Error("Invalid session data");
   }
@@ -192,6 +194,24 @@ export async function deleteUser(id: string) {
   return await prisma.user.delete({
     where: {
       id,
+    },
+  });
+}
+
+export async function joinFraternity(
+  userId: string,
+  fraternityId: number,
+  force: boolean = false
+) {
+  if (!force && (await isFraternityFull(fraternityId))) {
+    throw new Error("Fraternity is full");
+  }
+  return await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      fraternityId,
     },
   });
 }

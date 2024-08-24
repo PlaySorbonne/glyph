@@ -9,10 +9,13 @@ export default function NewCodePage() {
     const codeData = {
       code: formData.get("code") as string,
       description: (formData.get("description") as string) || undefined,
-      isQuest: formData.get("isQuest") === "on",
+      isQuest: formData.get("questId") != null,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
         ? new Date(formData.get("expires") as string)
+        : undefined,
+      questId: formData.get("questId")
+        ? parseInt(formData.get("questId") as string)
         : undefined,
     };
 
@@ -71,18 +74,6 @@ export default function NewCodePage() {
           </div>
 
           <div>
-            <label htmlFor="isQuest" className="flex items-center">
-              <input
-                type="checkbox"
-                name="isQuest"
-                id="isQuest"
-                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              <span className="ml-2 text-sm text-gray-700">Is Quest Code</span>
-            </label>
-          </div>
-
-          <div>
             <label
               htmlFor="points"
               className="block text-sm font-medium text-gray-700"
@@ -109,6 +100,22 @@ export default function NewCodePage() {
               type="datetime-local"
               name="expires"
               id="expires"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="questId"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Quest ID
+            </label>
+            <input
+              type="number"
+              name="questId"
+              id="questId"
+              min={1}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>

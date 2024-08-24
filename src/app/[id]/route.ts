@@ -1,14 +1,12 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
 import { getCode, userScannedCode } from "@/actions/code";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, res: NextResponse) {
-  const codeStr = req.nextUrl.searchParams.get("code");
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const codeStr = params.id;
 
-  if (!codeStr) {
-    return NextResponse.next();
-  }
 
   const session = await getSession();
 
@@ -36,9 +34,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   let code = await getCode(codeStr);
 
   if (!code) {
-    return NextResponse.redirect(
-      new URL(`/login?error=${"Code invalide"}`, process.env.MAIN_URL)
-    );
+    return notFound();
   }
 
   await userScannedCode(userId, code);
