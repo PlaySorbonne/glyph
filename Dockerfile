@@ -2,9 +2,11 @@ FROM node:20.10-alpine AS base
 
 ARG NODE_ENV=production
 ARG MAIN_URL="http://localhost:3000"
+ARG PORT=3000
 
 ENV NODE_ENV=${NODE_ENV}
 ENV MAIN_URL=${MAIN_URL}
+ENV PORT=${PORT}
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -59,6 +61,8 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 VOLUME [ "/app/prisma" ]
+
+
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

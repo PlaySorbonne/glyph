@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start:migrate:prod": "npx prisma migrate deploy && node server.js"
+    "start:migrate:prod": "npx prisma migrate deploy && node server.js -p $PORT"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
