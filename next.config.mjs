@@ -13,12 +13,12 @@ const nextConfig = {
     return {
       afterFiles: [
         {
-          source: "/ar/:path*",
-          destination: "https://playsorbonne.github.io/jeu_piste_AR/:path*",
+          source: "/eye/:path*/",
+          destination:"https://playsorbonne.github.io/jeu_piste_AR/:path*/",
         },
         {
-          source: "/ar",
-          destination: "https://playsorbonne.github.io/jeu_piste_AR",
+          source: "/eye",
+          destination: "https://playsorbonne.github.io/jeu_piste_AR/",
         },
       ],
     };
