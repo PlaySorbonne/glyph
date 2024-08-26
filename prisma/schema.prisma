@@ -91,6 +91,8 @@ model Quest {
 
   hasFinished hasFinished[]
   Code        Code[]
+
+  History History[]
 }
 
 model hasFinished {
@@ -111,6 +113,8 @@ model History {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   codeId      Int
   code        Code?    @relation(fields: [codeId], references: [id], onDelete: NoAction)
+  questId     Int?
+  quest       Quest?   @relation(fields: [questId], references: [id], onDelete: Cascade)
   points      Int
   date        DateTime @default(now())
   description String?

@@ -68,7 +68,7 @@ export default async function EditUserPage({
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">
-        Modifier l&aposutilisateur
+        Modifier l&apos;utilisateur
       </h1>
       <div className="bg-white shadow-md rounded-lg p-6">
         <form action={updateUserAction} className="space-y-4">

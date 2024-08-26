@@ -9,6 +9,20 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV !== "development", // Remove console.log in production
   },
+  async rewrites() {
+    return {
+      afterFiles: [
+        {
+          source: "/ar/:path*",
+          destination: "https://playsorbonne.github.io/jeu_piste_AR/:path*",
+        },
+        {
+          source: "/ar",
+          destination: "https://playsorbonne.github.io/jeu_piste_AR",
+        },
+      ],
+    };
+  },
 };
 
 export default withPWA({

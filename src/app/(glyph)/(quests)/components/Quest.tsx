@@ -9,9 +9,9 @@ export default function Quest({ quest }: { quest: Quest }) {
   return (
     <Link
       href={`/quest/${quest.id}`}
-      className="bg-white shadow-md rounded-lg p-6 m-4 max-w-sm mx-auto"
+      className="bg-white rounded-lg max-w-sm mx-auto"
     >
-      <h1 className="text-2xl font-bold mb-4 text-purple-600">{quest.title}</h1>
+      <h1 className="text-2xl font-bold mb-4">{quest.title}</h1>
       <p className="text-gray-700">{quest.description}</p>
     </Link>
   );

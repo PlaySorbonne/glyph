@@ -29,16 +29,16 @@ export default async function Welcome1Page() {
     <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex flex-col justify-center items-center p-6 text-white">
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Tout d&aposabord choisis un nom d&aposutilisateur
+          Tout d&aposa;bord choisis un nom d&apos;utilisateur
         </h1>
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
-              Nom d&aposutilisateur
+              Nom d&apos;utilisateur
             </label>
             <input
               type="text"
-              placeholder="Entrez votre nom d&aposutilisateur"
+              placeholder="Entrez votre nom d&apos;utilisateur"
               name="name"
               id="name"
               required

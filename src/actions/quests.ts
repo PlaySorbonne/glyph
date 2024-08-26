@@ -81,15 +81,43 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
   });
 }
 
-export async function getAvailableQuests(userId:string) {
+export async function getAvailableQuests(userId: string) {
   return await prisma.quest.findMany({
     where: {
-      starts: {
-        lte: new Date(),
-      },
-      ends: {
-        gte: new Date(),
-      },
+      OR: [
+        {
+          starts: {
+            equals: null,
+          },
+          ends: {
+            equals: null,
+          },
+        },
+        {
+          starts: {
+            lte: new Date(),
+          },
+          ends: {
+            gte: new Date(),
+          },
+        },
+        {
+          starts: {
+            equals: null,
+          },
+          ends: {
+            gte: new Date(),
+          },
+        },
+        {
+          starts: {
+            lte: new Date(),
+          },
+          ends: {
+            equals: null,
+          },
+        },
+      ],
     },
     include: {
       hasFinished: {
@@ -103,10 +131,35 @@ export async function getAvailableQuests(userId:string) {
   });
 }
 
+export async function getFinishedQuests(userId: string) {
+  return await prisma.quest.findMany({
+    where: {
+      hasFinished: {
+        some: {
+          userId: userId,
+        },
+      },
+    },
+  });
+}
+
 export async function deleteQuest(id: string) {
   return await prisma.quest.delete({
     where: {
       id: parseInt(id),
+    },
+  });
+}
+
+// récupère les quêtes créées aujourd'hui (après minuit)
+export async function getQuestNewlyCreatedQuests() {
+  let dateToday = new Date();
+  dateToday.setHours(0, 0, 0, 0);
+  return await prisma.quest.findMany({
+    where: {
+      createdAt: {
+        gt: dateToday,
+      },
     },
   });
 }

@@ -113,7 +113,7 @@ export default async function EditCodePage({
               htmlFor="points"
               className="block text-sm font-medium text-gray-700"
             >
-              Points (laisser prérempli si c'est un code à quêtes)
+              Points (laisser prérempli si c&apos;est un code à quêtes)
             </label>
             <input
               required
@@ -149,7 +149,7 @@ export default async function EditCodePage({
               htmlFor="questId"
               className="block text-sm font-medium text-gray-700"
             >
-              Quest ID (laisser vide si c'est un code à points)
+              Quest ID (laisser vide si c&apos;est un code à points)
             </label>
             <input
               type="number"
