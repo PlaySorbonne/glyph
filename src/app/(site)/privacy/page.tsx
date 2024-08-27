@@ -40,7 +40,7 @@ export default function Page() {
       </div>
       <div>
         <ul>
-          <li>Assurer l'unicité de la création de compte</li>
+          <li>Assurer l&apos;unicité de la création de compte</li>
         </ul>
       </div>
       <h2>Droit d&apos;opposition et de retrait</h2>
