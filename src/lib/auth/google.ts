@@ -79,6 +79,16 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     };
   }
 
+  if (
+    process.env.DISABLE_LOGIN &&
+    !googleInfo.email.endsWith("@playsorbonne.fr")
+  ) {
+    return {
+      error: true,
+      msg: "Login is disabled",
+    };
+  }
+
   let [account] = await prisma.account.findMany({
     where: {
       provider: "google",

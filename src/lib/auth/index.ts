@@ -22,10 +22,21 @@ export async function signIn(data: signInData): Promise<
 > {
   let out;
   if (data.type === "discord") {
+    if (process.env.DISABLE_LOGIN)
+      return {
+        error: true,
+        msg: "Login is disabled",
+      };
     out = await signInWithDiscord(data);
   } else if (data.type === "google") {
     out = await signInWithGoogle(data);
+    // prevent login in function, it allows @playsorbonne.fr emails only
   } else if (data.type === "name") {
+    if (process.env.DISABLE_LOGIN)
+      return {
+        error: true,
+        msg: "Login is disabled",
+      };
     out = await signInWithName(data);
   } else {
     return {
