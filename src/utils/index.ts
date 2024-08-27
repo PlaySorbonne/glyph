@@ -23,7 +23,7 @@ export function generateCode(): `${string}-${string}-${string}` {
 }
 
 export function appUrl(relativePath: string) {
-  return new URL(`/app/${relativePath}`, process.env.APP_URL).toString();
+  return new URL(`/app${relativePath}`, process.env.APP_URL).toString();
 }
 
 const words = [
