@@ -17,7 +17,10 @@ export async function addFraternity(data: {
   });
 }
 
-export async function getFraternity(id: number) {
+export async function getFraternity(id?: number | null) {
+  if (!id) {
+    return null;
+  }
   return await prisma.fraternity.findUnique({
     where: {
       id,

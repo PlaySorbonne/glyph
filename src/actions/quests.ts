@@ -164,3 +164,56 @@ export async function getNewlyCreatedQuests() {
     },
   });
 }
+
+export async function getAvailableSecondaryQuests(userId: string) {
+  return await prisma.quest.findMany({
+    where: {
+      AND: [
+        {
+          secondary: true,
+          hasFinished: {
+            some: {
+              userId: userId,
+            },
+          },
+        },
+        {
+          OR: [
+            {
+              starts: {
+                equals: null,
+              },
+              ends: {
+                equals: null,
+              },
+            },
+            {
+              starts: {
+                lte: new Date(),
+              },
+              ends: {
+                gte: new Date(),
+              },
+            },
+            {
+              starts: {
+                equals: null,
+              },
+              ends: {
+                gte: new Date(),
+              },
+            },
+            {
+              starts: {
+                lte: new Date(),
+              },
+              ends: {
+                equals: null,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  });
+}

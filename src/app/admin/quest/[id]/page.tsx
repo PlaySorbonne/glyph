@@ -25,7 +25,7 @@ export default async function EditQuestPage({
       img: (formData.get("img") as string) || null,
       description: (formData.get("description") as string) || null,
       lore: (formData.get("lore") as string) || null,
-      global: formData.get("global") === "on",
+      secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
         ? new Date(formData.get("starts") as string)
@@ -149,15 +149,15 @@ export default async function EditQuestPage({
           </div>
 
           <div>
-            <label htmlFor="global" className="flex items-center">
+            <label htmlFor="secondary" className="flex items-center">
               <input
                 type="checkbox"
-                name="global"
-                id="global"
+                name="secondary"
+                id="secondary"
                 className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                defaultChecked={quest.global}
+                defaultChecked={quest.secondary}
               />
-              <span className="ml-2 text-sm text-gray-700">Global</span>
+              <span className="ml-2 text-sm text-gray-700">secondary</span>
             </label>
           </div>
 

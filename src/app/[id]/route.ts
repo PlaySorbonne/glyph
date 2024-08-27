@@ -4,9 +4,11 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const codeStr = params.id;
-
 
   const session = await getSession();
 
@@ -19,15 +21,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     );
   }
 
-  let userId = (await getUserFromSession(session))!.id;
+  let user = await getUserFromSession(session);
   let code = await getCode(codeStr);
 
   if (!code) {
     return notFound();
   }
 
-  await userScannedCode(userId, code);
+  await userScannedCode(user!, code);
   return NextResponse.redirect(
-    new URL(`/${code.questId}`, process.env.MAIN_URL)
+    new URL(`/${code.questId}?finished=true`, process.env.MAIN_URL)
   );
 }

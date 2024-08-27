@@ -1,5 +1,9 @@
 import { getUserFromSession, logout } from "@/actions/auth";
-import { getAvailableQuests, getNewlyCreatedQuests } from "@/actions/quests";
+import {
+  getAvailableQuests,
+  getNewlyCreatedQuests,
+  getAvailableSecondaryQuests,
+} from "@/actions/quests";
 import { cookies } from "next/headers";
 import Quests from "./components/Quests";
 import { redirect } from "next/navigation";
@@ -9,20 +13,34 @@ export default async function Home() {
   let user = await getUserFromSession(session);
   let quests = await getAvailableQuests(user!.id);
   let liveQuests = await getNewlyCreatedQuests();
+  let secondaryQuests = await getAvailableSecondaryQuests(user!.id);
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4 pb-8">
-        <h2 className="text-2xl font-bold text-center">Quêtes disponibles</h2>
-        <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
-          <Quests quests={quests} />
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <div>
+        <h1>{user!.name}</h1>
       </div>
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center">Quêtes disponibles</h2>
-        <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
+      <div className="space-y-8">
+        <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
+            Quêtes Principales
+          </h2>
           <Quests quests={quests} />
-        </div>
+        </section>
+        {liveQuests.length > 0 && (
+          <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
+              Quêtes nouvellement annoncées
+            </h2>
+            <Quests quests={liveQuests} />
+          </section>
+        )}
+        <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
+            Quêtes secondaires
+          </h2>
+          <Quests quests={secondaryQuests} />
+        </section>
       </div>
     </div>
   );

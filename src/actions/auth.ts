@@ -28,7 +28,7 @@ export async function logout(error: string = "Vous avez été déconnecté") {
   return redirect(new URL("/login?error=" + error, process.env.MAIN_URL).toString());
 }
 
-export async function getUserFromSession(sessionId: string | undefined) {
+export async function getUserFromSession(sessionId?: string) {
   if (!sessionId) sessionId = await getSession();
   if (!sessionId) return null;
 

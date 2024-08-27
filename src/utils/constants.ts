@@ -40,7 +40,7 @@ export const questSchema = z
     img: z.string().url().optional().nullable(),
     description: z.string().optional().nullable(),
     lore: z.string().optional().nullable(),
-    global: z.boolean().default(true),
+    secondary: z.boolean().default(false),
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),
     ends: z.coerce.date().optional().nullable(),

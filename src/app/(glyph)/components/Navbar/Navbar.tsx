@@ -39,7 +39,7 @@ export default function Navbar() {
         </svg>
         {/* <span>Trophy</span> */}
       </Link>
-      <Link href="/history" className={styles.navItem}>
+      <Link href="/book" className={styles.navItem}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

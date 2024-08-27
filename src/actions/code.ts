@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { codeFormat, codeSchema } from "@/utils/constants";
-import { Code } from "@prisma/client";
+import { Code, User } from "@prisma/client";
 
 export async function addCodeToQuest(
   id: string,
@@ -117,11 +117,36 @@ export async function deleteCode(id: number) {
   });
 }
 
-export async function userScannedCode(userId: string, code: Code) {
+export async function userScannedCode(user: User, code: Code) {
+  user = await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      score: {
+        increment: code.points,
+      },
+    },
+  });
+  
+  if (user.fraternityId) {
+    let fraternity = await prisma.fraternity.update({
+      where: {
+        id: user.fraternityId!,
+      },
+      data: {
+        score: {
+          increment: code.points,
+        },
+      },
+    });
+  }
+
   return await prisma.history.create({
     data: {
-      userId,
+      userId: user.id,
       codeId: code.id,
+      questId: code.questId,
       points: code.points,
       description: `Scanned code ${code.code} avec description ${code.description}`,
     },
