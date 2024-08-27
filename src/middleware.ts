@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { appUrl } from "./utils";
 
 export async function middleware(request: NextRequest) {
   // Store current request url in a custom header, which you can read later
@@ -11,7 +12,12 @@ export async function middleware(request: NextRequest) {
     let session = cookies().get("session");
 
     if (!session)
-      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+      return NextResponse.redirect(
+        new URL(
+          "/app/login?error=Vous devez vous connectez pour accéder à cette page",
+          process.env.MAIN_URL
+        )
+      );
 
     let isAdmin;
     try {
@@ -28,14 +34,16 @@ export async function middleware(request: NextRequest) {
       console.error("Error checking admin status:", error);
       return NextResponse.redirect(
         new URL(
-          `/?error=Error lors de la vérification de votre statut d'administrateur`,
+          `/app?error=Error lors de la vérification de votre statut d'administrateur`,
           process.env.MAIN_URL
         )
       );
     }
 
     if (!isAdmin.isAdmin)
-      return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+      return NextResponse.redirect(
+        new URL("/app?error=user is not admin", process.env.MAIN_URL)
+      );
   }
 
   return NextResponse.next({

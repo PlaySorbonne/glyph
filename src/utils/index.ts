@@ -22,6 +22,10 @@ export function generateCode(): `${string}-${string}-${string}` {
   )}-${getRandomElement(words)}`;
 }
 
+export function appUrl(relativePath: string) {
+  return new URL(`/app/${relativePath}`, process.env.APP_URL).toString();
+}
+
 const words = [
   "autour",
   "chaud",

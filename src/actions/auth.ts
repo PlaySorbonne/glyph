@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { appUrl } from "@/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -25,7 +26,7 @@ export async function logout(error: string = "Vous avez été déconnecté") {
   }
 
   cookies().delete("session");
-  return redirect(new URL("/login?error=" + error, process.env.MAIN_URL).toString());
+  return redirect(appUrl("/login?error=" + error));
 }
 
 export async function getUserFromSession(sessionId?: string) {
@@ -48,7 +49,7 @@ export async function getUserFromSession(sessionId?: string) {
     });
   } catch (error) {
     console.error("Error getting user from session", sessionId);
-    return redirect(new URL("/logout?error=La session n'existe pas", process.env.MAIN_URL).toString());
+    return redirect(appUrl("/logout?error=La session n'existe pas"));
   }
 
   if (!session) {

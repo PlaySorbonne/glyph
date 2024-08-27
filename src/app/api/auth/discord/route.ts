@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { signIn } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_TTL } from "@/utils/constants";
+import { appUrl } from "@/utils";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   let code = req.nextUrl.searchParams.get("code");
@@ -19,5 +20,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
         : new Date(Date.now() + SESSION_TTL),
   });
 
-  return NextResponse.redirect(new URL("/", process.env.MAIN_URL));
+  return NextResponse.redirect(appUrl("/"));
 }
