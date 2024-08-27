@@ -83,7 +83,7 @@ model Quest {
   img         String?
   description String?
   lore        String?
-  global      Boolean   @default(true)
+  secondary   Boolean   @default(true)
   points      Int       @default(1)
   starts      DateTime?
   ends        DateTime?

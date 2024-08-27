@@ -152,7 +152,7 @@ export async function deleteQuest(id: string) {
 }
 
 // récupère les quêtes créées aujourd'hui (après minuit)
-export async function getQuestNewlyCreatedQuests() {
+export async function getNewlyCreatedQuests() {
   let dateToday = new Date();
   dateToday.setHours(0, 0, 0, 0);
   return await prisma.quest.findMany({
@@ -160,6 +160,7 @@ export async function getQuestNewlyCreatedQuests() {
       createdAt: {
         gt: dateToday,
       },
+      secondary: true,
     },
   });
 }

@@ -19,18 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     );
   }
 
-  let userId = (await getUserFromSession(session))?.id;
-
-  if (!userId) {
-    cookies().delete("session");
-    return NextResponse.redirect(
-      new URL(
-        `/login?error=${"Connectez vous d'abord pour ça"}`,
-        process.env.MAIN_URL
-      )
-    );
-  }
-
+  let userId = (await getUserFromSession(session))!.id;
   let code = await getCode(codeStr);
 
   if (!code) {

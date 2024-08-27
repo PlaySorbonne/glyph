@@ -7,13 +7,7 @@ export default async function Welcome1Page() {
   const session = await getSession();
   const user = await getUserFromSession(session);
 
-  if (!user) {
-    console.error("Something went wrong");
-    cookies().delete("session");
-    redirect(new URL("/login", process.env.MAIN_URL).toString());
-  }
-
-  if (user.name) {
+  if (user!.name) {
     redirect(new URL("/welcome/2", process.env.MAIN_URL).toString());
   }
 

@@ -19,22 +19,31 @@ async function checkAuth() {
   const session = await getSession();
 
   if (!session && !pathname.includes("/login"))
-    redirect(new URL("/login", process.env.MAIN_URL).toString());
+    redirect(
+      new URL(
+        "/login?error=vous devez vous connecter pour accéder à cette page",
+        process.env.MAIN_URL
+      ).toString()
+    );
 
-  const user = await getUserFromSession(session);
+  let user = await getUserFromSession(session);
 
   if (!user && !pathname.includes("/login")) {
-    console.error("Something went wrong");
-    redirect(new URL("/login", process.env.MAIN_URL).toString());
+    redirect(
+      new URL(
+        "/logout?error=La session n'existe plus",
+        process.env.MAIN_URL
+      ).toString()
+    );
   }
-  
+
   if (
     !pathname.includes("/welcome") &&
     !pathname.includes("/login") &&
     !pathname.includes("/admin") &&
     (!user!.name || !user!.welcomed)
   ) {
-    await updateUserWelcomed({userId: user!.id, sessionToken: undefined});
+    await updateUserWelcomed({ userId: user!.id, sessionToken: undefined });
     redirect(new URL("/welcome", process.env.MAIN_URL).toString());
   }
 }
