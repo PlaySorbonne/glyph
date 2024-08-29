@@ -1,0 +1,7 @@
+.link {
+    transition: all 0.3s ease-in-out;
+}
+
+.link:hover {
+    transform: scale(1.1);
+}
