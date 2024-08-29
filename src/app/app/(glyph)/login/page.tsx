@@ -10,6 +10,13 @@ export default async function Login({
 }: {
   searchParams: { error?: string };
 }) {
+  let error = searchParams.error;
+  console.log("process.env.DISABLE_LOGIN", process.env.DISABLE_LOGIN, error);
+  console.log(process.env.DISABLE_LOGIN);
+  if (process.env.DISABLE_LOGIN) {
+    error ??= "La connexion est désactivée, veillez revenir ultérieurement";
+  }
+  console.log("error", error);
   const session = await getSession();
   if (session) {
     redirect(appUrl("/"));
@@ -19,8 +26,8 @@ export default async function Login({
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
-        {searchParams.error && (
-          <p className="text-red-500 text-sm mb-4">{searchParams.error}</p>
+        {error && (
+          <p className="text-red-500 text-sm mb-4">{error}</p>
         )}
         <div className="space-y-4">
           <DiscordBtn />

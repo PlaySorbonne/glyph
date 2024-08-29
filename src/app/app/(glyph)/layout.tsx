@@ -48,8 +48,12 @@ export default async function GlyphLayout({
 
   return (
     <>
-      <main className={styles.main}>{children}</main>
-      <Navbar />
+      <div className={styles.center}>
+        <div className={styles.content}>
+          <main>{children}</main>
+          <Navbar />
+        </div>
+      </div>
     </>
   );
 }
