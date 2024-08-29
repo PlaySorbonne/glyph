@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { appUrl } from "./utils";
 
 export async function middleware(request: NextRequest) {
   // Store current request url in a custom header, which you can read later
@@ -53,3 +52,7 @@ export async function middleware(request: NextRequest) {
     },
   });
 }
+
+export const config = {
+  matcher: "/app/:path*",
+};

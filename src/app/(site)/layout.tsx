@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   generator: "Next.js",
   manifest: "/manifest.json",
   icons: [
-    { rel: "apple-touch-icon", url: "logo-128.png" },
-    { rel: "icon", url: "logo-128.png" },
+    { rel: "apple-touch-icon", url: "/ios/128.png" },
+    { rel: "icon", url: "/ios/128.png" },
   ],
 };
 

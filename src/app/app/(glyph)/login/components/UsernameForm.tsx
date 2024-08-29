@@ -34,7 +34,7 @@ export default function UsernameForm() {
         userId: result.user.id,
         sessionToken: undefined,
       });
-      redirect(appUrl("/welcomeS"));
+      redirect(appUrl("/welcome"));
     } else {
       redirect(appUrl("/"));
     }
