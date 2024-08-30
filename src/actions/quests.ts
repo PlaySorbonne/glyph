@@ -48,6 +48,8 @@ export async function createQuest(data: QuestInput, code?: string) {
         code: code,
         isQuest: true,
         questId: quest.id,
+        points: quest.points,
+        description: `${quest.title}`,
       },
     });
   }
@@ -178,7 +180,7 @@ export async function getFinishedSecondaryQuests(userId?: string) {
             },
           }
         : undefined,
-      },
+    },
   });
 }
 

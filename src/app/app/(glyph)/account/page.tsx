@@ -1,9 +1,15 @@
 import { getUserFromSession } from "@/actions/auth";
 import { getFraternity } from "@/actions/fraternity";
+import Setting from "./components/Setting";
+import { appUrl } from "@/utils";
+import { getUserScoreHistory } from "@/actions/users";
+import { getQuests } from "@/actions/quests";
 
 export default async function Account() {
   let user = await getUserFromSession();
   let fraternity = await getFraternity(user!.fraternityId);
+  let history = await getUserScoreHistory(user!.id);
+  let quests = await getQuests();
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center text-purple-600">
@@ -29,7 +35,23 @@ export default async function Account() {
             )}
           </div>
         </section>
-        <section></section>
+        <section>
+          <Setting label="Se déconnecter" type="link" href={appUrl("/logout")} />
+          <Setting label="Historique des scores" type="children">
+            {history.map((item) => (
+              <div key={item.id}>
+                <p>
+                  {item.questId
+                    ? quests.find((quest) => quest.id === item.questId)
+                        ?.title
+                    : "Code"}
+                </p>
+                {item.description && <p>{item.description}</p>}
+                <p>{item.points} points</p>
+              </div>
+            ))}
+          </Setting>
+        </section>
       </div>
     </div>
   );

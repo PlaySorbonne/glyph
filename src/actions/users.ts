@@ -231,3 +231,14 @@ export async function joinRandomFraternity(userId: string) {
   await joinFraternity(userId, fraternityId, true);
   return fraternityId;
 }
+
+export async function getUserScoreHistory(userId: string) {
+  return await prisma.history.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+}
