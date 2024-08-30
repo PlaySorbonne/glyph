@@ -7,17 +7,17 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
   let session = cookies().get("session")?.value;
+  let continueResponse = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
   if (
     request.nextUrl.pathname.includes("/login") ||
     request.nextUrl.pathname.includes("/logout")
-  ) {
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
+  )
+    return continueResponse;
 
   if (!session) {
     return NextResponse.redirect(
@@ -64,24 +64,16 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  if (request.nextUrl.pathname.includes("/admin") && info.isAdmin) {
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-  }
+  if (request.nextUrl.pathname.includes("/welcome")) return continueResponse;
+
+  if (request.nextUrl.pathname.includes("/admin") && info.isAdmin)
+    return continueResponse;
 
   if (!info.name || !info.welcomed) {
     return NextResponse.redirect(new URL("/app/welcome", process.env.MAIN_URL));
   }
 
-  return NextResponse.next({
-    request: {
-      // Apply new request headers
-      headers: requestHeaders,
-    },
-  });
+  return continueResponse;
 }
 
 export const config = {

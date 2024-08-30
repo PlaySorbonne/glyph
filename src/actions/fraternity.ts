@@ -101,7 +101,7 @@ export async function getFraternitysMembersCount() {
 export async function getNextAvailableFraternity() {
   let membersCount = await getFraternitysMembersCount();
   membersCount.sort((a, b) => a._count - b._count);
-  return membersCount[0].fraternityId;
+  return membersCount[0].fraternityId!;
 }
 
 export async function isFraternityFull(fraternityId: number) {

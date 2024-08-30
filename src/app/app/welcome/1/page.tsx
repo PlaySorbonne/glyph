@@ -1,7 +1,6 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
-import { updateUser } from "@/actions/users";
+import { updateUserSelf } from "@/actions/users";
 import { appUrl } from "@/utils";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Welcome1Page() {
@@ -15,7 +14,15 @@ export default async function Welcome1Page() {
   async function handleSubmit(formData: FormData) {
     "use server";
     const name = formData.get("name") as string;
-    await updateUser(user!.id, { name });
+    try {
+      await updateUserSelf(session!, { name });
+    } catch (error) {
+      if (error instanceof Error) {
+        redirect(appUrl(`/welcome/1?error=${error.message}`));
+      } else {
+        redirect(appUrl(`/welcome/1?error=An unknown error occurred`));
+      }
+    }
     redirect(appUrl("/welcome/2"));
   }
 

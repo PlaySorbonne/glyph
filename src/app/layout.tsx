@@ -1,9 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ErrorLabel from "./components/ErrorLabel";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -18,7 +19,10 @@ export default function RootLayout({
           src="https://stats.backend.playsorbonne.fr/umami.js"
         ></script>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ErrorLabel />
+        {children}
+      </body>
     </html>
   );
 }

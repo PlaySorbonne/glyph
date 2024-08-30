@@ -19,6 +19,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
         ? new Date(2147483647000)
         : new Date(Date.now() + SESSION_TTL),
   });
+  if (data.user.fraternityId) {
+    cookies().set("fraternityId", data.user.fraternityId.toString(), {
+      expires:
+        SESSION_TTL === -1
+          ? new Date(2147483647000)
+          : new Date(Date.now() + SESSION_TTL),
+    });
+  }
+  if (data.user.name) {
+    cookies().set("name", data.user.name, {
+      expires:
+        SESSION_TTL === -1
+          ? new Date(2147483647000)
+          : new Date(Date.now() + SESSION_TTL),
+    });
+  }
 
   return NextResponse.redirect(appUrl("/"));
 }

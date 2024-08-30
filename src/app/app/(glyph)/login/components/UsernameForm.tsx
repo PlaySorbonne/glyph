@@ -27,6 +27,23 @@ export default function UsernameForm() {
           ? new Date(2147483647000)
           : new Date(Date.now() + SESSION_TTL),
     });
+    if (result.user.fraternityId) {
+      cookies().set("fraternityId", result.user.fraternityId.toString(), {
+        expires:
+          SESSION_TTL === -1
+            ? new Date(2147483647000)
+            : new Date(Date.now() + SESSION_TTL),
+      });
+    }
+
+    if (result.user.name) { 
+      cookies().set("name", result.user.name, {
+        expires:
+          SESSION_TTL === -1
+            ? new Date(2147483647000)
+            : new Date(Date.now() + SESSION_TTL),
+      });
+    }
 
     if (result.registered) {
       await updateUserWelcomed({

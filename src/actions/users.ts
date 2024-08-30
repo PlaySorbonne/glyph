@@ -5,7 +5,7 @@ import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
 import { getUserFromSession } from "./auth";
 import { cookies } from "next/headers";
 import { Session } from "inspector";
-import { isFraternityFull } from "./fraternity";
+import { getNextAvailableFraternity, isFraternityFull } from "./fraternity";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -50,7 +50,7 @@ export async function createUser(data: UserInput) {
   const validatedData = userSchema.safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
-    throw new Error("Invalid user data");
+    throw new Error(validatedData.error.errors[0].message);
   }
   return await prisma.user.create({
     data: validatedData.data,
@@ -65,7 +65,7 @@ export async function updateUser(
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
-    throw new Error("Invalid user data");
+    throw new Error(validatedData.error.errors[0].message);
   }
   if (validatedData.data.isAdmin) {
     let user = await prisma.user.findUnique({
@@ -103,6 +103,11 @@ export async function updateUser(
         expires: ttl,
       });
     }
+    if (out.fraternityId) {
+      cookies().set("fraternityId", out.fraternityId.toString(), {
+        expires: ttl,
+      });
+    }
   }
 }
 
@@ -136,7 +141,7 @@ export async function updateUserSelf(
   const validatedData = userSchema.partial().safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
-    throw new Error("Invalid user data");
+    throw new Error(validatedData.error.errors[0].message);
   }
 
   let out = await prisma.user.update({
@@ -158,7 +163,11 @@ export async function updateUserSelf(
       expires: ttl,
     });
   }
-
+  if (out.fraternityId) {
+    cookies().set("fraternityId", out.fraternityId.toString(), {
+      expires: ttl,
+    });
+  }
   return out;
 }
 
@@ -214,4 +223,10 @@ export async function joinFraternity(
       fraternityId,
     },
   });
+}
+
+export async function joinRandomFraternity(userId: string) {
+  let fraternityId = await getNextAvailableFraternity();
+  await joinFraternity(userId, fraternityId, true);
+  return fraternityId;
 }
