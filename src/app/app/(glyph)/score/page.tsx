@@ -18,7 +18,7 @@ export default async function ScorePage() {
                     <div className="flex justify-center items-end h-64 mb-8">
                         {/* 2nd place */}
                         <div className="w-1/4 mx-2">
-                            <div className="bg-gray-200 h-40 flex flex-col justify-end items-center p-2 rounded-t-lg">
+                            <div className="h-40 flex flex-col justify-end items-center p-2 rounded-t-lg">
                                 <span className="text-2xl font-bold text-gray-700">2</span>
                                 <h3 className="text-lg font-medium text-gray-800 text-center">{fraternities[1].name}</h3>
                                 <p className="text-md font-semibold text-indigo-600">{fraternities[1].score} pts</p>
@@ -46,7 +46,7 @@ export default async function ScorePage() {
                     <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">Top 10 Utilisateurs</h2>
                     <div className="space-y-4">
                         {users.map((user, index) => (
-                            <div key={user.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-md">
+                            <div key={user.id} className="flex items-center justify-between p-3 rounded-md">
                                 <div className="flex items-center">
                                     <span className="text-lg font-bold mr-3 text-gray-700">{index + 1}.</span>
                                     <h3 className="text-lg font-medium text-gray-800">{user.name}</h3>
