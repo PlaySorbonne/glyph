@@ -6,13 +6,13 @@ import {
 } from "@/actions/quests";
 import { cookies } from "next/headers";
 import Quests from "./components/Quests";
-import { redirect } from "next/navigation";
+import { appUrl } from "@/utils";
+import Link from "next/link";
 
 export default async function Home() {
   let session = cookies().get("session")?.value;
   let user = await getUserFromSession(session);
-  let quests = await getAvailableQuests(user!.id);
-  let liveQuests = await getNewlyCreatedQuests();
+  let liveQuests = await getNewlyCreatedQuests(user!.id);
   let secondaryQuests = await getAvailableSecondaryQuests(user!.id);
 
   return (
@@ -24,12 +24,11 @@ export default async function Home() {
         </div>
       </div>
       <div className="space-y-8">
-        <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
-            Quêtes Principales
+        <Link href={appUrl("/book")} className="bg-white bg-opacity-20 rounded-xl p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Continuez les quêtes principales de glyph
           </h2>
-          <Quests quests={quests} />
-        </section>
+        </Link>
         {liveQuests.length > 0 && (
           <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">

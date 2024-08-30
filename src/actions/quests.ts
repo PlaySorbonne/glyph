@@ -8,7 +8,6 @@ import {
   codeFormat,
   codeSchema,
 } from "@/utils/constants";
-import { generateCode } from "@/utils";
 
 export async function getQuests(n?: number): Promise<Quest[]> {
   return await prisma.quest.findMany({
@@ -83,47 +82,10 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
 export async function getAvailableQuests(userId: string) {
   return await prisma.quest.findMany({
     where: {
-      OR: [
-        {
-          starts: {
-            equals: null,
-          },
-          ends: {
-            equals: null,
-          },
-        },
-        {
-          starts: {
-            lte: new Date(),
-          },
-          ends: {
-            gte: new Date(),
-          },
-        },
-        {
-          starts: {
-            equals: null,
-          },
-          ends: {
-            gte: new Date(),
-          },
-        },
-        {
-          starts: {
-            lte: new Date(),
-          },
-          ends: {
-            equals: null,
-          },
-        },
-      ],
-    },
-    include: {
-      hasFinished: {
-        where: {
-          NOT: {
-            userId: userId,
-          },
+      ...dateCheck,
+      History: {
+        none: {
+          userId: userId,
         },
       },
     },
@@ -133,7 +95,7 @@ export async function getAvailableQuests(userId: string) {
 export async function getFinishedQuests(userId: string) {
   return await prisma.quest.findMany({
     where: {
-      hasFinished: {
+      History: {
         some: {
           userId: userId,
         },
@@ -151,68 +113,108 @@ export async function deleteQuest(id: string) {
 }
 
 // récupère les quêtes créées aujourd'hui (après minuit)
-export async function getNewlyCreatedQuests() {
+export async function getNewlyCreatedQuests(userId?: string) {
   let dateToday = new Date();
   dateToday.setHours(0, 0, 0, 0);
+
   return await prisma.quest.findMany({
     where: {
       createdAt: {
         gt: dateToday,
       },
       secondary: true,
+      ...dateCheck,
+      History: userId
+        ? {
+            none: {
+              userId: userId,
+            },
+          }
+        : undefined,
     },
   });
 }
 
-export async function getAvailableSecondaryQuests(userId: string) {
+export async function getAvailablePrimaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
-      AND: [
-        {
-          secondary: true,
-          hasFinished: {
-            some: {
+      secondary: false,
+      ...dateCheck,
+      History: userId
+        ? {
+            none: {
               userId: userId,
             },
-          },
-        },
-        {
-          OR: [
-            {
-              starts: {
-                equals: null,
-              },
-              ends: {
-                equals: null,
-              },
-            },
-            {
-              starts: {
-                lte: new Date(),
-              },
-              ends: {
-                gte: new Date(),
-              },
-            },
-            {
-              starts: {
-                equals: null,
-              },
-              ends: {
-                gte: new Date(),
-              },
-            },
-            {
-              starts: {
-                lte: new Date(),
-              },
-              ends: {
-                equals: null,
-              },
-            },
-          ],
-        },
-      ],
+          }
+        : undefined,
     },
   });
 }
+
+export async function getAvailableSecondaryQuests(userId?: string) {
+  return await prisma.quest.findMany({
+    where: {
+      secondary: true,
+      ...dateCheck,
+      History: userId
+        ? {
+            none: {
+              userId: userId,
+            },
+          }
+        : undefined,
+    },
+  });
+}
+
+export async function getFinishedSecondaryQuests(userId?: string) {
+  return await prisma.quest.findMany({
+    where: {
+      secondary: true,
+      History: userId
+        ? {
+            some: {
+              userId: userId,
+            },
+          }
+        : undefined,
+      },
+  });
+}
+
+let dateCheck = {
+  OR: [
+    {
+      starts: {
+        equals: null,
+      },
+      ends: {
+        equals: null,
+      },
+    },
+    {
+      starts: {
+        lte: new Date(),
+      },
+      ends: {
+        gte: new Date(),
+      },
+    },
+    {
+      starts: {
+        equals: null,
+      },
+      ends: {
+        gte: new Date(),
+      },
+    },
+    {
+      starts: {
+        lte: new Date(),
+      },
+      ends: {
+        equals: null,
+      },
+    },
+  ],
+};

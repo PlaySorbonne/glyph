@@ -63,7 +63,6 @@ model User {
   accounts    Account[]
   sessions    Session[]
   History     History[]
-  hasFinished hasFinished[]
 
   @@map("users")
 }
@@ -89,22 +88,9 @@ model Quest {
   ends        DateTime?
   createdAt   DateTime  @default(now())
 
-  hasFinished hasFinished[]
   Code        Code[]
 
   History History[]
-}
-
-model hasFinished {
-  userId  String
-  questId Int
-  User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Quest   Quest  @relation(fields: [questId], references: [id], onDelete: Cascade)
-
-  date    DateTime? @default(now())
-  expires DateTime?
-
-  @@id([userId, questId])
 }
 
 model History {
