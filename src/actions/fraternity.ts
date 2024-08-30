@@ -100,7 +100,6 @@ export async function getFraternitysMembersCount() {
 
 export async function getNextAvailableFraternity() {
   let membersCount = await getFraternitysMembersCount();
-  console.log(membersCount);
   membersCount.sort((a, b) => a._count - b._count);
   return membersCount[0].fraternityId;
 }

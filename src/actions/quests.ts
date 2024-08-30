@@ -33,7 +33,6 @@ export async function createQuest(data: QuestInput, code?: string) {
     console.error("Validation error:", validatedData.error);
     throw new Error("Invalid quest data");
   }
-  console.log(`"${code}"`);
   let parsedCode = codeFormat.optional().safeParse(code);
   if (!parsedCode.success) {
     console.error("Invalid code:", parsedCode.error);

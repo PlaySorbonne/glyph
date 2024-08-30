@@ -11,7 +11,6 @@ export default async function EditCodePage({
 }) {
   const code = await getCodeById(parseInt(params.id));
 
-  console.log(code);
 
   if (!code) {
     return <div>Code not found</div>;

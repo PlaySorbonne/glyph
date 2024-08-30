@@ -15,7 +15,6 @@ export default async function Welcome1Page() {
   async function handleSubmit(formData: FormData) {
     "use server";
     const name = formData.get("name") as string;
-    console.log(name, user!.id);
     await updateUser(user!.id, { name });
     redirect(appUrl("/welcome/2"));
   }

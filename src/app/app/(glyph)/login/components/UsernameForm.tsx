@@ -11,7 +11,6 @@ export default function UsernameForm() {
     "use server";
 
     const username = formData.get("username") as string;
-    console.log(username);
     const result = await signIn({ type: "name", name: username });
 
     if (result.error) {

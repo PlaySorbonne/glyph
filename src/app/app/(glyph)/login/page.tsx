@@ -11,12 +11,9 @@ export default async function Login({
   searchParams: { error?: string };
 }) {
   let error = searchParams.error;
-  console.log("process.env.DISABLE_LOGIN", process.env.DISABLE_LOGIN, error);
-  console.log(process.env.DISABLE_LOGIN);
   if (process.env.DISABLE_LOGIN) {
     error ??= "La connexion est désactivée, veillez revenir ultérieurement";
   }
-  console.log("error", error);
   const session = await getSession();
   if (session) {
     redirect(appUrl("/"));
