@@ -5,7 +5,7 @@ import LogoJaune from "./logo_jaune.png";
 import LogoRouge from "./logo_rouge.png";
 import LogoVert from "./logo_vert.png";
 
-export default {
+let Fraternities = {
   pietr: {
     fond: FondJaune,
     logo: LogoJaune,
@@ -19,3 +19,5 @@ export default {
     logo: LogoVert,
   },
 };
+
+export default Fraternities;

@@ -1,6 +1,8 @@
 import { getClassement } from "@/actions/fraternity";
 import { getUsers } from "@/actions/users";
 
+export const dynamic = "force-dynamic";
+
 export default async function ScorePage() {
     let fraternities = await getClassement();
     let users = await getUsers({ sortByPoint: true, n: 10 });

@@ -35,7 +35,7 @@ export default async function Welcome1Page() {
     <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex flex-col justify-center items-center p-6 text-white">
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Répondez à cette question pour que l'ont détermine votre fraternité.
+          Répondez à cette question pour que l&apos;ont détermine votre fraternité.
         </h1>
         <form action={handleSubmit} className="space-y-4">
           <div>

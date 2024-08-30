@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ErrorLabel from "./components/ErrorLabel";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default async function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        <ErrorLabel />
+        <Suspense>
+          <ErrorLabel />
+        </Suspense>
         {children}
       </body>
     </html>
