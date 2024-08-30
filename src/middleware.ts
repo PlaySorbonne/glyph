@@ -6,6 +6,10 @@ export async function middleware(request: NextRequest) {
   // Store current request url in a custom header, which you can read later
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
+  
+  if (request.nextUrl.pathname.includes("/app")) {
+    
+  }
 
   if (request.nextUrl.pathname.includes("/admin")) {
     let session = cookies().get("session");

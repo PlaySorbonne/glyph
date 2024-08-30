@@ -15,7 +15,7 @@ export default function Page() {
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          height: "150px",
+          height: "80px",
           zIndex: "1000",
           position: "fixed",
           top: "0",
@@ -28,7 +28,7 @@ export default function Page() {
         }}
       >
         <Link href="/" className={styles.link}>
-          <Image src={Logo} alt="logo" width={100} />
+          <Image src={Logo} alt="logo" width={70} />
         </Link>
         <div style={{ display: "flex", gap: "10px" }}>
           <Link
@@ -36,14 +36,14 @@ export default function Page() {
             target="_blank"
             className={styles.link}
           >
-            <Image src={Champsu} alt="logo" height={100} />
+            <Image src={Champsu} alt="logo" height={70} />
           </Link>
           <Link
             href="https://playsorbonne.fr/dlc"
             target="_blank"
             className={styles.link}
           >
-            <Image src={Dlc} alt="logo" height={100} />
+            <Image src={Dlc} alt="logo" height={70} />
           </Link>
         </div>
       </header>
@@ -75,14 +75,14 @@ export default function Page() {
             Découvrez le campus !
           </h1>
           <p>
-            Avec glyph, vous pourrez découvrir le campus Jussieu de la Sorbonne
-            Université à travers ce site.
+            Découvrez le campus Pierre et Marie Curie de Sorbonne Université à
+            travers a travers Glyph sur ce site.
           </p>
           <p>
             Vous pourrez retrouver les différents bâtiments, les lieux
-            importants, les activités proposées et bien plus encore ! Explorer
-            le campus, relevez des défis, et partipez à la victoire de votre
-            fratrie.
+            importants, les activités proposées et bien plus encore ! Explorez
+            le campus, relevez des défis, et participez à la victoire de votre
+            fraternité !
           </p>
           <div
             style={{

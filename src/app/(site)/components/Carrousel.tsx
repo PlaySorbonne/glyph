@@ -3,12 +3,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import Image from "next/image";
 import styles from "./Carrousel.module.css";
+import fraternities from "@/assets/fraternities";
+import Link from "next/link";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import fraternities from "@/assets/fraternities";
-import Link from "next/link";
+import "swiper/css/effect-fade";
 
 export default function Carrousel() {
   let slides = [
@@ -46,6 +47,7 @@ export default function Carrousel() {
         pauseOnMouseEnter: true,
       }}
       className={styles.carrousel}
+      effect="fade"
     >
       {slides.map((slide, index) => (
         <SwiperSlide
@@ -54,7 +56,6 @@ export default function Carrousel() {
           style={{ backgroundImage: `url(${slide.cover.src})` }}
         >
           <div className={styles.content}>
-            <div style={{ height: "150px" }} />
             <div className={styles.textWrapper}>
               <h1 className={styles.title}>{slide.title}</h1>
               <Image

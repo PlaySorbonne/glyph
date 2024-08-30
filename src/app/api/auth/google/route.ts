@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   if (data.error) {
     console.error(data.msg);
-    return NextResponse.error();
+    return NextResponse.redirect(appUrl(`/login?error=${data.msg}`));
   }
 
   cookies().set("session", data.session, {
