@@ -7,13 +7,13 @@ import { redirect } from "next/navigation";
 export default async function Welcome1Page() {
   let user = await getUserFromSession();
   if (user?.fraternityId) {
-    redirect(appUrl(`/app/welcome/3?fraternityId=${user.fraternityId}`));
+    redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
   }
 
   async function handleSubmit() {
     "use server";
     if (user?.fraternityId) {
-      redirect(appUrl(`/app/welcome/3?fraternityId=${user.fraternityId}`));
+      redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
     }
 
     let fraternityId: number;

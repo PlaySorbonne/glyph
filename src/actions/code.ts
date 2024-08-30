@@ -118,7 +118,18 @@ export async function deleteCode(id: number) {
 }
 
 export async function userScannedCode(user: User, code: Code) {
-  user = await prisma.user.update({
+  await prisma.fraternity.update({
+    where: {
+      id: user.fraternityId!,
+    },
+    data: {
+      score: {
+        increment: code.points,
+      },
+    },
+  });
+
+  await prisma.user.update({
     where: {
       id: user.id,
     },
@@ -128,19 +139,7 @@ export async function userScannedCode(user: User, code: Code) {
       },
     },
   });
-  
-  if (user.fraternityId) {
-    let fraternity = await prisma.fraternity.update({
-      where: {
-        id: user.fraternityId!,
-      },
-      data: {
-        score: {
-          increment: code.points,
-        },
-      },
-    });
-  }
+
 
   return await prisma.history.create({
     data: {
@@ -148,7 +147,7 @@ export async function userScannedCode(user: User, code: Code) {
       codeId: code.id,
       questId: code.questId,
       points: code.points,
-      description: `Scanned code ${code.code} avec description ${code.description}`,
+      description: `${code.description}`,
     },
   });
 }

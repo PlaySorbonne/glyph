@@ -47,5 +47,6 @@ export async function GET(
     session: session,
     isAdmin: session.user.isAdmin,
     welcomed: session.user.welcomed,
+    fraternityId: session.user.fraternityId,
   });
 }

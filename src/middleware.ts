@@ -69,7 +69,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes("/admin") && info.isAdmin)
     return continueResponse;
 
-  if (!info.name || !info.welcomed) {
+  if (!info.name || !info.welcomed || !info.fraternityId) {
     return NextResponse.redirect(new URL("/app/welcome", process.env.MAIN_URL));
   }
 
