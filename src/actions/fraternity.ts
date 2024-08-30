@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import { fraternitySchema } from "@/utils/constants";
+import { randomInt } from "crypto";
 
 export async function addFraternity(data: {
   name: string;
@@ -99,8 +100,21 @@ export async function getFraternitysMembersCount() {
 }
 
 export async function getNextAvailableFraternity() {
-  let membersCount = await getFraternitysMembersCount();
-  membersCount.sort((a, b) => a._count - b._count);
+  let membersCount: { _count: number; fraternityId: number | null }[] = [
+    { _count: 0, fraternityId: 1 },
+    { _count: 0, fraternityId: 2 },
+    { _count: 0, fraternityId: 3 },
+  ];
+  membersCount = [...(await getFraternitysMembersCount()), ...membersCount];
+  membersCount = membersCount.filter(
+    (a, b, c) => c.findIndex((t) => t.fraternityId === a.fraternityId) === b
+  );
+  console.log("membersCount", membersCount);
+  membersCount = membersCount.sort((a, b) => a._count - b._count);
+  membersCount = membersCount.filter((a) => a.fraternityId);
+  if (membersCount.length === 0) {
+    return randomInt(1, 3);
+  }
   return membersCount[0].fraternityId!;
 }
 

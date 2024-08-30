@@ -5,14 +5,21 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Welcome1Page() {
+  let user = await getUserFromSession();
+  if (user?.fraternityId) {
+    redirect(appUrl(`/app/welcome/3?fraternityId=${user.fraternityId}`));
+  }
+
   async function handleSubmit() {
     "use server";
-    let fraternityId: number;
+    if (user?.fraternityId) {
+      redirect(appUrl(`/app/welcome/3?fraternityId=${user.fraternityId}`));
+    }
 
+    let fraternityId: number;
     try {
-      fraternityId = await joinRandomFraternity(
-        (await getUserFromSession())!.id
-      );
+      fraternityId = await joinRandomFraternity(user!.id);
+      console.log(fraternityId);
     } catch (error) {
       if (error instanceof Error) {
         redirect(appUrl(`/welcome/2?error=${error.message}`));
@@ -40,7 +47,6 @@ export default async function Welcome1Page() {
               placeholder="Oui, non, peut-être...."
               name="name"
               id="name"
-              required
               className="w-full px-3 py-2 bg-white bg-opacity-50 rounded-lg text-purple-900 placeholder-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300"
             />
           </div>
