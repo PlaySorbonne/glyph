@@ -100,6 +100,7 @@ export default function Page() {
                 borderRadius: "0.5rem",
                 fontWeight: "bold",
                 marginTop: "2rem",
+                paddingBottom: "3rem",
               }}
             >
               Rejoignez l&apos;aventure dès le 9 septembre !
