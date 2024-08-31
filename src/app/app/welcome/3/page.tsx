@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Fraternities, { getBackground } from "@/assets/fraternities";
 
 export default async function WelcomePage({
   searchParams,
@@ -6,8 +7,16 @@ export default async function WelcomePage({
   searchParams: { fraternityId: string };
 }) {
   const fraternityId = searchParams.fraternityId;
+  const background = getBackground(parseInt(fraternityId));
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex flex-col justify-center items-center p-6 text-white">
+    <div
+      className="min-h-screen flex flex-col justify-center items-center p-6"
+      style={{
+        backgroundImage: `url(${background.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">
           Si y a plus de bla bla

@@ -184,6 +184,30 @@ export async function getFinishedSecondaryQuests(userId?: string) {
   });
 }
 
+export async function getPrimaryQuests() {
+  return await prisma.quest.findMany({
+    where: {
+      secondary: false,
+      ...dateCheck,
+    },
+  });
+}
+
+export async function getFinishedPrimaryQuests(userId?: string) {
+  return await prisma.quest.findMany({
+    where: {
+      secondary: false,
+      History: userId
+        ? {
+            some: {
+              userId: userId,
+            },
+          }
+        : undefined,
+    },
+  });
+}
+
 let dateCheck = {
   OR: [
     {

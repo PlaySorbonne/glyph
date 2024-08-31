@@ -26,6 +26,8 @@ export async function logout(error: string = "Vous avez été déconnecté") {
   }
 
   cookies().delete("session");
+  cookies().delete("name");
+  cookies().delete("fraternityId");
   return redirect(appUrl("/login?error=" + error));
 }
 

@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import Navbar from "./components/Navbar/Navbar";
 import styles from "./layout.module.css";
+import { cookies } from "next/headers";
+import Fraternities, { getBackground } from "@/assets/fraternities";
 
 export const metadata: Metadata = {
   title: "Glyph",
@@ -17,10 +19,19 @@ export const metadata: Metadata = {
 export default async function GlyphLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const backgroundCookie = cookies().get("fraternityId")?.value;
+  const background = getBackground(parseInt(backgroundCookie ?? "-1"));
 
   return (
     <>
-      <div className={styles.center}>
+      <div
+        className={styles.center}
+        style={{
+          backgroundImage: `url(${background.src})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className={styles.content}>
           <main>{children}</main>
           <Navbar />

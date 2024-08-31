@@ -1,5 +1,6 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
 import { updateUserWelcomed } from "@/actions/users";
+import Fraternities from "@/assets/fraternities";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -14,7 +15,14 @@ export default async function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-500 to-purple-600 flex flex-col justify-center items-center p-6 text-white">
+    <div
+      className="min-h-screen flex flex-col justify-center items-center p-6"
+      style={{
+        backgroundImage: `url(${Fraternities.default.fond.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
         <h1 className="text-4xl font-bold mb-6 text-center">
           Bienvenue sur Glyph !
