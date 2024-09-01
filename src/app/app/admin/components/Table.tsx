@@ -24,7 +24,14 @@ export default function Table<
   }
 
   const columnNames = columns || Object.keys(data[0]);
-  const keys = Object.keys(data[0]);
+
+  // Filter out columns where all values are empty or null
+  const nonEmptyColumns = columnNames.filter(columnName => 
+    data.some(item => {
+      const value = item[columnName];
+      return value !== null && value !== undefined && value !== "";
+    })
+  );
 
   const truncateString = (str: string) => {
     if (str.length <= maxStringLength) return str;
@@ -63,7 +70,7 @@ export default function Table<
       <table className={styles.table}>
         <thead>
           <tr>
-            {columnNames.map((columnName) => {
+            {nonEmptyColumns.map((columnName) => {
               if (columnName === "href") return undefined;
               return <th key={columnName}>{columnName}</th>;
             })}
@@ -72,7 +79,7 @@ export default function Table<
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
-              {keys.map((key) => (
+              {nonEmptyColumns.map((key) => (
                 <td key={key} data-label={key}>
                   {renderCell(item, key)}
                 </td>

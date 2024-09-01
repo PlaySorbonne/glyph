@@ -38,8 +38,26 @@ export const questSchema = z
   .object({
     title: z.string().min(1, "Title is required"),
     img: z.string().url().optional().nullable(),
+    mission: z.string().optional().nullable(),
     description: z.string().optional().nullable(),
+    indice: z.string().optional().nullable(),
     lore: z.string().optional().nullable(),
+    lieu: z.string().optional().nullable(),
+    daysOpen: z
+      .string()
+      .regex(/^[LMJVSDe,]*$/, "Invalid days format")
+      .optional()
+      .nullable(),
+    hourOpen: z
+      .string()
+      .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format")
+      .optional()
+      .nullable(),
+    hourClose: z
+      .string()
+      .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format")
+      .optional()
+      .nullable(),
     secondary: z.boolean().default(false),
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),

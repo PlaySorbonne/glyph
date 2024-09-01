@@ -26,6 +26,11 @@ export function appUrl(relativePath: string) {
   return new URL(`/app${relativePath}`, process.env.MAIN_URL).toString();
 }
 
+export function cutString(str: string | null | undefined, maxLength: number) {
+  if (!str) return "";
+  return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
+}
+
 const words = [
   "autour",
   "chaud",

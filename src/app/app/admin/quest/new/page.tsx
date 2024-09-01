@@ -12,8 +12,14 @@ export default function NewQuestPage() {
     const questData: QuestInput = {
       title: formData.get("title") as string,
       img: (formData.get("img") as string) || null,
+      mission: (formData.get("mission") as string) || null,
       description: (formData.get("description") as string) || null,
+      indice: (formData.get("indice") as string) || null,
       lore: (formData.get("lore") as string) || null,
+      lieu: (formData.get("lieu") as string) || null,
+      daysOpen: Array.from(formData.getAll("daysOpen")).join(","),
+      hourOpen: (formData.get("hourOpen") as string) || null,
+      hourClose: (formData.get("hourClose") as string) || null,
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
@@ -76,6 +82,21 @@ export default function NewQuestPage() {
 
           <div>
             <label
+              htmlFor="mission"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Mission
+            </label>
+            <textarea
+              name="mission"
+              id="mission"
+              rows={3}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            ></textarea>
+          </div>
+
+          <div>
+            <label
               htmlFor="description"
               className="block text-sm font-medium text-gray-700"
             >
@@ -84,6 +105,21 @@ export default function NewQuestPage() {
             <textarea
               name="description"
               id="description"
+              rows={3}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            ></textarea>
+          </div>
+
+          <div>
+            <label
+              htmlFor="indice"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Indice
+            </label>
+            <textarea
+              name="indice"
+              id="indice"
               rows={3}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></textarea>
@@ -102,6 +138,70 @@ export default function NewQuestPage() {
               rows={5}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></textarea>
+          </div>
+
+          <div>
+            <label
+              htmlFor="lieu"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Lieu
+            </label>
+            <input
+              type="text"
+              name="lieu"
+              id="lieu"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Jours d'ouverture
+            </label>
+            <div className="space-y-2">
+              {["L", "M", "Me", "J", "V", "S", "D"].map((day) => (
+                <label key={day} className="inline-flex items-center mr-4">
+                  <input
+                    type="checkbox"
+                    name="daysOpen"
+                    value={day}
+                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  />
+                  <span className="ml-2">{day}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="hourOpen"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Heure d'ouverture (HH:MM)
+            </label>
+            <input
+              type="time"
+              name="hourOpen"
+              id="hourOpen"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="hourClose"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Heure de fermeture (HH:MM)
+            </label>
+            <input
+              type="time"
+              name="hourClose"
+              id="hourClose"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
           </div>
 
           <div>

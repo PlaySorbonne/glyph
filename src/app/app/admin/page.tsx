@@ -6,21 +6,56 @@ import { getUsers } from "@/actions/users";
 import { getCodes } from "@/actions/code";
 import Link from "next/link";
 import { getFraternitysWithMembersCount } from "@/actions/fraternity";
+import { importDatabase } from "@/actions/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: { error?: string; message?: string };
 }) {
   return (
     <div className="container mx-auto px-4 py-8">
       {searchParams.error && (
         <p className="text-red-500 text-sm mb-4">{searchParams.error}</p>
       )}
+      {searchParams.message && (
+        <p className="text-green-500 text-sm mb-4">{searchParams.message}</p>
+      )}
       <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
       <div className="space-y-8">
+        <section className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Database Actions</h2>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="/api/admin/export-database"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-block"
+              download
+            >
+              Download Database
+            </a>
+            <form action={importDatabase} className="flex flex-col">
+              <input
+                type="file"
+                name="databaseFile"
+                accept=".json"
+                className="mb-2"
+                id="databaseFile"
+              />
+              <button
+                type="submit"
+                className="bg-yellow-500 hover:bg-red-600 text-white hover:text-black font-bold py-2 px-4 rounded cursor-pointer inline-block"
+              >
+                Import Database
+              </button>
+              <p className="text-sm text-red-500 mt-1">
+                Warning: This will overwrite existing data!
+              </p>
+            </form>
+          </div>
+        </section>
+
         <section className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Quests</h2>
           <Table

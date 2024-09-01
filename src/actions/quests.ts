@@ -19,6 +19,7 @@ export async function getQuests(n?: number): Promise<Quest[]> {
 }
 
 export async function getQuest(id: string) {
+  console.log("id", id, typeof id, parseInt(id));
   return await prisma.quest.findUnique({
     where: {
       id: parseInt(id),

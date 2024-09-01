@@ -60,9 +60,9 @@ model User {
   fraternityId Int?
   fraternity   Fraternity? @relation(fields: [fraternityId], references: [id])
 
-  accounts    Account[]
-  sessions    Session[]
-  History     History[]
+  accounts Account[]
+  sessions Session[]
+  History  History[]
 
   @@map("users")
 }
@@ -80,15 +80,21 @@ model Quest {
   id          Int       @id @default(autoincrement())
   title       String
   img         String?
+  mission     String?
   description String?
+  indice      String?
   lore        String?
+  lieu        String?
+  daysOpen    String? // of type L,M,Me,J,V,S,D
+  hourOpen    String? // of type HH:MM
+  hourClose   String? // of type HH:MM
   secondary   Boolean   @default(true)
   points      Int       @default(1)
   starts      DateTime?
   ends        DateTime?
   createdAt   DateTime  @default(now())
 
-  Code        Code[]
+  Code Code[]
 
   History History[]
 }
