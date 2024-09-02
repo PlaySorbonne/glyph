@@ -264,7 +264,7 @@ export default async function EditQuestPage({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Jours d'ouverture
+              Jours d&apos;ouverture
             </label>
             <div className="space-y-2">
               {["L", "M", "Me", "J", "V", "S", "D"].map((day) => (
@@ -287,7 +287,7 @@ export default async function EditQuestPage({
               htmlFor="hourOpen"
               className="block text-sm font-medium text-gray-700"
             >
-              Heure d'ouverture (HH:MM)
+              Heure d&apos;ouverture (HH:MM)
             </label>
             <input
               type="time"
