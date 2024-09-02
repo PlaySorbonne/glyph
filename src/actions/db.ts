@@ -122,7 +122,7 @@ export async function importDatabaseFromCSV(formData: FormData) {
         starts:
           record["Date Début"] !== "9/9"
             ? convertDDMMToDate(record["Date Début"])
-            : new Date(),
+            : null,
         ends: convertDDMMToDate(record["Date Fin"]),
         daysOpen: record["Jours"],
         hourOpen: record["Horaire Début"],
