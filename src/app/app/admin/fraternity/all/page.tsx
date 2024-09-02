@@ -1,9 +1,8 @@
 import {
-  getClassement,
+  createDefaultFraternitys,
   getFraternitysWithMembersCount,
 } from "@/actions/fraternity";
 import Table from "../../components/Table";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -21,12 +20,14 @@ export default async function AllFraternitiesPage() {
             };
           })}
         />
-        <Link
-          href="/app/admin/fraternity/new"
-          className="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Créer une fraternité
-        </Link>
+        <form action={createDefaultFraternitys}>
+          <button
+            type="submit"
+            className="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Créer les fraternités par défaut
+          </button>
+        </form>
       </div>
     </div>
   );

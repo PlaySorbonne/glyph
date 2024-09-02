@@ -7,6 +7,7 @@ import { getCodes } from "@/actions/code";
 import Link from "next/link";
 import { getFraternitysWithMembersCount } from "@/actions/fraternity";
 import { importDatabase } from "@/actions/db";
+import { importDatabaseFromCSV } from "@/actions/db";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,24 @@ export default async function AdminPage({
                 className="bg-yellow-500 hover:bg-red-600 text-white hover:text-black font-bold py-2 px-4 rounded cursor-pointer inline-block"
               >
                 Import Database
+              </button>
+              <p className="text-sm text-red-500 mt-1">
+                Warning: This will overwrite existing data!
+              </p>
+            </form>
+            <form action={importDatabaseFromCSV} className="flex flex-col mt-4">
+              <input
+                type="file"
+                name="databaseFile"
+                accept=".csv"
+                className="mb-2"
+                id="databaseFileCSV"
+              />
+              <button
+                type="submit"
+                className="bg-yellow-500 hover:bg-red-600 text-white hover:text-black font-bold py-2 px-4 rounded cursor-pointer inline-block"
+              >
+                Import Database from CSV
               </button>
               <p className="text-sm text-red-500 mt-1">
                 Warning: This will overwrite existing data!

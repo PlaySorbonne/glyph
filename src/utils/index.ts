@@ -31,6 +31,28 @@ export function cutString(str: string | null | undefined, maxLength: number) {
   return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
 }
 
+export function convertDDMMToDate(ddmmString?:string, year = new Date().getFullYear()) {
+  if (!ddmmString) {
+    return undefined;
+  }
+  const [day, month] = ddmmString.split('/').map(num => parseInt(num, 10));
+  
+  // Validate input
+  if (isNaN(day) || isNaN(month) || day < 1 || day > 31 || month < 1 || month > 12) {
+    throw new Error('Invalid date format. Expected DD/MM');
+  }
+
+  // Create Date object (month is 0-indexed in JavaScript)
+  const date = new Date(year, month - 1, day);
+
+  // Validate that the date is valid (e.g., not 31/04 for April 31st)
+  if (date.getDate() !== day || date.getMonth() !== month - 1) {
+    throw new Error('Invalid date');
+  }
+
+  return date;
+}
+
 const words = [
   "autour",
   "chaud",

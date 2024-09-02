@@ -4,6 +4,28 @@ import prisma from "@/lib/db";
 import { fraternitySchema } from "@/utils/constants";
 import { randomInt } from "crypto";
 
+export async function createDefaultFraternitys() {
+  await prisma.fraternity.createMany({
+    data: [
+      {
+        id: 1,
+        name: "Pietr",
+        description: "",
+      },
+      {
+        id: 2,
+        name: "Saka",
+        description: "",
+      },
+      {
+        id: 3,
+        name: "Foli",
+        description: "",
+      },
+    ],
+  });
+}
+
 export async function addFraternity(data: {
   name: string;
   description?: string;

@@ -78,7 +78,7 @@ model Fraternity {
 
 model Quest {
   id          Int       @id @default(autoincrement())
-  title       String
+  title       String    @unique
   img         String?
   mission     String?
   description String?

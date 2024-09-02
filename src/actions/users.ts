@@ -5,7 +5,7 @@ import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
 import { getUserFromSession } from "./auth";
 import { cookies } from "next/headers";
 import { Session } from "inspector";
-import { getNextAvailableFraternity, isFraternityFull } from "./fraternity";
+import { createDefaultFraternitys, getClassement, getFraternity, getNextAvailableFraternity, isFraternityFull } from "./fraternity";
 import { randomInt } from "crypto";
 
 export async function getUserById(id: string) {
@@ -227,6 +227,9 @@ export async function joinFraternity(
 }
 
 export async function joinRandomFraternity(userId: string) {
+  if ((await prisma.fraternity.findMany()).length === 0) {
+    createDefaultFraternitys();
+  }
   let fraternityId = await getNextAvailableFraternity();
   await joinFraternity(userId, fraternityId, true);
   return fraternityId;
