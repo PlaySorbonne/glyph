@@ -36,8 +36,20 @@ export default async function Book() {
         <section className={styles.quests}>
           {finishedQuests.map((quest) => (
             <div key={quest.id} className={styles.quest}>
-              <h3>{quest.title}</h3>
-              <p>{quest.description}</p>
+              {quest.img && quest.img.length > 0 ? (
+                <Image src={quest.img} alt="quest" className={styles.lock} />
+              ) : (
+                <Image src={icons.check} alt="check" className={styles.lock} />
+              )}
+              <div className={styles.questContent}>
+                <h3 className={styles.questTitle}>{quest.title}</h3>
+                <p className={styles.questDescription}>
+                  {cutString(quest.mission, 100)}{" "}
+                  {quest.description && quest.description.length > 100 && (
+                    <span className={styles.more}>{" Plus..."}</span>
+                  )}
+                </p>
+              </div>
             </div>
           ))}
         </section>

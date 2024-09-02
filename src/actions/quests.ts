@@ -121,6 +121,7 @@ export async function getNewlyCreatedQuests(userId?: string) {
   dateToday.setHours(0, 0, 0, 0);
 
   return await prisma.quest.findMany({
+    take: 3,
     where: {
       createdAt: {
         gt: dateToday,
@@ -207,6 +208,21 @@ export async function getFinishedPrimaryQuests(userId?: string) {
         : undefined,
     },
   });
+}
+
+export async function hasUserFinishedQuest(userId: string, questId: number) {
+  try {
+    let history = await prisma.history.findFirst({
+      where: {
+        userId: userId,
+        questId: questId,
+      },
+    });
+    return history ? true : false;
+  } catch (error) {
+    console.error("Error checking if user has finished quest", error);
+    return false;
+  }
 }
 
 let dateCheck = {

@@ -20,6 +20,11 @@ export default function AdminHeader() {
               Users
             </Link>
           </li>
+          <li>
+            <Link href="/app/admin/code/all" className="hover:text-gray-300">
+              Codes
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>

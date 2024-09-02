@@ -25,12 +25,28 @@
 }
 
 .quest {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 1rem;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0.5rem;
+  padding: 1rem;
 }
 
 .questTitle {
   font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "DCC-Ash";
+}
+
+.questContent {
+  width: 90%;
+  padding: 1rem;
+}
+
+.more {
+  color: #000;
   font-weight: bold;
 }

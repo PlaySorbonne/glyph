@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { appUrl, convertDDMMToDate } from "@/utils";
+import { appUrl, convertDDMMToDate, generateCode } from "@/utils";
 import { redirect } from "next/navigation";
 import { parse } from "csv-parse/sync";
 import { Code, Quest } from "@prisma/client";
@@ -168,6 +168,18 @@ export async function importDatabaseFromCSV(formData: FormData) {
             points: quest.points,
           },
           create: {
+            code: code,
+            questId: dbQuest.id,
+            isQuest: true,
+            points: quest.points,
+          },
+        });
+        console.log("code added", dbCode.id);
+      } else {
+        code = generateCode();
+        console.log("generating code", code);
+        let dbCode = await prisma.code.create({
+          data: {
             code: code,
             questId: dbQuest.id,
             isQuest: true,
