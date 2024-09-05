@@ -2,6 +2,15 @@ import withPWA from "next-pwa";
 
 /** @type {import('next').NextConfig} */
 
+let AR_Files = [
+  "/eye",
+  "/kirby-2.jpg",
+  "/StreamingAssets/:path*",
+  "/Build/:path*",
+];
+
+let AR_url = "https://playsorbonne.github.io/jeu_piste_AR";
+
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true, // Enable React strict mode for improved error handling
@@ -11,16 +20,14 @@ const nextConfig = {
   },
   async rewrites() {
     return {
-      afterFiles: [
-        {
-          source: "/eye/:path*/",
-          destination:"https://playsorbonne.github.io/jeu_piste_AR/:path*/",
-        },
-        {
-          source: "/eye",
-          destination: "https://playsorbonne.github.io/jeu_piste_AR/",
-        },
-      ],
+      afterFiles: AR_Files.map((link) => {
+        return {
+          source: link,
+          destination: !link.startsWith("/eye")
+            ? `${AR_url}${link}`
+            : AR_url + "/",
+        };
+      }),
     };
   },
 };
