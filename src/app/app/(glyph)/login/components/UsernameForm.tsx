@@ -64,7 +64,7 @@ export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
           htmlFor="username"
           className="block text-sm font-medium text-gray-700"
         >
-          Nom d'utilisateur
+          Nom d&apos;utilisateur
         </label>
         <input
           type="text"
