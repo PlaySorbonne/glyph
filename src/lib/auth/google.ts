@@ -1,11 +1,11 @@
-import { generateSession } from "@/utils";
+import { generateSession, hash } from "@/utils";
 import prisma from "../db";
 import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
 
 export const googleCallback = "/api/auth/google";
 
-export type googleSignInData = { type: "google"; code?: string | null };
+export type googleSignInData = { type: "google"; code?: string | null, allowLogin?: boolean };
 
 export async function signInWithGoogle(data: googleSignInData): Promise<
   | {
@@ -21,6 +21,8 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     }
 > {
   let registered = false;
+  let isAdmin = false;
+
   if (!data.code) {
     return {
       error: true,
@@ -78,6 +80,14 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
       msg: "Email not provided",
     };
   }
+  
+  console.log(googleInfo);
+  
+  if (googleInfo.email.endsWith("@playsorbonne.fr") && googleInfo.verified_email) {
+    isAdmin = true;
+  }
+
+  googleInfo.email = hash(googleInfo.email.toLowerCase());
 
   if (
     process.env.DISABLE_LOGIN &&
@@ -118,9 +128,16 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
         data: {
           email: googleInfo.email,
           emailVerified: googleInfo.verified_email,
+          isAdmin
         },
       });
+
       registered = true;
+    } else if (data.allowLogin === false) {
+      return {
+        error: true,
+        msg: "L'utilisateur existe déjà",
+      };
     }
 
     account = await prisma.account.create({

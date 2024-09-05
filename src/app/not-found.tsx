@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function NotFound() {
-  return <div>Not Found</div>;
+  return redirect("/?error=La page demandée n'existe pas.");
 }

@@ -16,7 +16,7 @@ export default function Page() {
           justifyContent: "space-around",
           alignItems: "center",
           height: "80px",
-          zIndex: "1000",
+          zIndex: "100",
           position: "fixed",
           top: "0",
           width: "100vw",

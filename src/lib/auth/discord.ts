@@ -1,11 +1,15 @@
-import { generateSession } from "@/utils";
+import { generateSession, hash } from "@/utils";
 import prisma from "../db";
 import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
 
 export const discordCallback = "/api/auth/discord";
 
-export type discordSignInData = { type: "discord"; code?: string | null };
+export type discordSignInData = {
+  type: "discord";
+  code?: string | null;
+  allowLogin?: boolean;
+};
 
 export async function signInWithDiscord(data: discordSignInData): Promise<
   | {
@@ -80,6 +84,9 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
     };
   }
 
+  if (discordInfo.email)
+    discordInfo.email = hash(discordInfo.email.toLowerCase());
+
   // Check if user is already registered
   let [account, ..._] = await prisma.account.findMany({
     where: {
@@ -112,6 +119,13 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
           emailVerified: discordInfo.verified,
         },
       });
+
+      registered = true;
+    } else if (data.allowLogin === false) {
+      return {
+        error: true,
+        msg: "L'utilisateur existe déjà",
+      };
     }
 
     account = await prisma.account.create({
@@ -124,7 +138,6 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
         user: true,
       },
     });
-    let registered = true;
   }
 
   let session = await prisma.session.create({

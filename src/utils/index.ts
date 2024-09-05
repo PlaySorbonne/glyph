@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { createHash, randomBytes } from "crypto";
 
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
 export function generateSession(id: string) {
@@ -29,15 +29,25 @@ export function cutString(str: string | null | undefined, maxLength: number) {
   return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
 }
 
-export function convertDDMMToDate(ddmmString?:string, year = new Date().getFullYear()) {
+export function convertDDMMToDate(
+  ddmmString?: string,
+  year = new Date().getFullYear()
+) {
   if (!ddmmString) {
     return undefined;
   }
-  const [day, month] = ddmmString.split('/').map(num => parseInt(num, 10));
-  
+  const [day, month] = ddmmString.split("/").map((num) => parseInt(num, 10));
+
   // Validate input
-  if (isNaN(day) || isNaN(month) || day < 1 || day > 31 || month < 1 || month > 12) {
-    throw new Error('Invalid date format. Expected DD/MM');
+  if (
+    isNaN(day) ||
+    isNaN(month) ||
+    day < 1 ||
+    day > 31 ||
+    month < 1 ||
+    month > 12
+  ) {
+    throw new Error("Invalid date format. Expected DD/MM");
   }
 
   // Create Date object (month is 0-indexed in JavaScript)
@@ -45,10 +55,19 @@ export function convertDDMMToDate(ddmmString?:string, year = new Date().getFullY
 
   // Validate that the date is valid (e.g., not 31/04 for April 31st)
   if (date.getDate() !== day || date.getMonth() !== month - 1) {
-    throw new Error('Invalid date');
+    throw new Error("Invalid date");
   }
 
   return date;
+}
+
+export function hash(str: string, salt: string | undefined = process.env.SALT) {
+  if (!salt) {
+    throw new Error("No salt provided");
+  }
+  return createHash("sha256")
+    .update(str + salt)
+    .digest("hex");
 }
 
 const words = [

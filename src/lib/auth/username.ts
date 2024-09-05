@@ -3,7 +3,11 @@ import { nameFormat, SESSION_TTL } from "@/utils/constants";
 import prisma from "../db";
 import { User } from "@prisma/client";
 
-export type nameSignInData = { name: string; type: "name" };
+export type nameSignInData = {
+  name: string;
+  type: "name";
+  allowLogin?: boolean;
+};
 
 export async function signInWithName(data: nameSignInData): Promise<
   | {
@@ -18,6 +22,8 @@ export async function signInWithName(data: nameSignInData): Promise<
       user: User;
     }
 > {
+  console.log("allowLogin", data.allowLogin);
+
   let registered = false;
   if (!data?.name) {
     return {
@@ -54,6 +60,11 @@ export async function signInWithName(data: nameSignInData): Promise<
       },
     });
     registered = true;
+  } else if (data.allowLogin === false) {
+    return {
+      error: true,
+      msg: "Le nom est déjà pris",
+    };
   }
 
   if (user.accounts.length > 0) {

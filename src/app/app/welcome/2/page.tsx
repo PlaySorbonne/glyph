@@ -11,6 +11,8 @@ export default async function Welcome1Page() {
     redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
   }
 
+  let question = questions[Math.floor(Math.random() * questions.length)];
+
   async function handleSubmit() {
     "use server";
     if (user?.fraternityId) {
@@ -43,20 +45,33 @@ export default async function Welcome1Page() {
     >
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">
-          Répondez à cette question pour que l&apos;ont détermine votre fraternité.
+          Votre fraternité...
         </h1>
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
-              Peut-on dire des choses plus vraies que d&apos;autres ?
+              {question.question}
             </label>
-            <input
-              type="text"
-              placeholder="Oui, non, peut-être...."
-              name="name"
-              id="name"
-              className="w-full px-3 py-2 bg-white bg-opacity-50 rounded-lg text-purple-900 placeholder-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-300"
-            />
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              {question.reponses.map((reponse) => (
+                <div
+                  key={reponse}
+                  className="flex items-center justify-center space-y-2"
+                >
+                  <input
+                    type="radio"
+                    name="reponse"
+                    value={reponse}
+                    className="rounded-full"
+                  />
+                  {reponse}
+                </div>
+              ))}
+            </div>
           </div>
           <button
             type="submit"
@@ -69,3 +84,35 @@ export default async function Welcome1Page() {
     </div>
   );
 }
+
+let questions = [
+  {
+    question: "Quel est votre animal favori ?",
+    reponses: ["Poisson-zebre", "Grenouille-Taureau", "Lapin-chameau"],
+  },
+  {
+    question: "Quel est votre sport favori ?",
+    reponses: ["Hockey sur gazon", "Hockey sur glace", "Hockey en salle"],
+  },
+  {
+    question: "Quel est votre plat favori ?",
+    reponses: ["Pâtes au beurre", "Beurre aux pâtes", "Pâtes aux pâtes "],
+  },
+  {
+    question: "Si vous vous sentez triste que faites vous : ",
+    reponses: ["Je pleure", "J'utilise l'appel à un ami", "J'arrête "],
+  },
+  {
+    question:
+      "Cliquez sur l'image qui vous fait ressentir le plus de bonheur :",
+    reponses: ["Chienvoiture", "Kirbyfok", "Champsu"],
+  },
+  {
+    question: "Si vous rencontrez un puma, que faites vous : ",
+    reponses: [
+      "J'achète une casquette",
+      "Je rugis plus fort que lui",
+      "Je grimpe a un arbre",
+    ],
+  },
+];
