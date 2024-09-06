@@ -92,7 +92,7 @@ export default function Page() {
             }}
           >
             <Link
-              href="/app"
+              href="/welcome"
               style={{
                 backgroundColor: "#498",
                 color: "white",

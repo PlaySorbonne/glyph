@@ -67,7 +67,7 @@ export default function Carrousel() {
                 loading="eager"
               />
               <h2 className={styles.subtitle}>{slide.subtitle}</h2>
-              <Link href="/app" className={styles.join}>
+              <Link href="/welcome" className={styles.join}>
                 {slide.joinMsg}
               </Link>
             </div>
