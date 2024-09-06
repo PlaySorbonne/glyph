@@ -35,7 +35,7 @@ export default async function Welcome() {
               Glyph
             </b>
             , un jeu conçu pour rendre votre expérience universitaire plus
-            amusante et interactive. Votre mission sera d'explorez le campus,
+            amusante et interactive. Votre mission sera d&apos;explorez le campus,
             relevez des défis, et participez à la victoire de votre fratrie.
           </p>
 
