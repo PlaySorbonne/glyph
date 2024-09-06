@@ -60,7 +60,7 @@ export default async function Header() {
           />
         </div>
       </div>
-      <p>{finishedQuests.length / primaryQuests.length * 100}%</p>
+      <p>{(finishedQuests.length / primaryQuests.length * 100).toString().slice(0,2)}%</p>
     </header>
   );
 }

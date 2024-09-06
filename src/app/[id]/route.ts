@@ -1,7 +1,6 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
 import { getCode, userScannedCode } from "@/actions/code";
 import { appUrl } from "@/utils";
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,5 +26,5 @@ export async function GET(
   }
 
   await userScannedCode(user!, code);
-  return NextResponse.redirect(appUrl(`/${code.questId}?finished=true`));
+  return NextResponse.redirect(appUrl(`/quest/${code.questId}?finished=true`));
 }

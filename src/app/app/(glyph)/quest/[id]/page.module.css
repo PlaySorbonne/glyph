@@ -1,0 +1,20 @@
+.section {
+  background-color: rgba(255,255,255,0.5);
+  padding: 1rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 2rem; 
+  margin: 2rem 0;
+}
+
+.title {
+  font-family: "DCC-Ash";
+  font-size: 2rem;
+  letter-spacing: 0.1rem;
+}
+
+.sectionTitle {
+  font-family: "DCC-Ash";
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+}

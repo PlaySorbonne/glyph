@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import { cutString } from "@/utils";
+import Link from "next/link";
 
 export default async function Book() {
   let user = await getUserFromSession();
@@ -18,7 +19,7 @@ export default async function Book() {
       </p>
       <section className={styles.quests}>
         {quests.map((quest) => (
-          <div key={quest.id} className={styles.quest}>
+          <Link href={"/app/quest/" + quest.id} key={quest.id} className={styles.quest}>
             <Image src={icons.lock} alt="lock" className={styles.lock} />
             <div className={styles.questContent}>
               <h3 className={styles.questTitle}>{quest.title}</h3>
@@ -29,13 +30,13 @@ export default async function Book() {
                 )}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </section>
       {finishedQuests.length > 0 && (
         <section className={styles.quests}>
           {finishedQuests.map((quest) => (
-            <div key={quest.id} className={styles.quest}>
+            <Link href={"/app/quest/" + quest.id} key={quest.id} className={styles.quest}>
               {quest.img && quest.img.length > 0 ? (
                 <Image src={quest.img} alt="quest" className={styles.lock} />
               ) : (
@@ -50,7 +51,7 @@ export default async function Book() {
                   )}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </section>
       )}

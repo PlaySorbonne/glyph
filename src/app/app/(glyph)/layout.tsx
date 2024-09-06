@@ -35,8 +35,9 @@ export default async function GlyphLayout({
       >
         <div className={styles.content}>
           <Header />
-          <div style={{ height: "80px"}} />
+          <div style={{ height: "100px"}} />
           <main>{children}</main>
+          <div style={{ height: "50px "}}/>
           <Navbar />
         </div>
       </div>
