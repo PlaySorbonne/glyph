@@ -70,7 +70,7 @@ export async function middleware(request: NextRequest) {
     return continueResponse;
 
   if (!info.name || !info.welcomed || !info.fraternityId) {
-    return NextResponse.redirect(new URL("/app/welcome", process.env.MAIN_URL));
+    return NextResponse.redirect(new URL("/welcome", process.env.MAIN_URL));
   }
 
   return continueResponse;

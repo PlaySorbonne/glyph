@@ -3,7 +3,12 @@ import GoogleBtn from "@/app/app/(glyph)/login/components/googleBtn";
 import UsernameForm from "@/app/app/(glyph)/login/components/UsernameForm";
 import WelcomePage from "../components/WelcomePage";
 
-export default function Welcome2() {
+export default function Welcome2({
+  searchParams,
+}: {
+  searchParams: { error?: string };
+}) {
+  let error = searchParams.error;
   return (
     <WelcomePage>
       <h1
@@ -16,7 +21,8 @@ export default function Welcome2() {
         }}
       >
         Créez un compte...
-      </h1>
+      </h1>{" "}
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <div className="space-y-4">
         <DiscordBtn allowLogin={false} />
         <GoogleBtn allowLogin={false} />

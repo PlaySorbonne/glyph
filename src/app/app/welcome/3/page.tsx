@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Fraternities, { getBackground } from "@/assets/fraternities";
+import Fraternities, { getBackground, getName, getLogo } from "@/assets/fraternities";
+import Image from "next/image";
 
 export default async function WelcomePage({
   searchParams,
@@ -8,6 +9,7 @@ export default async function WelcomePage({
 }) {
   const fraternityId = searchParams.fraternityId;
   const background = getBackground(parseInt(fraternityId));
+  const fraternity = getName(parseInt(fraternityId));
   return (
     <div
       className="min-h-screen flex flex-col justify-center items-center p-6"
@@ -17,9 +19,13 @@ export default async function WelcomePage({
         backgroundPosition: "center",
       }}
     >
+    <Image src={getLogo(parseInt(fraternityId))} alt={fraternity} width={100} height={100} />
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Si y a plus de bla bla
+        <h1 className="text-3xl font-bold mb-6 text-center" style={{
+          fontFamily: "DCC-Ash",
+          letterSpacing: "0.2rem",
+        }}>
+          Hmm... {fraternity} !
         </h1>
         <p className="text-lg mb-8 text-center">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam

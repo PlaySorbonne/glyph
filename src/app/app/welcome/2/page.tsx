@@ -44,9 +44,15 @@ export default async function Welcome1Page() {
       }}
     >
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Votre fraternité...
+        <h1 className="text-3xl font-bold mb-6 text-center" style={{
+          fontFamily: "DCC-Ash",
+          letterSpacing: "0.2rem",
+        }}>
+          Votre fratrie...
         </h1>
+        <p style={{
+          padding: "1rem 0"
+        }}>Répondez à cette question pour que l'on vous assigne votre fratrie</p>
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -55,20 +61,27 @@ export default async function Welcome1Page() {
             <div
               style={{
                 display: "flex",
+                flexDirection: "column",
               }}
             >
               {question.reponses.map((reponse) => (
                 <div
                   key={reponse}
-                  className="flex items-center justify-center space-y-2"
+                  style={{
+                    padding: "1rem",
+                    display: "flex",
+                  }}
                 >
                   <input
                     type="radio"
                     name="reponse"
                     value={reponse}
                     className="rounded-full"
+                    id={reponse}
                   />
+                  <label htmlFor={reponse}>
                   {reponse}
+                  </label>
                 </div>
               ))}
             </div>
@@ -97,10 +110,6 @@ let questions = [
   {
     question: "Quel est votre plat favori ?",
     reponses: ["Pâtes au beurre", "Beurre aux pâtes", "Pâtes aux pâtes "],
-  },
-  {
-    question: "Si vous vous sentez triste que faites vous : ",
-    reponses: ["Je pleure", "J'utilise l'appel à un ami", "J'arrête "],
   },
   {
     question:

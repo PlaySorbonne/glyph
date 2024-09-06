@@ -2,7 +2,6 @@ import WelcomePage from "./components/WelcomePage";
 import WelcomeButton from "@/components/WelcomeButton";
 
 export default async function Welcome() {
-
   return (
     <WelcomePage>
       <h1
@@ -26,11 +25,20 @@ export default async function Welcome() {
       ) : (
         <>
           <p>
-            Votre mission : <b>reconstituer le Glyph Ancestral</b> en explorant
-            le campus, en relevant des défis donnés par notre site ou nos
-            donneurs de missions en brassard et en résolvant des énigmes pour
-            retrouver les fragments cachés.
+            Vous êtes sur le point de rejoindre{" "}
+            <b
+              style={{
+                fontFamily: "DCC-Ash",
+                letterSpacing: "0.1rem",
+              }}
+            >
+              Glyph
+            </b>
+            , un jeu conçu pour rendre votre expérience universitaire plus
+            amusante et interactive. Votre mission sera d'explorez le campus,
+            relevez des défis, et participez à la victoire de votre fratrie.
           </p>
+
           <div
             style={{
               display: "flex",

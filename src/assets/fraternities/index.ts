@@ -53,4 +53,8 @@ export function getLogo(fraternityId?: number) {
   }
 }
 
+export function getName(fraternityId?: number) {
+  return {1: "Pietr", 2: "Saka", 3: "Foli"}[fraternityId || 0] || "Inconnue";
+}
+
 export default Fraternities;
