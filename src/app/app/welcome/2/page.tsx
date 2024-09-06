@@ -52,7 +52,7 @@ export default async function Welcome1Page() {
         </h1>
         <p style={{
           padding: "1rem 0"
-        }}>Répondez à cette question pour que l'on vous assigne votre fratrie</p>
+        }}>Répondez à cette question pour que l&apos;on vous assigne votre fratrie</p>
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-1">
