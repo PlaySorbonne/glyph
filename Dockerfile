@@ -63,11 +63,13 @@ RUN chown nextjs:nodejs .next
 VOLUME [ "/app/prisma" ]
 
 
-
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# REMOVE THIS IN PRODUCTION
+RUN rm -rf /app/prisma/dev.db
 
 # Uncomment this if you're using prisma, copies prisma files for linting
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
