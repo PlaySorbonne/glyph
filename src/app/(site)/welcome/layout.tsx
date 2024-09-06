@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 export default async function WelcomeLayout(props: { children: React.ReactNode }) {
   let session = await getSession();
-  if (session) return redirect(appUrl("/"));
+  if (session) return redirect(appUrl("/welcome"));
 
   return <>{props.children}</>
 }
