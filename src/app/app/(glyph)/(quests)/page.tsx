@@ -1,6 +1,5 @@
-import { getUserFromSession, logout } from "@/actions/auth";
+import { getUserFromSession } from "@/actions/auth";
 import {
-  getAvailableQuests,
   getNewlyCreatedQuests,
   getAvailableSecondaryQuests,
 } from "@/actions/quests";
@@ -8,6 +7,7 @@ import { cookies } from "next/headers";
 import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export default async function Home() {
   let session = cookies().get("session")?.value;
@@ -17,29 +17,34 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div>
-        <div className="flex items-center gap-4">
-          <h1 className="font-bold">{user!.name}</h1>
-          <p className="font-bold">{user!.score} points</p>
-        </div>
-      </div>
       <div className="space-y-8">
-        <Link href={appUrl("/book")} className="bg-white bg-opacity-20 rounded-xl p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
-            Continuez les quêtes principales de glyph
+        <Link href={appUrl("/book")}>
+          <h2 className="text-2xl font-semibold mb-4" style={{
+            fontFamily: "DCC-Ash",
+            letterSpacing: "0.2rem",
+            textAlign: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            borderRadius: "0.5rem",
+            padding: "1rem",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+          }}>
+            Continuez de reconstituer le Glyph principale !
           </h2>
         </Link>
+        
         {liveQuests.length > 0 && (
-          <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
+          <section className={styles.section}>
             <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
               Quêtes nouvellement annoncées
             </h2>
             <Quests quests={liveQuests} />
           </section>
         )}
-        <section className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
-            Quêtes secondaires
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>
+            Quêtes disponibles :
           </h2>
           <Quests quests={secondaryQuests} />
         </section>
