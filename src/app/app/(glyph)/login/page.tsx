@@ -12,7 +12,7 @@ export default async function Login({
 }) {
   let error = searchParams.error;
   if (process.env.DISABLE_LOGIN) {
-    error ??= "La connexion est désactivée, veillez revenir ultérieurement";
+    error = "La connexion est désactivée, veillez revenir ultérieurement";
   }
   const session = await getSession();
   if (session) {
