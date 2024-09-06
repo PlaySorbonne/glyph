@@ -1,5 +1,6 @@
 import { getClassement } from "@/actions/fraternity";
 import { getUsers } from "@/actions/users";
+import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +13,17 @@ export default async function ScorePage() {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8 text-center text-purple-600">Classements</h1>
+        <div className="container mx-auto px-4 py-8" style={{
+            width: "95vw",
+        }}>
             <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white shadow-md rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">Podium des Fraternités</h2>
+                <div className={styles.wrapper}>
+                    <h2 className="font-semibold mb-4 text-center" style={{
+                        fontSize: "2rem",
+                        fontFamily: "DCC-Ash",
+                        letterSpacing: "0.1rem",
+                        color: "rgba(0, 0, 0, 0.8)",
+                    }}>Podium des Fratries</h2>
                     <div className="flex justify-center items-end h-64 mb-8">
                         {/* 2nd place */}
                         <div className="w-1/4 mx-2">
