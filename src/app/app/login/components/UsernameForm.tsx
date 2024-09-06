@@ -2,11 +2,11 @@ import { updateUserWelcomed } from "@/actions/users";
 import { signIn } from "@/lib/auth";
 import { appUrl } from "@/utils";
 import { SESSION_TTL } from "@/utils/constants";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
+  allowLogin = allowLogin ?? true;
   async function handleSubmit(formData: FormData) {
     "use server";
 

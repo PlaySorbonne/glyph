@@ -1,6 +1,6 @@
-import DiscordBtn from "@/app/app/(glyph)/login/components/discordBtn";
-import GoogleBtn from "@/app/app/(glyph)/login/components/googleBtn";
-import UsernameForm from "@/app/app/(glyph)/login/components/UsernameForm";
+import DiscordBtn from "@/app/app/login/components/discordBtn";
+import GoogleBtn from "@/app/app/login/components/googleBtn";
+import UsernameForm from "@/app/app/login/components/UsernameForm";
 import WelcomePage from "../components/WelcomePage";
 
 export default function Welcome2({

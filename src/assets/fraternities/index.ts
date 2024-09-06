@@ -40,7 +40,7 @@ export function getBackground(fraternityId?: number) {
   }
 }
 
-export function getLogo(fraternityId?: number) {
+export function getLogo(fraternityId?: number | null) {
   switch (fraternityId) {
     case 1:
       return Fraternities.pietr.logo;
@@ -53,8 +53,8 @@ export function getLogo(fraternityId?: number) {
   }
 }
 
-export function getName(fraternityId?: number) {
-  return {1: "Pietr", 2: "Saka", 3: "Foli"}[fraternityId || 0] || "Inconnue";
+export function getName(fraternityId?: number | null) {
+  return { 1: "Pietr", 2: "Saka", 3: "Foli" }[fraternityId || 0] || "Inconnue";
 }
 
 export default Fraternities;

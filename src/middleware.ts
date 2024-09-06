@@ -12,6 +12,8 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   });
+  
+  if (process.env.NO_AUTH) return continueResponse;
 
   if (
     request.nextUrl.pathname.includes("/login") ||

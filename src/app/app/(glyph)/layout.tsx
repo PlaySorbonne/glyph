@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import styles from "./layout.module.css";
 import { cookies } from "next/headers";
 import Fraternities, { getBackground } from "@/assets/fraternities";
+import Header from "./components/Header/Header";
 
 export const metadata: Metadata = {
   title: "Glyph",
@@ -33,6 +34,8 @@ export default async function GlyphLayout({
         }}
       >
         <div className={styles.content}>
+          <Header />
+          <div style={{ height: "80px"}} />
           <main>{children}</main>
           <Navbar />
         </div>
