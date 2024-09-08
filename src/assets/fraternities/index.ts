@@ -1,10 +1,10 @@
-import FondJaune from "./fond_jaune.png";
-import FondRouge from "./fond_rouge.png";
-import FondVert from "./fond_vert.png";
+import FondJaune from "./fond_jaune.webp";
+import FondRouge from "./fond_rouge.webp";
+import FondVert from "./fond_vert.webp";
+import FondBlanc from "./fond_blanc.webp";
 import LogoJaune from "./logo_jaune.png";
 import LogoRouge from "./logo_rouge.png";
 import LogoVert from "./logo_vert.png";
-import FondBlanc from "./fond_blanc.png";
 
 import LogoFlat from "../logo-flat.png";
 
