@@ -1,10 +1,12 @@
 import icons from "@/assets/icons";
 import Image from "next/image";
 
+import styles from "./page.module.css";
+
 export default function Map() {
   return (
-    <div className="container mx-auto px-4 py-8 h-screen flex flex-col items-center justify-center">
-      <div className="text-center">
+    <div className={styles.container}>
+      <div>
         <Image
           src={icons.lock}
           alt="lock"

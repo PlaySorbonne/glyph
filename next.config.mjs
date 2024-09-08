@@ -1,6 +1,6 @@
-import withPWA from "next-pwa";
-
 /** @type {import('next').NextConfig} */
+
+import withPWA from "next-pwa";
 
 let AR_Files = [
   "/eye",
@@ -11,7 +11,7 @@ let AR_Files = [
 
 let AR_url = "https://playsorbonne.github.io/jeu_piste_AR";
 
-const nextConfig = {
+let nextConfig = {
   output: "standalone",
   reactStrictMode: true, // Enable React strict mode for improved error handling
   swcMinify: true, // Enable SWC minification for improved performance
@@ -32,9 +32,11 @@ const nextConfig = {
   },
 };
 
-export default withPWA({
+nextConfig = withPWA({
   dest: "public", // destination directory for the PWA files
   disable: process.env.NODE_ENV === "development", // disable PWA in the development environment
   register: true, // register the PWA service worker
   skipWaiting: true, // skip waiting for service worker activation
 })(nextConfig);
+
+export default nextConfig;

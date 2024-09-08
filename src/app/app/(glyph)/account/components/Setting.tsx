@@ -31,7 +31,9 @@ export default function Setting(
         className="py-4 px-4 flex justify-between items-center cursor-pointer"
         onClick={props.type === "button" ? props.onClick : handleToggle}
       >
-        <span>{props.label}</span>
+        <span style={{
+          fontWeight: 500,
+        }}>{props.label}</span>
         {props.type !== "button" && (
           <svg
             className={`w-4 h-4 transition-transform ${
@@ -52,10 +54,23 @@ export default function Setting(
         )}
       </div>
       {isOpen && props.type === "children" && !props.popup && (
-        <div className="px-4 py-2 bg-gray-50">{props.children}</div>
+        <div className="px-4 py-2">{props.children}</div>
       )}
       {isOpen && props.type === "children" && props.popup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+          }}
+        >
           <div className="bg-white p-4 rounded-lg max-w-sm w-full mx-4">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{props.label}</h3>

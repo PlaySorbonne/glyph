@@ -30,7 +30,7 @@ export default async function QuestPage({
 
   return (
     <div>
-      {searchParams.finished && (
+      {(searchParams.finished || hasFinishedQuest) && (
         <div
           style={{
             backgroundColor: "green",

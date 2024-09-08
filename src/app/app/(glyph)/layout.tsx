@@ -36,7 +36,10 @@ export default async function GlyphLayout({
         <div className={styles.content}>
           <Header />
           <div style={{ height: "100px"}} />
-          <main>{children}</main>
+          <main style={{
+            minHeight: "calc(100vh - 150px)",
+            margin: "1rem"
+          }}>{children}</main>
           <div style={{ height: "50px "}}/>
           <Navbar />
         </div>

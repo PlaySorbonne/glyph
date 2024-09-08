@@ -7,6 +7,8 @@ import Dlc from "@/assets/dlc.png";
 import styles from "./page.module.css";
 import Carrousel from "./components/Carrousel";
 
+import { FAQ } from "@/utils";
+
 export default function Page() {
   return (
     <>
@@ -100,12 +102,47 @@ export default function Page() {
                 borderRadius: "0.5rem",
                 fontWeight: "bold",
                 marginTop: "2rem",
-                marginBottom: "3rem",
+                marginBottom: "1rem",
               }}
             >
               Rejoignez l&apos;aventure dès le 9 septembre !
             </Link>
           </div>
+        </div>
+      </section>
+      <section id="faq" style={{
+        backgroundColor: "#eee",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+      }}>
+        <div style={{
+          padding: "2rem",
+          maxWidth: "1000px",
+        }}>
+          <h1 style={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+            fontFamily: "DCC-Ash",
+            letterSpacing: "0.1rem",
+          }}>Qualitatively Anticipated Fake Frequently Asked Questions :</h1>
+          {FAQ.map((item, index) => (
+            <div
+              key={index}
+              style={{
+                padding: "1rem",
+              }}
+            >
+              <h2 style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "0.5rem",
+              }}>{item.question}</h2>
+              <p>{item.answer}</p>
+            </div>
+          ))}
         </div>
       </section>
     </>

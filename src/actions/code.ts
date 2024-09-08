@@ -118,6 +118,27 @@ export async function deleteCode(id: number) {
 }
 
 export async function userScannedCode(user: User, code: Code) {
+  let quest;
+  let history = await prisma.history.findFirst({
+    where: {
+      userId: user.id,
+      codeId: code.id,
+    },
+  });
+
+  if (history) {
+    throw new Error("Le code a déjà été scanné");
+  }
+
+  if (code.isQuest) {
+    quest = await prisma.quest.findUnique({
+      where: {
+        id: code.questId!,
+      },
+    });
+    code.points = quest?.points || 1;
+  }
+
   await prisma.fraternity.update({
     where: {
       id: user.fraternityId!,
@@ -140,14 +161,15 @@ export async function userScannedCode(user: User, code: Code) {
     },
   });
 
-
   return await prisma.history.create({
     data: {
       userId: user.id,
       codeId: code.id,
       questId: code.questId,
       points: code.points,
-      description: `${code.description}`,
+      description: code.isQuest
+        ? `Vous avez fini la quête ${quest?.title}`
+        : `Vous avez accompli une quête secondaire de ${code.points} points`,
     },
   });
 }

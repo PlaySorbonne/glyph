@@ -115,26 +115,15 @@ export async function deleteQuest(id: string) {
   });
 }
 
-// récupère les quêtes créées aujourd'hui (après minuit)
-export async function getNewlyCreatedQuests(userId?: string) {
-  let dateToday = new Date();
-  dateToday.setHours(0, 0, 0, 0);
-
+/* get quests that are recently active */
+export async function getRecenltyActiveQuests() {
+  const nbDays = 3;
   return await prisma.quest.findMany({
-    take: 3,
     where: {
-      createdAt: {
-        gt: dateToday,
+      starts: {
+        lte: new Date(),
+        gte: new Date(new Date().getTime() - nbDays * 24 * 60 * 60 * 1000),
       },
-      secondary: true,
-      ...dateCheck,
-      History: userId
-        ? {
-            none: {
-              userId: userId,
-            },
-          }
-        : undefined,
     },
   });
 }

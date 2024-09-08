@@ -25,6 +25,12 @@ export async function GET(
     return notFound();
   }
 
-  await userScannedCode(user!, code);
+  try {
+    await userScannedCode(user!, code);
+  } catch (e : any) {
+    return NextResponse.redirect(
+      appUrl(`/quest/${code.questId}?error=${e.message ?? "Une erreur est survenue"}`)
+    );
+  }
   return NextResponse.redirect(appUrl(`/quest/${code.questId}?finished=true`));
 }
