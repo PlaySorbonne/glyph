@@ -1,10 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import styles from "./Navbar.module.css";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
     <nav className={styles.navbar}>
-      <Link href="/app" className={styles.navItem}>
+      <Link
+        href="/app"
+        className={`${styles.navItem} ${
+          pathname === "/app" ? styles.active : ""
+        }`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -16,18 +26,23 @@ export default function Navbar() {
             id="Shape"
             d="M10.75,1.5A2.25,2.25,0,0,1,13,3.75v9.028h1.5V3.75A3.75,3.75,0,0,0,10.75,0H.75a.75.75,0,0,0,0,1.5C1.669,1.5,2,1.831,2,2.75v11A3.75,3.75,0,0,0,5.75,17.5h8V16h-8A2.25,2.25,0,0,1,3.5,13.75v-11A3.392,3.392,0,0,0,3.285,1.5Z"
             transform="translate(4.25 3.25)"
-            fill="#141124"
+            fill="currentColor"
           />
           <path
             id="Shape-2"
             data-name="Shape"
             d="M7.765,17.5A3.294,3.294,0,0,0,10.738,16H7.754C9.307,16,10,15,10,12.749a.751.751,0,0,1,.751-.75h8a.751.751,0,0,1,.75.75v1a3.755,3.755,0,0,1-3.75,3.75ZM10.738,16H15.75A2.253,2.253,0,0,0,18,13.749V13.5H11.472A5.4,5.4,0,0,1,10.738,16ZM7,16.75A.72.72,0,0,1,7.749,16h0v1.5A.719.719,0,0,1,7,16.75ZM.75,5.5A.751.751,0,0,1,0,4.75v-2a2.75,2.75,0,1,1,5.5,0v2a.751.751,0,0,1-.75.75ZM1.5,2.75V4H4V2.75a1.25,1.25,0,1,0-2.5,0Z"
             transform="translate(2.25 3.25)"
-            fill="#141124"
+            fill="currentColor"
           />
         </svg>
       </Link>
-      <Link href="/app/score" className={styles.navItem}>
+      <Link
+        href="/app/score"
+        className={`${styles.navItem} ${
+          pathname === "/app/score" ? styles.active : ""
+        }`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -37,9 +52,13 @@ export default function Navbar() {
         >
           <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
         </svg>
-        {/* <span>Trophy</span> */}
       </Link>
-      <Link href="/app/book" className={styles.navItem}>
+      <Link
+        href="/app/book"
+        className={`${styles.navItem} ${
+          pathname === "/app/book" ? styles.active : ""
+        }`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -49,9 +68,13 @@ export default function Navbar() {
         >
           <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z" />
         </svg>
-        {/* <span>Book</span> */}
       </Link>
-      <Link href="/app/map" className={styles.navItem}>
+      <Link
+        href="/app/map"
+        className={`${styles.navItem} ${
+          pathname === "/app/map" ? styles.active : ""
+        }`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -61,9 +84,13 @@ export default function Navbar() {
         >
           <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
         </svg>
-        {/* <span>Map</span> */}
       </Link>
-      <Link href="/app/account" className={styles.navItem}>
+      <Link
+        href="/app/account"
+        className={`${styles.navItem} ${
+          pathname === "/app/account" ? styles.active : ""
+        }`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

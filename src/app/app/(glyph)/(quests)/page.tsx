@@ -17,11 +17,12 @@ export default async function Home() {
               fontFamily: "DCC-Ash",
               letterSpacing: "0.2rem",
               textAlign: "center",
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              backgroundColor: "rgba(255, 255, 255, 0.8)",
               borderRadius: "0.5rem",
               padding: "1rem",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
+              border: "2px solid rgba(0, 0, 0, 0.9)",
             }}
           >
             Continuez de reconstituer le Glyph principal !
