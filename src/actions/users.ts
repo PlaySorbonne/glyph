@@ -4,9 +4,11 @@ import prisma from "@/lib/db";
 import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
 import { getUserFromSession } from "./auth";
 import { cookies } from "next/headers";
-import { Session } from "inspector";
-import { createDefaultFraternitys, getClassement, getFraternity, getNextAvailableFraternity, isFraternityFull } from "./fraternity";
-import { randomInt } from "crypto";
+import {
+  createDefaultFraternitys,
+  getNextAvailableFraternity,
+  isFraternityFull,
+} from "./fraternity";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -73,6 +75,7 @@ export async function updateUser(
     console.error("Validation error:", validatedData.error);
     throw new Error(validatedData.error.errors[0].message);
   }
+
   if (validatedData.data.isAdmin) {
     let user = await prisma.user.findUnique({
       where: {
@@ -89,11 +92,24 @@ export async function updateUser(
     // let emailVerified = user?.emailVerified ?? false;
     data.isAdmin = Boolean(hasProvider);
   }
+
+  let user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      History: true,
+    },
+  });
+
+  let score =
+    user?.History.reduce((acc, history) => acc + history.points, 0) || 0;
+
   let out = await prisma.user.update({
     where: {
       id,
     },
-    data: validatedData.data,
+    data: { ...validatedData.data, score },
   });
 
   if (setCookie) {
