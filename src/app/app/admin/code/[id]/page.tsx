@@ -71,8 +71,8 @@ export default async function EditCodePage({
       <div className="bg-white shadow-md rounded-lg p-6">
         <div className="mt-6 border-t pt-4">
           <h2 className="text-lg font-semibold mb-2">Delete Code</h2>
-            <Link href={`/admin/code/${code.id}/delete`}
-              className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            <Link href={`/s/${code.code}`}
+              className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Afficher QRcode
             </Link>
