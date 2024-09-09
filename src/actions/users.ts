@@ -35,6 +35,11 @@ export async function getUserByName(name: string) {
 export async function getUsers(data?: { n?: number; sortByPoint?: boolean }) {
   let { n, sortByPoint } = data || {};
   return await prisma.user.findMany({
+    where: {
+      name: {
+        not: null,
+      },
+    },
     take: n,
     orderBy: [
       {

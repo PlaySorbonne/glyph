@@ -13,7 +13,7 @@ export default function Map() {
           className="w-32 h-32 text-gray-400 mb-4 mx-auto"
         />
         <p className="text-xl text-gray-600">
-          Faites au moins une mission principale pour débloquer
+          Complétez la quete de la Plume pour débloquer la carte
         </p>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { getClassement } from "@/actions/fraternity";
 import { getUsers } from "@/actions/users";
 import styles from "./page.module.css";
+import { getLogo } from "@/assets/fraternities";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +43,12 @@ export default async function ScorePage() {
             <div className="w-1/4 mx-2">
               <div className="h-40 flex flex-col justify-end items-center p-2 rounded-t-lg">
                 <span className="text-2xl font-bold text-gray-700">2</span>
+                <Image
+                  src={getLogo(fraternities[1].id)}
+                  width={100}
+                  height={100}
+                  alt={`${fraternities[1].name} logo`}
+                />
                 <h3 className="text-lg font-medium text-gray-800 text-center">
                   {fraternities[1].name}
                 </h3>
@@ -53,6 +61,12 @@ export default async function ScorePage() {
             <div className="w-1/3 mx-2">
               <div className="bg-yellow-200 h-52 flex flex-col justify-end items-center p-2 rounded-t-lg">
                 <span className="text-3xl font-bold text-yellow-700">1</span>
+                <Image
+                  src={getLogo(fraternities[0].id)}
+                  width={100}
+                  height={100}
+                  alt={`${fraternities[0].name} logo`}
+                />
                 <h3 className="text-xl font-medium text-gray-800 text-center">
                   {fraternities[0].name}
                 </h3>
@@ -65,6 +79,12 @@ export default async function ScorePage() {
             <div className="w-1/4 mx-2">
               <div className="bg-orange-200 h-32 flex flex-col justify-end items-center p-2 rounded-t-lg">
                 <span className="text-xl font-bold text-orange-700">3</span>
+                <Image
+                  src={getLogo(fraternities[2].id)}
+                  width={100}
+                  height={100}
+                  alt={`${fraternities[2].name} logo`}
+                />
                 <h3 className="text-lg font-medium text-gray-800 text-center">
                   {fraternities[2].name}
                 </h3>
@@ -76,7 +96,14 @@ export default async function ScorePage() {
           </div>
         </div>
         <div className={styles.wrapper}>
-          <h2 className="text-2xl font-semibold mb-4 text-center text-indigo-600">
+          <h2
+            className="text-2xl font-semibold mb-4 text-center"
+            style={{
+              fontFamily: "DCC-Ash",
+              letterSpacing: "0.1rem",
+              color: "rgba(0, 0, 0, 0.8)",
+            }}
+          >
             Top 10
           </h2>
           <div className="space-y-4">
@@ -86,9 +113,15 @@ export default async function ScorePage() {
                 className="flex items-center justify-between p-3 rounded-md"
               >
                 <div className="flex items-center">
-                  <span className="text-lg font-bold mr-3 text-gray-700">
-                    {index + 1}.
-                  </span>
+                  <Image
+                    src={getLogo(user.fraternityId)}
+                    width={50}
+                    height={50}
+                    alt={`${user.fraternityId} logo`}
+                    style={{
+                      padding: "3px",
+                    }}
+                  />
                   <h3 className="text-lg font-medium text-gray-800">
                     {user.name}
                   </h3>
