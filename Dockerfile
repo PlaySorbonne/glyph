@@ -79,6 +79,9 @@ ENV PORT=${PORT}
 # set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
+RUN apk update && apk upgrade
+RUN apk add --no-cache sqlite
+
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["npm", "run", "start:migrate:prod"]
