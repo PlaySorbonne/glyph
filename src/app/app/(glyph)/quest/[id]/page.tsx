@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import Image from "next/image";
+import Setting from "../../account/components/Setting";
 
 export default async function QuestPage({
   params,
@@ -28,6 +29,13 @@ export default async function QuestPage({
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
 
+  let indices =
+    quest.indice &&
+    quest!.indice
+      .split("\n")
+      .filter((e) => e)
+      .map((e) => e.trim());
+
   return (
     <div>
       {(searchParams.finished || hasFinishedQuest) && (
@@ -48,9 +56,17 @@ export default async function QuestPage({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
         >
-          <h1 className={styles.title}>{quest.title}</h1>
+          <h1
+            className={styles.title}
+            style={{
+              minWidth: "50%",
+            }}
+          >
+            {quest.title}
+          </h1>
           <h3
             style={{
               color: "rgba(0, 0, 0, 0.5)",
@@ -60,6 +76,13 @@ export default async function QuestPage({
             {quest.lieu}
           </h3>
         </div>
+        <p
+          style={{
+            paddingBottom: "1rem",
+          }}
+        >
+          {quest.horaires ?? "jioajdioazj"}
+        </p>
         <p>{quest.mission}</p>
       </section>
 
@@ -67,6 +90,26 @@ export default async function QuestPage({
         <h1 className={styles.sectionTitle}>Description</h1>
         <p>{quest.description}</p>
       </section>
+
+      {indices && (
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>
+            Indice{indices.length > 1 ? "s" : ""}
+          </h1>
+          {indices.map((indice, index) => (
+            <Setting key={index} label={`Indice ${index + 1}`} type="children">
+              <p>{indice}</p>
+            </Setting>
+          ))}
+        </section>
+      )}
+
+      {hasFinishedQuest && quest.lore && (
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>Lore</h1>
+          <p>{quest.lore}</p>
+        </section>
+      )}
 
       <section className={styles.section}>
         <h1 className={styles.sectionTitle}>Glyph</h1>

@@ -4,6 +4,7 @@ import { googleSignInData, signInWithGoogle } from "./google";
 import { cookies } from "next/headers";
 import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
+import { getCode, userScannedCode } from "@/actions/code";
 
 type signInData = nameSignInData | discordSignInData | googleSignInData;
 
@@ -55,6 +56,17 @@ export async function signIn(data: signInData): Promise<
       });
     }
   }
+
+  if (out.error || !out.registered) return out;
+
+  try {
+    let code = await getCode("notwelcome");
+    if (!code) {
+      console.error("Quests not initialized yet");
+      throw new Error("Quests not initialized yet");
+    }
+    userScannedCode(out.user, code!);
+  } catch (e: any) {}
 
   return out;
 }

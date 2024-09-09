@@ -130,9 +130,11 @@ export async function importDatabaseFromCSV(formData: FormData) {
         code: record["Qrcode"],
         mission: record["Mission"],
         description: record["Description immersive"],
+        lore: record["Lore"],
         points: record["Pts"] ? parseInt(record["Pts"].toString()) : 1,
         indice: record["Indice"],
         secondary: !["Principale", "Début"].includes(record["Style"]),
+        horaires: record["Horaires"],
       } as Quest & { code?: string };
     });
     quests = quests.filter((quest) => quest !== null);

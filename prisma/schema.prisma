@@ -93,6 +93,7 @@ model Quest {
   starts      DateTime?
   ends        DateTime?
   createdAt   DateTime  @default(now())
+  horaires    String?
 
   Code Code[]
 
