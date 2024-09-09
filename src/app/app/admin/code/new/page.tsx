@@ -6,11 +6,12 @@ import { appUrl } from "@/utils";
 export default function NewCodePage() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
+    let code;
 
     const codeData = {
       code: formData.get("code") as string,
       description: (formData.get("description") as string) || undefined,
-      isQuest: formData.get("questId") != null,
+      isQuest: formData.get("questId") ? true : false,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
         ? new Date(formData.get("expires") as string)
@@ -21,14 +22,14 @@ export default function NewCodePage() {
     };
 
     try {
-      await addCode(codeData);
+      code = await addCode(codeData);
     } catch (error) {
       console.error("Error adding code:", error);
       return redirect(
         appUrl(`/admin/code/new?error=${"Erreur lors de l'ajout du code"}`)
       );
     }
-    return redirect(appUrl("/admin/code/all"));
+    return redirect(appUrl(`/admin/code/${code.id}`));
   };
 
   return (
