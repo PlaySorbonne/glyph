@@ -55,7 +55,7 @@ export async function updateFraternity(
   id: number,
   data: { name: string; description?: string }
 ) {
-  const parsedData = fraternitySchema.safeParse(data);
+  const parsedData = fraternitySchema.partial().safeParse(data);
   if (!parsedData.success) {
     throw new Error("Invalid data");
   }
