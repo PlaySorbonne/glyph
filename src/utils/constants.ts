@@ -62,6 +62,7 @@ export const questSchema = z
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),
     ends: z.coerce.date().optional().nullable(),
+    horaires: z.string().optional().nullable(),
   })
   .refine((data) => !data.starts || !data.ends || data.starts < data.ends, {
     message: "End date must be after start date",
@@ -90,4 +91,5 @@ export type UserInput = z.infer<typeof userSchema>;
 export const fraternitySchema = z.object({
   name: z.string().min(1),
   description: z.string().optional().nullable(),
+  points: z.number().int().positive().default(0),
 });
