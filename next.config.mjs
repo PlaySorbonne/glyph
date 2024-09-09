@@ -18,17 +18,14 @@ let nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV !== "development", // Remove console.log in production
   },
-  async rewrites() {
-    return {
-      afterFiles: AR_Files.map((link) => {
-        return {
-          source: link,
-          destination: !link.startsWith("/eye")
-            ? `${AR_url}${link}`
-            : AR_url + "/",
-        };
-      }),
-    };
+  async redirects() {
+    return [
+      {
+        source: "/eye",
+        destination: "https://webxr.run/Q2nA90N3RwMgp",
+        permanent: false,
+      },
+    ];
   },
 };
 
