@@ -30,6 +30,8 @@ export async function signInWithName(data: nameSignInData): Promise<
       msg: "Le nom est requis",
     };
   }
+  
+  data.name = data.name.toLowerCase();
 
   let parsed = nameFormat.safeParse(data.name);
   if (!parsed.success) {
