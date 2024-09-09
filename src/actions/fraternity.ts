@@ -59,11 +59,23 @@ export async function updateFraternity(
   if (!parsedData.success) {
     throw new Error("Invalid data");
   }
+
+  let fraternity = await prisma.fraternity.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      users: true,
+    },
+  });
+
+  let score = fraternity?.users.reduce((acc, user) => acc + user.score, 0) || 0;
+
   return await prisma.fraternity.update({
     where: {
       id,
     },
-    data: parsedData.data,
+    data: { ...parsedData.data, score },
   });
 }
 
