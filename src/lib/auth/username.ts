@@ -36,7 +36,7 @@ export async function signInWithName(data: nameSignInData): Promise<
   if (!parsed.success) {
     return {
       error: true,
-      msg: parsed.error.message,
+      msg: "Le nom doit contenir entre 4 et 20 caractères alphanumériques et ne contenir que des lettres, des chiffres, des points, des tirets et des underscores.",
     };
   }
 

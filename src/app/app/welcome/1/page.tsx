@@ -1,18 +1,12 @@
-import { getSession, getUserFromSession } from "@/actions/auth";
-import { updateUserWelcomed } from "@/actions/users";
+import { getUserFromSession } from "@/actions/auth";
 import Fraternities from "@/assets/fraternities";
+import { appUrl } from "@/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function WelcomePage() {
-  try {
-    await updateUserWelcomed({
-      sessionToken: (await getSession()) as string,
-      userId: undefined,
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  let user = await getUserFromSession();
+  if (user!.name && user!.fraternityId) return redirect(appUrl("/"));
 
   return (
     <div

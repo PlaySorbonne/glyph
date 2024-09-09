@@ -1,4 +1,4 @@
-import { getFinishedQuests, getRecenltyActiveQuests } from "@/actions/quests";
+import { getAvailableSecondaryQuests, getFinishedQuests } from "@/actions/quests";
 import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export default async function Home() {
   let user = await getUserFromSession();
-  let liveQuests = await getRecenltyActiveQuests();
+  let quests = await getAvailableSecondaryQuests(user!.id);
   let finishedQuests = await getFinishedQuests(user!.id).then((quests) =>
     quests.filter((quest) => !quest.secondary)
   );
@@ -87,12 +87,12 @@ export default async function Home() {
           </p>
         </div>
 
-        {liveQuests.length > 0 && (
+        {quests.length > 0 && (
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>
-              Quêtes nouvellement annoncées
+              Quêtes secondaires disponibles
             </h2>
-            <Quests quests={liveQuests} />
+            <Quests quests={quests} />
           </section>
         )}
       </div>

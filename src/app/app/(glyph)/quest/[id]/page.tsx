@@ -82,15 +82,17 @@ export default async function QuestPage({
             paddingBottom: "1rem",
           }}
         >
-          {quest.horaires ?? "jioajdioazj"}
+          {quest.horaires}
         </p>
         <p>{quest.mission}</p>
       </section>
 
-      <section className={styles.section}>
-        <h1 className={styles.sectionTitle}>Description</h1>
-        <p>{quest.description}</p>
-      </section>
+      {quest.description && (
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>Description</h1>
+          <p>{quest.description}</p>
+        </section>
+      )}
 
       {indices && (
         <section className={styles.section}>
@@ -138,7 +140,6 @@ export default async function QuestPage({
           <p>{quest.lore}</p>
         </section>
       )}
-
     </div>
   );
 }

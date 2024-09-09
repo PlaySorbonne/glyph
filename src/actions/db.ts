@@ -119,10 +119,7 @@ export async function importDatabaseFromCSV(formData: FormData) {
       return {
         title: record["Nom"],
         lieu: record["Lieu"],
-        starts:
-          record["Date Début"] !== "9/9"
-            ? convertDDMMToDate(record["Date Début"])
-            : null,
+        starts: convertDDMMToDate(record["Date Début"]),
         ends: convertDDMMToDate(record["Date Fin"]),
         daysOpen: record["Jours"],
         hourOpen: record["Horaire Début"],
@@ -135,7 +132,7 @@ export async function importDatabaseFromCSV(formData: FormData) {
         indice: record["Indice"],
         secondary: !["Principale", "Début"].includes(record["Style"]),
         horaires: record["Horaires"],
-        img: record["Glyph"]
+        img: record["Glyph"],
       } as Quest & { code?: string };
     });
     quests = quests.filter((quest) => quest !== null);

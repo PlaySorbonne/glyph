@@ -157,6 +157,14 @@ export async function getAvailableSecondaryQuests(userId?: string) {
           }
         : undefined,
     },
+    orderBy: [
+      {
+        starts: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 }
 

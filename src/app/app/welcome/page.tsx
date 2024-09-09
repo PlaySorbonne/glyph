@@ -5,12 +5,10 @@ import { redirect } from "next/navigation";
 import Fraternities from "@/assets/fraternities";
 
 export default async function Welcome1Page() {
-  const session = await getSession();
-  const user = await getUserFromSession(session);
-
-  if (user!.name) {
-    redirect(appUrl("/welcome/1"));
-  }
+  let session = await getSession();
+  let user = await getUserFromSession(session);
+  if (user!.name && user!.fraternityId) return redirect(appUrl("/"));
+  if (user!.name) redirect(appUrl("/welcome/1"));
 
   async function handleSubmit(formData: FormData) {
     "use server";

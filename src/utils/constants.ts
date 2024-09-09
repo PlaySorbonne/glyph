@@ -8,12 +8,12 @@ export const nameFormat = z.custom<string>(
       typeof val === "string" &&
       val.length > 3 &&
       val.length < 20 && // allows string of length 4
-      /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9_-]+$/.test(val)
+      /^(?=.*[a-zA-Z0-9])[a-zA-Z0-9_.-]+$/.test(val)
     ); // regex for alphanumeric and _- (allows _- only if there is at least one alphanumeric character)
   },
   {
     message:
-      "Le nom doit contenir entre 4 et 20 caractères alphanumériques et ne contenir que des lettres, des chiffres, des tirets et des underscores.",
+      "Le nom doit contenir entre 4 et 20 caractères alphanumériques et ne contenir que des lettres, des chiffres, des points, des tirets et des underscores.",
   }
 );
 
