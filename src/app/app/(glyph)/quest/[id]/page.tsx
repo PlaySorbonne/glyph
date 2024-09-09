@@ -105,13 +105,6 @@ export default async function QuestPage({
         </section>
       )}
 
-      {hasFinishedQuest && quest.lore && (
-        <section className={styles.section}>
-          <h1 className={styles.sectionTitle}>Lore</h1>
-          <p>{quest.lore}</p>
-        </section>
-      )}
-
       {!quest.secondary && (
         <section className={styles.section}>
           <h1 className={styles.sectionTitle}>Glyph</h1>
@@ -138,6 +131,14 @@ export default async function QuestPage({
           </div>
         </section>
       )}
+
+      {hasFinishedQuest && quest.lore && (
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>Lore</h1>
+          <p>{quest.lore}</p>
+        </section>
+      )}
+
     </div>
   );
 }

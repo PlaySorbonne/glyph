@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
 import { getCode, userScannedCode } from "@/actions/code";
+import prisma from "../db";
 
 type signInData = nameSignInData | discordSignInData | googleSignInData;
 
@@ -42,6 +43,8 @@ export async function signIn(data: signInData): Promise<
     };
   }
 
+  console.log("out", out);
+
   if (!out?.error) {
     let ttl =
       SESSION_TTL === -1
@@ -60,13 +63,26 @@ export async function signIn(data: signInData): Promise<
   if (out.error || !out.registered) return out;
 
   try {
-    let code = await getCode("notwelcome");
-    if (!code) {
-      console.error("Quests not initialized yet");
-      throw new Error("Quests not initialized yet");
-    }
-    userScannedCode(out.user, code!);
-  } catch (e: any) {}
+    let code = await prisma.code.findFirst({
+      where: {
+        code: "notwelcome",
+      },
+      include: {
+        quest: true,
+      },
+    });
+    if (!code) throw new Error("Code 'notwelcome' not found");
+    await prisma.history.create({
+      data: {
+        userId: out.user.id,
+        questId: code?.quest!.id,
+        codeId: code!.id,
+        points: code!.quest!.points,
+      },
+    });
+  } catch (e: any) {
+    console.error(e);
+  }
 
   return out;
 }

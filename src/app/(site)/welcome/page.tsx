@@ -35,8 +35,9 @@ export default async function Welcome() {
               Glyph
             </b>
             , un jeu conçu pour rendre votre expérience universitaire plus
-            amusante et interactive. Votre mission sera d&apos;explorez le campus,
-            relevez des défis, et participez à la victoire de votre fratrie.
+            amusante et interactive. Votre mission sera d&apos;explorez le
+            campus, relevez des défis, et participez à la victoire de votre
+            fratrie.
           </p>
 
           <div
@@ -52,21 +53,22 @@ export default async function Welcome() {
               style={{
                 height: "100%",
                 display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <WelcomeButton link="/welcome/2">Continuer</WelcomeButton>
-            </div>
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
               }}
             >
-              <p>Déjà un compte ?</p>
-              <WelcomeButton link="/app/login">Se connecter</WelcomeButton>
+              <WelcomeButton link="/app/login">Déjà un compte ?</WelcomeButton>
+            </div>
+
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                paddingLeft: "1rem",
+              }}
+            >
+              <WelcomeButton link="/welcome/2">Continuer</WelcomeButton>
             </div>
           </div>
         </>
