@@ -4,6 +4,7 @@ import { userSchema, UserInput } from "@/utils/constants";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { appUrl } from "@/utils";
+import Link from "next/link";
 
 export default async function EditUserPage({
   params,
@@ -66,6 +67,15 @@ export default async function EditUserPage({
         Modifier l&apos;utilisateur
       </h1>
       <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="mt-6 border-b pt-4">
+          <h2 className="text-lg font-semibold mb-2">Historique</h2>
+          <Link
+            href={`/app/admin/user/${params.id}/history`}
+            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Voir Historique
+          </Link>
+        </div>
         <form action={updateUserAction} className="space-y-4">
           <div>
             <label
