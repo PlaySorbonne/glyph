@@ -22,7 +22,6 @@ export default async function Welcome1Page() {
     let fraternityId: number;
     try {
       fraternityId = await joinRandomFraternity(user!.id);
-      console.log(fraternityId);
     } catch (error) {
       if (error instanceof Error) {
         redirect(appUrl(`/welcome/2?error=${error.message}`));

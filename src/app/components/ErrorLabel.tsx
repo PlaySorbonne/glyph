@@ -6,7 +6,6 @@ import { useState } from "react";
 export default function ErrorLabel() {
   let [show, setShow] = useState(true);
   let searchParams = useSearchParams();
-  console.log(searchParams);
   let error = searchParams.get("error");
   
   

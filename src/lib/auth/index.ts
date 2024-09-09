@@ -43,8 +43,6 @@ export async function signIn(data: signInData): Promise<
     };
   }
 
-  console.log("out", out);
-
   if (!out?.error) {
     let ttl =
       SESSION_TTL === -1

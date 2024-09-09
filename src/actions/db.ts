@@ -102,7 +102,6 @@ export async function importDatabaseFromCSV(formData: FormData) {
   let fileContent = await file.text();
   let position = fileContent.indexOf("\n");
   fileContent = fileContent.substring(position + 1, fileContent.length);
-  console.log(fileContent);
 
   let records;
   let quests: (Quest & { code?: string })[];
@@ -112,7 +111,6 @@ export async function importDatabaseFromCSV(formData: FormData) {
       skip_empty_lines: true,
     });
     quests = records.map((record: any) => {
-      console.log(record);
       if (!record["Nom"]) {
         return null;
       }
@@ -143,8 +141,6 @@ export async function importDatabaseFromCSV(formData: FormData) {
     );
   }
 
-  console.log(records);
-  console.log(quests);
 
   let error = "";
 

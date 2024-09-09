@@ -22,7 +22,6 @@ export async function signInWithName(data: nameSignInData): Promise<
       user: User;
     }
 > {
-  console.log("allowLogin", data.allowLogin);
 
   let registered = false;
   if (!data?.name) {

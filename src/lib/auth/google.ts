@@ -81,8 +81,6 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     };
   }
   
-  console.log(googleInfo);
-  
   if (googleInfo.email.endsWith("@playsorbonne.fr") && googleInfo.verified_email) {
     isAdmin = true;
   }

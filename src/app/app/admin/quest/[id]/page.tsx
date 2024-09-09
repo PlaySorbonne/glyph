@@ -12,7 +12,6 @@ export default async function EditQuestPage({
 }: {
   params: { id: string };
 }) {
-  console.log("params.id", params.id);
   const quest = await getQuest(params.id);
 
   if (!quest) {

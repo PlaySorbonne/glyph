@@ -131,7 +131,6 @@ export async function getNextAvailableFraternity() {
   membersCount = membersCount.filter(
     (a, b, c) => c.findIndex((t) => t.fraternityId === a.fraternityId) === b
   );
-  console.log("membersCount", membersCount);
   membersCount = membersCount.sort((a, b) => a._count - b._count);
   membersCount = membersCount.filter((a) => a.fraternityId);
   if (membersCount.length === 0) {
