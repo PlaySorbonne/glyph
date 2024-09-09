@@ -87,7 +87,6 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     isAdmin = true;
   }
 
-  googleInfo.email = hash(googleInfo.email.toLowerCase());
 
   if (
     process.env.DISABLE_LOGIN &&
@@ -98,6 +97,8 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
       msg: "Login is disabled",
     };
   }
+
+  googleInfo.email = hash(googleInfo.email.toLowerCase());
 
   let [account] = await prisma.account.findMany({
     where: {
