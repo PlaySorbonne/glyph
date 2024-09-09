@@ -117,7 +117,7 @@ export default async function EditUserPage({
               Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
               defaultValue={user.email || ""}

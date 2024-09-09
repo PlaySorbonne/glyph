@@ -78,7 +78,7 @@ export const constraints = {
 export const userSchema = z.object({
   name: nameFormat.optional().nullable(),
   displayName: z.string().min(1).max(20).nullable().optional(),
-  email: z.string().email().nullable().optional(),
+  email: z.string().nullable().optional(),
   emailVerified: z.boolean().default(false).optional(),
   image: z.string().url().nullable().optional(),
   isAdmin: z.boolean().default(false).optional(),
