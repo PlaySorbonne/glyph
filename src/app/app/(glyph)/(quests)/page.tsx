@@ -1,11 +1,18 @@
-import { getRecenltyActiveQuests } from "@/actions/quests";
+import { getFinishedQuests, getRecenltyActiveQuests } from "@/actions/quests";
 import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
 import Link from "next/link";
 import styles from "./page.module.css";
+import { getUserFromSession } from "@/actions/auth";
+import { getGlyph } from "@/assets/glyphs";
+import Image from "next/image";
 
 export default async function Home() {
+  let user = await getUserFromSession();
   let liveQuests = await getRecenltyActiveQuests();
+  let finishedQuests = await getFinishedQuests(user!.id).then((quests) =>
+    quests.filter((quest) => quest.secondary)
+  );
 
   return (
     <div>
@@ -27,6 +34,15 @@ export default async function Home() {
           >
             Continuez de reconstituer le Glyph principal !
           </h2>
+          <div>
+            {finishedQuests.map((quest) => (
+              <Image src={getGlyph(quest.img)} alt="glyph" width={200} style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+              }}/>
+            ))}
+          </div>
         </Link>
 
         <div

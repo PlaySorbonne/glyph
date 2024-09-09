@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import { cutString } from "@/utils";
 import Link from "next/link";
+import { getGlyph } from "@/assets/glyphs";
 
 export default async function Book() {
   let user = await getUserFromSession();
@@ -45,11 +46,7 @@ export default async function Book() {
               key={quest.id}
               className={styles.quest}
             >
-              {quest.img && quest.img.length > 0 ? (
-                <Image src={quest.img} alt="quest" className={styles.lock} />
-              ) : (
-                <Image src={icons.check} alt="check" className={styles.lock} />
-              )}
+              <Image src={icons.check} alt="check" className={styles.lock} />
               <div className={styles.questContent}>
                 <h3 className={styles.questTitle}>{quest.title}</h3>
                 <p className={styles.questDescription}>

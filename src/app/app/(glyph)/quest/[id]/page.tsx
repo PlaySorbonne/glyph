@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import Image from "next/image";
 import Setting from "../../account/components/Setting";
+import { getGlyph } from "@/assets/glyphs";
 
 export default async function QuestPage({
   params,
@@ -111,23 +112,32 @@ export default async function QuestPage({
         </section>
       )}
 
-      <section className={styles.section}>
-        <h1 className={styles.sectionTitle}>Glyph</h1>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "200px",
-          }}
-        >
-          {hasFinishedQuest ? (
-            <Image src={icons.check} alt="quête terminée" width={100} />
-          ) : (
-            <Image src={icons.lock} alt="quête vérouillé" width={100} />
-          )}
-        </div>
-      </section>
+      {!quest.secondary && (
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>Glyph</h1>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+            }}
+          >
+            {hasFinishedQuest ? (
+              <Image
+                src={getGlyph(quest.img)}
+                alt="quête terminée"
+                height={400}
+                style={{
+                  imageRendering: "pixelated",
+                }}
+              />
+            ) : (
+              <Image src={icons.lock} alt="quête vérouillé" width={100} />
+            )}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
