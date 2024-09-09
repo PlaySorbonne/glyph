@@ -40,6 +40,7 @@ export default async function EditQuestPage({
       ends: formData.get("ends")
         ? new Date(formData.get("ends") as string)
         : null,
+      horaires: (formData.get("horaires") as string) || null,
     };
 
     try {
@@ -111,6 +112,22 @@ export default async function EditQuestPage({
               name="img"
               id="img"
               defaultValue={quest.img || ""}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="horaires"
+              className="block text-sm font-medium text-gray-700"
+            >
+              horaires
+            </label>
+            <input
+              type="text"
+              name="horaires"
+              id="horaires"
+              defaultValue={quest.horaires || ""}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>

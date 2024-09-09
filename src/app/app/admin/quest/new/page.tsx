@@ -28,6 +28,7 @@ export default function NewQuestPage() {
       ends: formData.get("ends")
         ? new Date(formData.get("ends") as string)
         : null,
+      horaires: (formData.get("horaires") as string) || null,
     };
 
     const code = (formData.get("code") as string) || generateCode();
@@ -93,6 +94,21 @@ export default function NewQuestPage() {
               rows={3}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></textarea>
+          </div>
+
+          <div>
+            <label
+              htmlFor="horaires"
+              className="block text-sm font-medium text-gray-700"
+            >
+              horaires
+            </label>
+            <input
+              type="text"
+              name="horaires"
+              id="horaires"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
           </div>
 
           <div>
