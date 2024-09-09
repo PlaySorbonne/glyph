@@ -1,4 +1,7 @@
-import { getAvailableSecondaryQuests, getFinishedQuests } from "@/actions/quests";
+import {
+  getAvailableSecondaryQuests,
+  getFinishedQuests,
+} from "@/actions/quests";
 import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
 import Link from "next/link";
@@ -10,8 +13,12 @@ import Image from "next/image";
 export default async function Home() {
   let user = await getUserFromSession();
   let quests = await getAvailableSecondaryQuests(user!.id);
-  let finishedQuests = await getFinishedQuests(user!.id).then((quests) =>
-    quests.filter((quest) => !quest.secondary)
+  let finishedQuests = await getFinishedQuests(user!.id);
+  let finishedSecondaryQuests = finishedQuests.filter(
+    (quest) => quest.secondary
+  );
+  let finishedPrimaryQuests = finishedQuests.filter(
+    (quest) => !quest.secondary
   );
 
   return (
@@ -51,7 +58,7 @@ export default async function Home() {
                 width: 200,
               }}
             >
-              {finishedQuests.map((quest, index) => (
+              {finishedPrimaryQuests.map((quest, index) => (
                 <Image
                   src={getGlyph(quest.img)}
                   alt="glyph"
@@ -93,6 +100,15 @@ export default async function Home() {
               Quêtes secondaires disponibles
             </h2>
             <Quests quests={quests} />
+          </section>
+        )}
+
+        {finishedSecondaryQuests.length > 0 && (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>
+              Quêtes secondaires terminées
+            </h2>
+            <Quests quests={finishedSecondaryQuests} />
           </section>
         )}
       </div>
