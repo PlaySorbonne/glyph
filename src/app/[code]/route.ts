@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { code: string } }
 ) {
-  const codeStr = params.id;
+  const codeStr = params.code;
 
   const session = await getSession();
 
@@ -25,12 +25,16 @@ export async function GET(
     return notFound();
   }
 
+  let redirectUrl = code?.isQuest
+    ? `/quest/${code.questId}?`
+    : `/?error=vous avez reçu ${code.points} points`;
+
   try {
     await userScannedCode(user!, code);
-  } catch (e : any) {
+  } catch (e: any) {
     return NextResponse.redirect(
-      appUrl(`/quest/${code.questId}?error=${e.message ?? "Une erreur est survenue"}`)
+      appUrl(`${redirectUrl}&error=${e.message ?? "Une erreur est survenue"}`)
     );
   }
-  return NextResponse.redirect(appUrl(`/quest/${code.questId}?finished=true`));
+  return NextResponse.redirect(appUrl(`${redirectUrl}&finished=true`));
 }

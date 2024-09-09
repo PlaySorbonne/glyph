@@ -119,15 +119,18 @@ export async function deleteCode(id: number) {
 
 export async function userScannedCode(user: User, code: Code) {
   let quest;
-  let history = await prisma.history.findFirst({
-    where: {
-      userId: user.id,
-      codeId: code.id,
-    },
-  });
 
-  if (history) {
-    throw new Error("Le code a déjà été scanné");
+  if (code.isQuest) {
+    let history = await prisma.history.findFirst({
+      where: {
+        userId: user.id,
+        codeId: code.id,
+      },
+    });
+
+    if (history) {
+      throw new Error("Le code a déjà été scanné");
+    }
   }
 
   if (code.isQuest) {
