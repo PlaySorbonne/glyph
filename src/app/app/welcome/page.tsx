@@ -17,12 +17,12 @@ export default async function Welcome1Page() {
       await updateUserSelf(session!, { name });
     } catch (error) {
       if (error instanceof Error) {
-        redirect(appUrl(`/welcome/1?error=${error.message}`));
+        redirect(appUrl(`/welcome?error=${error.message}`));
       } else {
-        redirect(appUrl(`/welcome/1?error=An unknown error occurred`));
+        redirect(appUrl(`/welcome?error=An unknown error occurred`));
       }
     }
-    redirect(appUrl("/welcome/2"));
+    redirect(appUrl("/welcome/1"));
   }
 
   return (
