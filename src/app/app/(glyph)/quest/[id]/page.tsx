@@ -101,7 +101,9 @@ export default async function QuestPage({
           </h1>
           {indices.map((indice, index) => (
             <Setting key={index} label={`Indice ${index + 1}`} type="children">
-              <p>{indice}</p>
+              <p style={{
+                wordBreak: "break-all",
+              }}>{indice}</p>
             </Setting>
           ))}
         </section>

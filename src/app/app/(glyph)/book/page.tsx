@@ -1,16 +1,15 @@
 import { getUserFromSession } from "@/actions/auth";
-import { getAvailablePrimaryQuests, getFinishedQuests } from "@/actions/quests";
+import { getAvailablePrimaryQuests, getFinishedPrimaryQuests, getFinishedQuests } from "@/actions/quests";
 import Image from "next/image";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import { cutString } from "@/utils";
 import Link from "next/link";
-import { getGlyph } from "@/assets/glyphs";
 
 export default async function Book() {
   let user = await getUserFromSession();
   let quests = await getAvailablePrimaryQuests(user!.id);
-  let finishedQuests = await getFinishedQuests(user!.id);
+  let finishedQuests = await getFinishedPrimaryQuests(user!.id);
 
   return (
     <div className={styles.wrapper}>

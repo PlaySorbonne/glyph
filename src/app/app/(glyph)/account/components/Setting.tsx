@@ -26,7 +26,7 @@ export default function Setting(
   };
 
   return (
-    <div className="w-full border-b border-gray-200">
+    <div className="w-full border-b border-gray-200 overflow-hidden">
       <div
         className="py-4 px-4 flex justify-between items-center cursor-pointer"
         onClick={props.type === "button" ? props.onClick : handleToggle}
