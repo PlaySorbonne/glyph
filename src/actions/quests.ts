@@ -257,3 +257,34 @@ let dateCheck = {
     },
   ],
 };
+
+
+export async function getUnavailableMainQuests() {
+  return await prisma.quest.findMany({
+    where: {
+      AND: [
+        {
+          NOT: dateCheck,
+        },
+        {
+          secondary: false,
+        },
+      ],
+    },
+  });
+}
+
+export async function getUnavailableSecondaryQuests() {
+  return await prisma.quest.findMany({
+    where: {
+      AND: [
+        {
+          NOT: dateCheck,
+        },
+        {
+          secondary: true,
+        },
+      ],
+    },
+  });
+}

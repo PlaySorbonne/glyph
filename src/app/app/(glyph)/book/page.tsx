@@ -1,5 +1,9 @@
 import { getUserFromSession } from "@/actions/auth";
-import { getAvailablePrimaryQuests, getFinishedPrimaryQuests, getFinishedQuests } from "@/actions/quests";
+import {
+  getAvailablePrimaryQuests,
+  getFinishedPrimaryQuests,
+  getUnavailableMainQuests,
+} from "@/actions/quests";
 import Image from "next/image";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
@@ -10,6 +14,30 @@ export default async function Book() {
   let user = await getUserFromSession();
   let quests = await getAvailablePrimaryQuests(user!.id);
   let finishedQuests = await getFinishedPrimaryQuests(user!.id);
+  let unavailableQuest = await getUnavailableMainQuests();
+  unavailableQuest = unavailableQuest
+    .map((quest) => {
+      if (quest.ends && quest.ends < new Date()) {
+        return null;
+      }
+      return {
+        ...quest,
+        title: Array.from(
+          { length: 4 + Math.floor(Math.random() * 9) },
+          () => "█"
+        ).join(""),
+        mission:
+          "La quête sera disponible à partir du " +
+          quest.starts!.toLocaleDateString("fr-FR", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+      };
+    })
+    .filter((quest) => quest !== null)
+    .sort((a, b) => a.starts!.getTime() - b.starts!.getTime());
 
   return (
     <div className={styles.wrapper}>
@@ -37,6 +65,31 @@ export default async function Book() {
           </Link>
         ))}
       </section>
+      
+      
+      {unavailableQuest.length > 0 && (
+        <section className={styles.quests}>
+          {unavailableQuest.map((quest) => (
+            <Link
+              href={"/app/quest/" + quest.id}
+              key={quest.id}
+              className={styles.quest}
+            >
+              <Image src={icons.lock} alt="check" className={styles.lock} />
+              <div className={styles.questContent}>
+                <h3 className={styles.questTitle}>{quest.title}</h3>
+                <p className={styles.questDescription}>
+                  {cutString(quest.mission, 100)}{" "}
+                  {quest.description && quest.description.length > 100 && (
+                    <span className={styles.more}>{" Plus..."}</span>
+                  )}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </section>
+      )}
+
       {finishedQuests.length > 0 && (
         <section className={styles.quests}>
           {finishedQuests.map((quest) => (
@@ -59,6 +112,7 @@ export default async function Book() {
           ))}
         </section>
       )}
+
     </div>
   );
 }

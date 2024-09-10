@@ -1,6 +1,7 @@
 import {
   getAvailableSecondaryQuests,
   getFinishedQuests,
+  getUnavailableSecondaryQuests,
 } from "@/actions/quests";
 import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
@@ -14,12 +15,39 @@ export default async function Home() {
   let user = await getUserFromSession();
   let quests = await getAvailableSecondaryQuests(user!.id);
   let finishedQuests = await getFinishedQuests(user!.id);
+  let unavailableQuests = await getUnavailableSecondaryQuests();
+  unavailableQuests = unavailableQuests
+    .map((quest) => {
+      if (quest.ends && quest.ends < new Date()) {
+        return null;
+      }
+      return {
+        ...quest,
+        title: Array.from(
+          { length: 4 + Math.floor(Math.random() * 9) },
+          () => "█"
+        ).join(""),
+        mission:
+          "La quête sera disponible à partir du " +
+          quest.starts!.toLocaleDateString("fr-FR", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+      };
+    })
+    .filter((quest) => quest !== null)
+    .sort((a, b) => a.starts!.getTime() - b.starts!.getTime());
+
   let finishedSecondaryQuests = finishedQuests.filter(
     (quest) => quest.secondary
   );
   let finishedPrimaryQuests = finishedQuests.filter(
     (quest) => !quest.secondary
   );
+
+  let questList = [...quests, ...unavailableQuests];
 
   return (
     <div>
@@ -94,12 +122,10 @@ export default async function Home() {
           </p>
         </div>
 
-        {quests.length > 0 && (
+        {questList.length > 0 && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>
-              Quêtes secondaires disponibles
-            </h2>
-            <Quests quests={quests} />
+            <h2 className={styles.sectionTitle}>Quêtes secondaires</h2>
+            <Quests quests={questList} />
           </section>
         )}
 
