@@ -1,12 +1,13 @@
 import { getUserFromSession } from "@/actions/auth";
 import { getQuest, hasUserFinishedQuest } from "@/actions/quests";
-import { appUrl } from "@/utils";
+import { appUrl, isQuestAvailable } from "@/utils";
 import { redirect } from "next/navigation";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
 import Image from "next/image";
 import Setting from "../../account/components/Setting";
 import { getGlyph } from "@/assets/glyphs";
+import Link from "next/link";
 
 export default async function QuestPage({
   params,
@@ -28,6 +29,27 @@ export default async function QuestPage({
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
+  }
+
+  if (!hasFinishedQuest && !isQuestAvailable(quest)) {
+    quest = {
+      ...quest,
+      title: Array.from(
+        { length: 4 + Math.floor(Math.random() * 9) },
+        () => "█"
+      ).join(""),
+      mission:
+        "La quête sera disponible à partir du " +
+        quest.starts!.toLocaleDateString("fr-FR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      description: null,
+      lore: null,
+      indice: null,
+    };
   }
 
   let indices =
@@ -101,9 +123,22 @@ export default async function QuestPage({
           </h1>
           {indices.map((indice, index) => (
             <Setting key={index} label={`Indice ${index + 1}`} type="children">
-              <p style={{
-                wordBreak: "break-all",
-              }}>{indice}</p>
+              {indice.startsWith("http") ? (
+                <Link href={indice} passHref target="_blank" style={{
+                  wordBreak: "break-all",
+                  color: "blue",
+                }}>
+                  {indice}
+                </Link>
+              ) : (
+                <p
+                  style={{
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {indice}
+                </p>
+              )}
             </Setting>
           ))}
         </section>

@@ -1,3 +1,4 @@
+import { Quest } from "@prisma/client";
 import { createHash, randomBytes } from "crypto";
 
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
@@ -109,6 +110,14 @@ export const FAQ = [
       "Envoyer un mail à dev@playsorbonne.fr en précisant votre nom d’utilisateur et les données à supprimer.",
   },
 ];
+
+
+export function isQuestAvailable(quest: Quest) {
+  return (
+    (!quest.starts || quest.starts <= new Date()) &&
+    (!quest.ends || quest.ends >= new Date())
+  );
+}
 
 const words = [
   "autour",
