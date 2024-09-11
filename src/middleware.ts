@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   });
-  
+
   if (process.env.NO_AUTH) return continueResponse;
 
   if (
@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
     `/api/access/${encodeURIComponent(session ?? "")}`,
     process.env.MAIN_URL
   );
-  let infoResponse = await fetch(infoUrl);
+  let infoResponse = await fetch(infoUrl, { cache: "force-cache" });
 
   if (!infoResponse.ok) {
     return NextResponse.redirect(

@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { getFinishedPrimaryQuests } from "@/actions/quests";
 import { getUserFromSession } from "@/actions/auth";
+import Carte from "./Carte";
 
 export default async function Map() {
   let user = await getUserFromSession();
@@ -13,18 +14,11 @@ export default async function Map() {
   if (unlocked) {
     return (
       <div className={styles.container}>
-        <div>
-          <Image
-            src={icons.check}
-            alt="map"
-            className="w-32 h-32 text-gray-400 mb-4 mx-auto"
-          />
-          <p className="text-xl text-gray-600">Vous devriez avoir accès à la carte mais elle arrive bientôt !</p>
-        </div>
+        <Carte />
       </div>
     );
   }
-  
+
   return (
     <div className={styles.container}>
       <div>
