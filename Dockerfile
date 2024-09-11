@@ -3,7 +3,6 @@ FROM node:20.10-alpine AS base
 ARG NODE_ENV="production"
 ARG MAIN_URL="http://localhost:3000"
 ARG PORT=3000
-ARG TZ="Europe/Paris"
 
 ENV NODE_ENV=${NODE_ENV}
 ENV MAIN_URL=${MAIN_URL}
@@ -76,8 +75,8 @@ USER root
 
 
 RUN apk update && apk upgrade && apk add --no-cache tzdata sqlite
-ENV TZ=${TZ}
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone
+ENV TZ="Europe/Paris"
 
 USER nextjs
 
