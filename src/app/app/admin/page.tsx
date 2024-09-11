@@ -26,6 +26,13 @@ export default async function AdminPage({
       )}
       <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
       <div className="space-y-8">
+        <p>
+          Server Date :{" "}
+          {await (async () => {
+            "use server";
+            return new Date();
+          })().then((e) => e.toString())}
+        </p>
         <section className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Database Actions</h2>
           <div className="flex flex-wrap gap-4">
