@@ -77,7 +77,7 @@ export default async function Home() {
                 textAlign: "center",
               }}
             >
-              Continuez de reconstituer le Glyph principal !
+              Cliquez ici pour continuer de reconstituer le Glyph principal !
             </h2>
 
             <div
