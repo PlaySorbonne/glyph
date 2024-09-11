@@ -32,7 +32,7 @@ export default function Quest({ quest }: { quest: Quest }) {
         <h1 className="text-2xl font-bold mb-4">{quest.title}</h1>
         {quest.starts &&
           quest.starts >
-            new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000) && (
+            new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000) && (
             <p>{"nv!"}</p>
           )}
       </div>
