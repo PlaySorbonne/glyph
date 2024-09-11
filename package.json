@@ -24,6 +24,7 @@
     "react-dom": "^18",
     "react-medium-image-zoom": "^5.2.9",
     "react-qr-code": "^2.0.15",
+    "react-qr-scanner": "^1.0.0-alpha.11",
     "sharp": "^0.33.5",
     "swiper": "^11.1.11",
     "tailwindcss": "^3.4.10",
