@@ -1,0 +1,49 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 100;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: "DCC-Ash";
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.scanButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.input {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

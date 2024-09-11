@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { codeFormat, codeSchema } from "@/utils/constants";
-import { Code, User } from "@prisma/client";
+import { Code, History, User } from "@prisma/client";
+import { getSession } from "./auth";
 
 export async function addCodeToQuest(
   id: string,
@@ -115,6 +116,68 @@ export async function deleteCode(id: number) {
       id,
     },
   });
+}
+
+export async function userScannedCodeFront(
+  code: string
+): Promise<
+  | {
+      error: true;
+      msg: string;
+      data?: null;
+    }
+  | {
+      error: false;
+      data: History;
+      msg?: null;
+    }
+> {
+  let userSession = await getSession();
+
+  let session = await prisma.session.findFirst({
+    where: {
+      sessionToken: userSession,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  let user = session?.user;
+
+  if (!user) {
+    return {
+      error: true,
+      msg: "Utilisateur non trouvé",
+    };
+  }
+
+  let codeData = await prisma.code.findFirst({
+    where: {
+      code,
+    },
+  });
+
+  if (!codeData) {
+    return {
+      error: true,
+      msg: "Code non trouvé",
+    };
+  }
+
+  let out;
+  try {
+    out = await userScannedCode(user, codeData);
+  } catch (e: any) {
+    return {
+      error: true,
+      msg: e.message,
+    };
+  }
+  return {
+    error: false,
+    data: out,
+  };
 }
 
 export async function userScannedCode(user: User, code: Code) {

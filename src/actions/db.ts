@@ -4,8 +4,7 @@ import prisma from "@/lib/db";
 import { appUrl, convertDDMMToDate, generateCode } from "@/utils";
 import { redirect } from "next/navigation";
 import { parse } from "csv-parse/sync";
-import { Code, Quest } from "@prisma/client";
-import { queryObjects } from "v8";
+import { Quest } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function importDatabase(formData: FormData) {

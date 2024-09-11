@@ -5,6 +5,7 @@ import { getUserFromSession } from "@/actions/auth";
 import { getLogo, getName } from "@/assets/fraternities";
 import Image from "next/image";
 import { getFinishedPrimaryQuests, getQuests } from "@/actions/quests";
+import CodeScan from "./CodeScan";
 
 export default async function Header() {
   let user = await getUserFromSession();
@@ -53,14 +54,16 @@ export default async function Header() {
         >
           <div
             style={{
-              width: `${(finishedQuests.length / primaryQuests.length) * 100 + 2}%`,
+              width: `${
+                (finishedQuests.length / primaryQuests.length) * 100 + 2
+              }%`,
               height: "100%",
               backgroundColor: `rgb(${colors[fraternityId]})`,
             }}
           />
         </div>
       </div>
-      <p>{(finishedQuests.length / primaryQuests.length * 100).toString().slice(0,2)}%</p>
+      <CodeScan />
     </header>
   );
 }
