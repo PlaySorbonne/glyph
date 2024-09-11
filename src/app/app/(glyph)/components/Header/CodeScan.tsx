@@ -29,7 +29,7 @@ export default function CodeScan() {
       data.text.startsWith("https://glyph.playsorbonne.fr")
     )
       return redirect(data.text);
-    else return redirect(`?error=Invalid QR code`);
+    else return redirect(`?error=Invalid QR code. got ${data.text}`);
   }
 
   function qrError(error: any) {
