@@ -3,6 +3,7 @@ FROM node:20.10-alpine AS base
 ARG NODE_ENV=production
 ARG MAIN_URL="http://localhost:3000"
 ARG PORT=3000
+ARG TZ=Europe/Paris
 
 ENV NODE_ENV=${NODE_ENV}
 ENV MAIN_URL=${MAIN_URL}
@@ -70,6 +71,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Uncomment this if you're using prisma, copies prisma files for linting
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER root
+
+
+RUN apk update && apk upgrade && apk add --no-cache tzdata sqlite
+ENV TZ=${TZ}
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 USER nextjs
 
