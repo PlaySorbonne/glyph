@@ -140,7 +140,6 @@ export async function importDatabaseFromCSV(formData: FormData) {
     );
   }
 
-
   let error = "";
 
   try {
@@ -196,4 +195,66 @@ export async function importDatabaseFromCSV(formData: FormData) {
       appUrl("/admin?message=Database imported successfully from CSV")
     );
   }
+}
+
+export async function recalculateScore() {
+  "use server";
+  
+  let codes = await prisma.code.findMany({
+    include: {
+      quest: true,
+    },
+  });
+  
+  for (let code of codes) {
+    if (code.quest) {
+      await prisma.code.update({
+        where: {
+          id: code.id,
+        },
+        data: {
+          points: code.quest.points,
+        },
+      });
+    }
+  }
+  
+  let users = await prisma.user.findMany({
+    include: {
+      History: true,
+    },
+  });
+
+  for (let user of users) {
+    let score =
+      user?.History.reduce((acc, history) => acc + history.points, 0) || 0;
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        score,
+      },
+    });
+  }
+
+  let fraternities = await prisma.fraternity.findMany({
+    include: {
+      users: true,
+    },
+  });
+
+  for (let fraternity of fraternities) {
+    let score = fraternity.users.reduce((acc, user) => acc + user.score, 0);
+    await prisma.fraternity.update({
+      where: {
+        id: fraternity.id,
+      },
+      data: {
+        score,
+      },
+    });
+  }
+  
+  return redirect(appUrl("/admin?message=Scores recalculated"));
 }

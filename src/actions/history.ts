@@ -43,3 +43,11 @@ export async function getHistories(n?: number) {
     take: n,
   });
 }
+
+export async function getHistoryByCodeId(codeId: number) {
+  return await prisma.history.findMany({
+    where: {
+      codeId,
+    },
+  });
+}

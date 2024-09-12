@@ -53,6 +53,7 @@ export async function getCode(code: string) {
     },
   });
 }
+
 export async function getCodeById(id: number) {
   return await prisma.code.findUnique({
     where: {

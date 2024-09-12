@@ -69,11 +69,19 @@ export default async function EditCodePage({
       <h1 className="text-3xl font-bold mb-8 text-center">Modifier le code</h1>
       <div className="bg-white shadow-md rounded-lg p-6">
         <div className="mt-6 border-b pt-4">
-          <h2 className="text-lg font-semibold mb-2">Delete Code</h2>
+          <h2 className="text-lg font-semibold mb-2">Afficher QRcode</h2>
             <Link href={`/s/${code.code}`}
               className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Afficher QRcode
+            </Link>
+        </div>
+        <div className="mt-6 border-b pt-4">
+          <h2 className="text-lg font-semibold mb-2">Afficher Histrique</h2>
+            <Link href={`/app/admin/code/${code.id}/history`}
+              className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Afficher l'Historique
             </Link>
         </div>
         <form action={handleSubmit} className="space-y-4">

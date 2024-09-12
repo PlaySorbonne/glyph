@@ -1,4 +1,4 @@
-import { getUserById, getUserScoreHistory, getUsers } from "@/actions/users";
+import { getUserById, getUserScoreHistory } from "@/actions/users";
 import Table from "../../../components/Table";
 import { getQuests } from "@/actions/quests";
 import { getCodes } from "@/actions/code";

@@ -6,8 +6,9 @@ import { getUsers } from "@/actions/users";
 import { getCodes } from "@/actions/code";
 import Link from "next/link";
 import { getFraternitysWithMembersCount } from "@/actions/fraternity";
-import { importDatabase } from "@/actions/db";
+import { importDatabase, recalculateScore } from "@/actions/db";
 import { importDatabaseFromCSV } from "@/actions/db";
+import { getHistories } from "@/actions/history";
 
 export const dynamic = "force-dynamic";
 
@@ -79,6 +80,14 @@ export default async function AdminPage({
                 Warning: This will overwrite existing data!
               </p>
             </form>
+            <form action={recalculateScore} className="flex flex-col">
+              <button
+                type="submit"
+                className="bg-yellow-500 hover:bg-red-600 text-white hover:text-black font-bold py-2 px-4 rounded cursor-pointer inline-block"
+              >
+                Recalculate all score
+              </button>
+            </form>
           </div>
         </section>
 
@@ -142,6 +151,20 @@ export default async function AdminPage({
             className="mt-4 inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
           >
             Voir toutes les fraternités
+          </Link>
+        </section>
+        <section className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Historique</h2>
+          <Table
+            data={(await getHistories(3)).map((q) => {
+              return { ...q, href: `/app/admin/history/${q.id}` };
+            })}
+          />
+          <Link
+            href="/app/admin/history/all"
+            className="mt-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Voir tout l'historique
           </Link>
         </section>
       </div>
