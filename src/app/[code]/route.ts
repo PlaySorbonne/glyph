@@ -33,7 +33,7 @@ export async function GET(
     await userScannedCode(user!, code);
   } catch (e: any) {
     return NextResponse.redirect(
-      appUrl(`${redirectUrl}&error=${e.message ?? "Une erreur est survenue"}`)
+      appUrl(`?error=${e.message ?? "Une erreur est survenue"}`)
     );
   }
   return NextResponse.redirect(appUrl(`${redirectUrl}&finished=true`));

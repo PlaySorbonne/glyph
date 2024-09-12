@@ -118,9 +118,7 @@ export async function deleteCode(id: number) {
   });
 }
 
-export async function userScannedCodeFront(
-  code: string
-): Promise<
+export async function userScannedCodeFront(code: string): Promise<
   | {
       error: true;
       msg: string;
@@ -181,19 +179,33 @@ export async function userScannedCodeFront(
 }
 
 export async function userScannedCode(user: User, code: Code) {
+  if (code.expires && code.expires < new Date()) {
+    throw new Error("Code expiré");
+  }
+
   let quest;
 
-  if (code.isQuest) {
-    let history = await prisma.history.findFirst({
-      where: {
-        userId: user.id,
-        codeId: code.id,
-      },
-    });
+  let [history] = await prisma.history.findMany({
+    where: {
+      userId: user.id,
+      codeId: code.id,
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
 
+  if (code.isQuest) {
     if (history) {
       throw new Error("Le code a déjà été scanné");
     }
+  }
+  let time = 10 * 60 * 1000;
+
+  if (history)
+    console.log(history.date, new Date(Date.now() - time));
+  if (history && history.date > new Date(Date.now() - time)) {
+    throw new Error("Le code a déjà été scanné il y a moins de 10 minutes");
   }
 
   if (code.isQuest) {

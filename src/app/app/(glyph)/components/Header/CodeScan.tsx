@@ -85,7 +85,7 @@ export default function CodeScan() {
 
               {openQR && (
                 <QrReader
-                  delay={300}
+                  delay={1000}
                   onError={qrError}
                   onScan={qrScan}
                   style={{ width: "100%" }}

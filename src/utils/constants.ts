@@ -93,3 +93,13 @@ export const fraternitySchema = z.object({
   description: z.string().optional().nullable(),
   points: z.number().int().positive().default(0),
 });
+
+export const historySchema = z.object({
+  userId: z.string().cuid(),
+  codeId: z.number().int().positive(),
+  questId: z.number().int().optional().nullable(),
+  points: z.number().int(),
+  description: z.string().optional().nullable(),
+});
+
+export type HistoryInput = z.infer<typeof historySchema>;
