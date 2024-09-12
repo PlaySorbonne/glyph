@@ -81,7 +81,7 @@ export default async function EditCodePage({
             <Link href={`/app/admin/code/${code.id}/history`}
               className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              Afficher l'Historique
+              Afficher l&apos;Historique
             </Link>
         </div>
         <form action={handleSubmit} className="space-y-4">
