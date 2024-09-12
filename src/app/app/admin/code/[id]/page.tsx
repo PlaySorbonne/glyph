@@ -19,11 +19,11 @@ export default async function EditCodePage({
 
   const handleSubmit = async (formData: FormData) => {
     "use server";
-
+    
     const codeData = {
       code: formData.get("code") as string,
       description: (formData.get("description") as string) || null,
-      isQuest: formData.get("questId") != null,
+      isQuest: formData.get("questId") ? true : false,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
         ? new Date(formData.get("expires") as string)
@@ -32,7 +32,6 @@ export default async function EditCodePage({
         ? parseInt(formData.get("questId") as string)
         : null,
     };
-
     try {
       await updateCode(parseInt(params.id), codeData);
     } catch (error) {
