@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { codeFormat, codeSchema } from "@/utils/constants";
 import { Code, History, User } from "@prisma/client";
 import { getSession } from "./auth";
+import { getFinishedPrimaryQuests, getPrimaryQuests } from "./quests";
 
 export async function addCodeToQuest(
   id: string,
@@ -184,6 +185,18 @@ export async function userScannedCode(user: User, code: Code) {
     throw new Error("Code expiré");
   }
 
+  if (code.code.startsWith("ending")) {
+    let [quests, completedQuests] = await Promise.all([
+      getPrimaryQuests(),
+      getFinishedPrimaryQuests(user.id),
+    ]);
+    if (quests.length - 1 !== completedQuests.length) {
+      throw new Error(
+        "Eh non, petit malin va. Complète toutes les quêtes principales et reconstitue le Glyph  pour accéder a la fin  du jeu"
+      );
+    }
+  }
+
   let quest;
 
   let [history] = await prisma.history.findMany({
@@ -203,8 +216,7 @@ export async function userScannedCode(user: User, code: Code) {
   }
   let time = 10 * 60 * 1000;
 
-  if (history)
-    console.log(history.date, new Date(Date.now() - time));
+  if (history) console.log(history.date, new Date(Date.now() - time));
   if (history && history.date > new Date(Date.now() - time)) {
     throw new Error("Le code a déjà été scanné il y a moins de 10 minutes");
   }

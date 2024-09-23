@@ -111,7 +111,6 @@ export const FAQ = [
   },
 ];
 
-
 export function isQuestAvailable(quest: Quest) {
   return (
     (!quest.starts || quest.starts <= new Date()) &&
