@@ -15,7 +15,7 @@ export default async function Home() {
   let user = await getUserFromSession();
   let quests = await getAvailableSecondaryQuests(user!.id);
   let finishedQuests = await getFinishedQuests(user!.id);
-  let unavailableQuests = await getUnavailableSecondaryQuests();
+  let unavailableQuests = (await getUnavailableSecondaryQuests()).filter((q) => !q.ends || q.ends >= new Date());
   unavailableQuests = unavailableQuests
     .map((quest) => {
       if (quest.ends && quest.ends < new Date()) {

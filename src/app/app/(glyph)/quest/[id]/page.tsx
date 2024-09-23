@@ -34,18 +34,26 @@ export default async function QuestPage({
   if (!hasFinishedQuest && !isQuestAvailable(quest)) {
     quest = {
       ...quest,
+      ...(quest.starts
+        ? {
+            mission:
+              "La quête sera disponible à partir du " +
+              quest.starts.toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }),
+          }
+        : {
+            mission:
+              "La quête est actuellement indisponible\n" +
+              (quest.mission ?? ""),
+          }),
       title: Array.from(
         { length: 4 + Math.floor(Math.random() * 9) },
         () => "█"
       ).join(""),
-      mission:
-        "La quête sera disponible à partir du " +
-        quest.starts!.toLocaleDateString("fr-FR", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
       description: null,
       lore: null,
       indice: null,
@@ -124,10 +132,15 @@ export default async function QuestPage({
           {indices.map((indice, index) => (
             <Setting key={index} label={`Indice ${index + 1}`} type="children">
               {indice.startsWith("http") ? (
-                <Link href={indice} passHref target="_blank" style={{
-                  wordBreak: "break-all",
-                  color: "blue",
-                }}>
+                <Link
+                  href={indice}
+                  passHref
+                  target="_blank"
+                  style={{
+                    wordBreak: "break-all",
+                    color: "blue",
+                  }}
+                >
                   {indice}
                 </Link>
               ) : (
