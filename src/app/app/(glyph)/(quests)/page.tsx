@@ -11,6 +11,9 @@ import { getUserFromSession } from "@/actions/auth";
 import { getGlyph } from "@/assets/glyphs";
 import Image from "next/image";
 
+export const revalidate = 3600 // invalidate every hour
+
+
 export default async function Home() {
   let user = await getUserFromSession();
   let quests = await getAvailableSecondaryQuests(user!.id);
