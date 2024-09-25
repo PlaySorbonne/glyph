@@ -2,6 +2,7 @@ import { getUserFromSession } from "@/actions/auth";
 import {
   getAvailablePrimaryQuests,
   getFinishedPrimaryQuests,
+  getPrimaryQuests,
   getUnavailableMainQuests,
 } from "@/actions/quests";
 import Image from "next/image";
@@ -10,11 +11,15 @@ import icons from "@/assets/icons";
 import { cutString } from "@/utils";
 import Link from "next/link";
 
+export const revalidate = 3600; // invalidate every hour
+
 export default async function Book() {
   let user = await getUserFromSession();
   let quests = await getAvailablePrimaryQuests(user!.id);
   let finishedQuests = await getFinishedPrimaryQuests(user!.id);
   let unavailableQuest = await getUnavailableMainQuests();
+  let questNb = (await getPrimaryQuests()).length;
+
   unavailableQuest = unavailableQuest
     .map((quest) => {
       if (quest.ends && quest.ends < new Date()) {
@@ -41,6 +46,38 @@ export default async function Book() {
 
   return (
     <div className={styles.wrapper}>
+      {questNb === finishedQuests.length && (
+        <section className={styles.finishedWrapper}>
+          <div className={styles.finishedContent}>
+            <h1 className={styles.title}>Félicitations !</h1>
+            <div className={styles.finishedDesc}>
+              <p className={styles.finishedDescText}>
+                Félicitations, aventurier ! Vous avez reconstitué le GLYPH,
+                symbole du jeu et de l&apos;imagination. Grâce à vous,
+                l&apos;esprit-jeu perdure à travers les générations. Votre
+                bravoure fait de vous une légende.
+              </p>
+              <p className={styles.finishedDescText}>
+                Mais l&apos;aventure continue ! Les rivalités entre fratries
+                persistent et votre maison compte sur vous. Rendez-vous le{" "}
+                <b>samedi 28 septembre, au Play Sorbonne Festival</b>, pour{" "}
+                <b>l&apos;ultime défi</b>. Rassemblez vos camarades et menez
+                votre fraternité à la victoire !
+              </p>
+              <p>La partie n’est jamais vraiment finie…</p>
+            </div>
+
+            <div className={styles.btnWrapper}>
+              <Link
+                href="https://playsorbonne.fr/festival"
+                className={styles.finishedButton}
+              >
+                Continuer
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
       <h1 className={styles.title}>Quêtes du Glyph</h1>
       <p className={styles.description}>
         Accomplissez les quêtes pour progresser et découvrir le campus
@@ -65,8 +102,7 @@ export default async function Book() {
           </Link>
         ))}
       </section>
-      
-      
+
       {unavailableQuest.length > 0 && (
         <section className={styles.quests}>
           {unavailableQuest.map((quest) => (
@@ -112,7 +148,6 @@ export default async function Book() {
           ))}
         </section>
       )}
-
     </div>
   );
 }

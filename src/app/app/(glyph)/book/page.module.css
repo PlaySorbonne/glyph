@@ -51,3 +51,49 @@
   color: #000;
   font-weight: bold;
 }
+
+.finishedWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  min-height: 70vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+}
+
+.finishedDesc {
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  
+  gap: 1rem;
+}
+
+.finishedContent {
+  margin: 3rem;
+}
+
+.finishedDescText {
+}
+
+.btnWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: 100%;
+  
+  margin-top: 1rem;
+}
+
+.finishedButton {
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
