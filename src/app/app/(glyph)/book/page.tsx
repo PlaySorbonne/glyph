@@ -72,7 +72,7 @@ export default async function Book() {
                 href="https://playsorbonne.fr/festival"
                 className={styles.finishedButton}
               >
-                Continuer
+                Page du Festival
               </Link>
             </div>
           </div>
