@@ -181,6 +181,10 @@ export async function userScannedCodeFront(code: string): Promise<
 }
 
 export async function userScannedCode(user: User, code: Code) {
+  if (process.env.NO_SCAN) {
+    throw new Error("Le scan est désactivé");
+  }
+
   if (code.expires && code.expires < new Date()) {
     throw new Error("Code expiré");
   }

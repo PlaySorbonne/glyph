@@ -123,6 +123,13 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
     });
 
     if (!user) {
+      if (process.env.NO_REGISTER) {
+        return {
+          error: true,
+          msg: "L'enregistrement est désactivé",
+        };
+      }
+      
       user = await prisma.user.create({
         data: {
           email: googleInfo.email,

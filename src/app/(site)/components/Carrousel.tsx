@@ -18,21 +18,21 @@ export default function Carrousel() {
       subtitle: "Rapidité et improvisation sont nos armes",
       cover: fraternities.saka.fond,
       logo: fraternities.saka.logo,
-      joinMsg: "Dépêchez-vous de rejoindre Saka !",
+      joinMsg: "Le jeu est fini !",
     },
     {
       title: "Pietr",
       subtitle: "Notre motivation est inébranlable",
       cover: fraternities.pietr.fond,
       logo: fraternities.pietr.logo,
-      joinMsg: "Jouez pour Pietr !",
+      joinMsg: "Rendez-vous l'année prochaine !",
     },
     {
       title: "Foli",
       subtitle: "La connaissance et la coopération nous guident",
       cover: fraternities.foli.fond,
       logo: fraternities.foli.logo,
-      joinMsg: "Choisissez de jouer pour Foli !",
+      joinMsg: "Merci à tous les participants !",
     },
   ];
   return (
@@ -67,9 +67,9 @@ export default function Carrousel() {
                 loading="eager"
               />
               <h2 className={styles.subtitle}>{slide.subtitle}</h2>
-              <Link href="/welcome" className={styles.join}>
+              <p className={styles.join}>
                 {slide.joinMsg}
-              </Link>
+              </p>
             </div>
           </div>
         </SwiperSlide>

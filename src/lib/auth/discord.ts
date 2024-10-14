@@ -113,6 +113,13 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
     });
 
     if (!user) {
+      if (process.env.NO_REGISTER) {
+        return {
+          error: true,
+          msg: "L'enregistrement est désactivé",
+        };
+      }
+
       user = await prisma.user.create({
         data: {
           email: discordInfo.email,

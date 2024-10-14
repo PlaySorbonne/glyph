@@ -2,6 +2,28 @@ import WelcomePage from "./components/WelcomePage";
 import WelcomeButton from "@/components/WelcomeButton";
 
 export default async function Welcome() {
+  if (process.env.NO_REGISTER) {
+    return (
+      <WelcomePage>
+        <h1
+          style={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+            fontFamily: "DCC-Ash",
+            letterSpacing: "0.2rem",
+          }}
+        >
+          Bienvenue sur Glyph
+        </h1>
+        <p>
+          Le jeu est malheureusement terminé ! Rendez-vous l&apos;année prochaine !
+        </p>
+        <WelcomeButton link="/">Continuer</WelcomeButton>
+      </WelcomePage>
+    );
+  }
+
   return (
     <WelcomePage>
       <h1

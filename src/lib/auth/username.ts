@@ -52,6 +52,13 @@ export async function signInWithName(data: nameSignInData): Promise<
 
   // Register
   if (!user) {
+    if (process.env.NO_REGISTER) {
+      return {
+        error: true,
+        msg: "L'enregistrement est désactivé",
+      };
+    }
+    
     user = await prisma.user.create({
       data: {
         name: data.name,
