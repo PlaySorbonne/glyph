@@ -80,7 +80,7 @@ export default async function Page() {
               fontFamily: "DCC-Ash",
             }}
           >
-            Le Jeu est fini ! Rendez-vous l'année prochaine !
+            Le Jeu est fini ! Rendez-vous l&apos;année prochaine !
           </h1>
           <p>
             Lors du mois de septembre, les étudiants de la Sorbonne ont pu
@@ -101,7 +101,7 @@ export default async function Page() {
               Play Sorbonne Festival
             </span>
             </Link>{" "}
-            les fraternités ont pu s'affronter une dernière fois avant de
+            les fraternités ont pu s&apos;affronter une dernière fois avant de
             recevoir les résultats finaux :
           </p>
           <h1
