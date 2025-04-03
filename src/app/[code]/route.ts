@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
-  const codeStr = params.code;
+  const codeStr = (await params).code;
 
   const session = await getSession();
 

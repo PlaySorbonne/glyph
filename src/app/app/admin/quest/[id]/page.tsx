@@ -7,11 +7,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { appUrl } from "@/utils";
 
-export default async function EditQuestPage({
-  params,
-}: {
-  params: { id: string };
+export default async function EditQuestPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const quest = await getQuest(params.id);
 
   if (!quest) {

@@ -15,15 +15,16 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: { error?: string; message?: string };
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
+  let params = await searchParams;
   return (
     <div className="container mx-auto px-4 py-8">
-      {searchParams.error && (
-        <p className="text-red-500 text-sm mb-4">{searchParams.error}</p>
+      {params.error && (
+        <p className="text-red-500 text-sm mb-4">{params.error}</p>
       )}
-      {searchParams.message && (
-        <p className="text-green-500 text-sm mb-4">{searchParams.message}</p>
+      {params.message && (
+        <p className="text-green-500 text-sm mb-4">{params.message}</p>
       )}
       <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
       <div className="space-y-8">

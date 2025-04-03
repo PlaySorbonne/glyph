@@ -13,19 +13,19 @@ export default async function QuestPage({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { finished?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ finished?: string }>;
 }) {
-  let questId = parseInt(params.id);
+  let questId = parseInt((await params).id);
   if (isNaN(questId)) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
   let user = await getUserFromSession();
   let hasFinishedQuest = await hasUserFinishedQuest(
     user!.id,
-    parseInt(params.id)
+    parseInt((await params).id)
   );
-  let quest = await getQuest(params.id);
+  let quest = await getQuest((await params).id);
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
@@ -69,7 +69,7 @@ export default async function QuestPage({
 
   return (
     <div>
-      {(searchParams.finished || hasFinishedQuest) && (
+      {((await searchParams).finished || hasFinishedQuest) && (
         <div
           style={{
             backgroundColor: "green",
