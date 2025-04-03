@@ -6,13 +6,14 @@ import { redirect } from "next/navigation";
 import { appUrl } from "@/utils";
 import Link from "next/link";
 import Fraternities from "@/assets/fraternities";
+import { SearchParams } from "next/dist/server/request/search-params";
 
 export default async function Login({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: Promise<SearchParams>
 }) {
-  let error = searchParams.error;
+  let error = (await searchParams).error;
   if (process.env.DISABLE_LOGIN) {
     error = "La connexion est désactivée, veillez revenir ultérieurement";
   }

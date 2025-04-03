@@ -3,12 +3,12 @@ import GoogleBtn from "@/app/app/login/components/googleBtn";
 import UsernameForm from "@/app/app/login/components/UsernameForm";
 import WelcomePage from "../components/WelcomePage";
 
-export default function Welcome2({
+export default async function Welcome2({
   searchParams,
 }: {
-  searchParams: { error?: string };
+  searchParams: Promise<{ error?: string }>;
 }) {
-  let error = searchParams.error;
+  let error = (await searchParams).error;
   return (
     <WelcomePage>
       <h1

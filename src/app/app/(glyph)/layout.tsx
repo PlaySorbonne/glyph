@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default async function GlyphLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const backgroundCookie = cookies().get("fraternityId")?.value;
+  const backgroundCookie = (await cookies()).get("fraternityId")?.value;
   const background = getBackground(parseInt(backgroundCookie ?? "-1"));
 
   return (

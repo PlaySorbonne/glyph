@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { session: string } }
+  { params }: { params: Promise<{ session: string }> }
 ) {
-  const sessionId = params.session;
+  const sessionId = (await params).session;
 
   if (!sessionId) {
     return NextResponse.json({ error: "Missing session" }, { status: 400 });
