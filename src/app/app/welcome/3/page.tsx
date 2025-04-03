@@ -14,7 +14,7 @@ export default async function WelcomePage({
   searchParams: { fraternityId: string };
 }) {
   let fraternityString =
-    searchParams.fraternityId ?? cookies().get("fraternityId")?.value;
+    searchParams.fraternityId ?? (await cookies()).get("fraternityId")?.value;
   const fraternityId = (
     fraternityString
       ? parseInt(fraternityString)

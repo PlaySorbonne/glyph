@@ -117,16 +117,16 @@ export async function updateUser(
       SESSION_TTL === -1
         ? new Date(2147483647000)
         : new Date(Date.now() + SESSION_TTL);
-    cookies().set("userId", out.id, {
+    (await cookies()).set("userId", out.id, {
       expires: ttl,
     });
     if (out.name) {
-      cookies().set("name", out.name, {
+      (await cookies()).set("name", out.name, {
         expires: ttl,
       });
     }
     if (out.fraternityId) {
-      cookies().set("fraternityId", out.fraternityId.toString(), {
+      (await cookies()).set("fraternityId", out.fraternityId.toString(), {
         expires: ttl,
       });
     }
@@ -142,7 +142,7 @@ export async function addUsername(id: string, username: string) {
       name: username,
     },
   });
-  cookies().set("name", out.name!, {
+  (await cookies()).set("name", out.name!, {
     expires:
       SESSION_TTL === -1
         ? new Date(2147483647000)
@@ -177,16 +177,16 @@ export async function updateUserSelf(
     SESSION_TTL === -1
       ? new Date(2147483647000)
       : new Date(Date.now() + SESSION_TTL);
-  cookies().set("session", sessionId, {
+  (await cookies()).set("session", sessionId, {
     expires: ttl,
   });
   if (out.name) {
-    cookies().set("name", out.name!, {
+    (await cookies()).set("name", out.name!, {
       expires: ttl,
     });
   }
   if (out.fraternityId) {
-    cookies().set("fraternityId", out.fraternityId.toString(), {
+    (await cookies()).set("fraternityId", out.fraternityId.toString(), {
       expires: ttl,
     });
   }

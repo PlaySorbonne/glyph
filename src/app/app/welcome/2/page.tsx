@@ -29,7 +29,7 @@ export default async function Welcome1Page() {
         redirect(appUrl(`/welcome/2?error=Une erreur inconnue est survenue`));
       }
     }
-    cookies().set("fraternityId", fraternityId.toString());
+    (await cookies()).set("fraternityId", fraternityId.toString());
     redirect(appUrl(`/welcome/3?fraternityId=${fraternityId}`));
   }
 

@@ -22,14 +22,14 @@ export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
       redirect(`?error=${result.msg}`);
     }
 
-    cookies().set("session", result.session, {
+    (await cookies()).set("session", result.session, {
       expires:
         SESSION_TTL === -1
           ? new Date(2147483647000)
           : new Date(Date.now() + SESSION_TTL),
     });
     if (result.user.fraternityId) {
-      cookies().set("fraternityId", result.user.fraternityId.toString(), {
+      (await cookies()).set("fraternityId", result.user.fraternityId.toString(), {
         expires:
           SESSION_TTL === -1
             ? new Date(2147483647000)
@@ -38,7 +38,7 @@ export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
     }
 
     if (result.user.name) {
-      cookies().set("name", result.user.name, {
+      (await cookies()).set("name", result.user.name, {
         expires:
           SESSION_TTL === -1
             ? new Date(2147483647000)

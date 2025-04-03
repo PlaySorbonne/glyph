@@ -6,7 +6,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function getSession() {
-  return cookies().get("session")?.value;
+  return (await cookies()).get("session")?.value;
 }
 
 export async function logout(error: string = "Vous avez été déconnecté") {
@@ -25,9 +25,9 @@ export async function logout(error: string = "Vous avez été déconnecté") {
     console.error("Error deleting session", session);
   }
 
-  cookies().delete("session");
-  cookies().delete("name");
-  cookies().delete("fraternityId");
+  (await cookies()).delete("session");
+  (await cookies()).delete("name");
+  (await cookies()).delete("fraternityId");
   return redirect(appUrl("/login?error=" + error));
 }
 
@@ -62,6 +62,6 @@ export async function getUserFromSession(sessionId?: string) {
 }
 
 export async function getHeaderUrl() {
-  const headersList = headers();
+  const headersList = await headers();
   return headersList.get("x-url") || "";
 }

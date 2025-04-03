@@ -48,11 +48,11 @@ export async function signIn(data: signInData): Promise<
       SESSION_TTL === -1
         ? new Date(2147483647000)
         : new Date(Date.now() + SESSION_TTL);
-    cookies().set("session", out.session, {
+    (await cookies()).set("session", out.session, {
       expires: ttl,
     });
     if (out.name) {
-      cookies().set("name", out.name, {
+      (await cookies()).set("name", out.name, {
         expires: ttl,
       });
     }
@@ -122,11 +122,11 @@ export async function register(data: signInData): Promise<
       SESSION_TTL === -1
         ? new Date(2147483647000)
         : new Date(Date.now() + SESSION_TTL);
-    cookies().set("session", out.session, {
+    (await cookies()).set("session", out.session, {
       expires: ttl,
     });
     if (out.name) {
-      cookies().set("name", out.name, {
+      (await cookies()).set("name", out.name, {
         expires: ttl,
       });
     }

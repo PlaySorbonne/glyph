@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   // Store current request url in a custom header, which you can read later
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
-  let session = cookies().get("session")?.value;
+  let session = (await cookies()).get("session")?.value;
   let continueResponse = NextResponse.next({
     request: {
       headers: requestHeaders,
