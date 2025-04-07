@@ -113,15 +113,6 @@ model History {
   description String?
 }
 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("verificationtokens")
-}
-
 model Code {
   id          Int       @id @default(autoincrement())
   code        String    @unique
