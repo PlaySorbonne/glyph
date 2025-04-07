@@ -11,7 +11,7 @@ import { SearchParams } from "next/dist/server/request/search-params";
 export default async function Login({
   searchParams,
 }: {
-  searchParams: Promise<SearchParams>
+  searchParams: Promise<SearchParams>;
 }) {
   let error = (await searchParams).error;
   if (process.env.DISABLE_LOGIN) {
@@ -32,20 +32,23 @@ export default async function Login({
       }}
     >
       <div className="p-8 bg-white shadow-md rounded-lg">
-        <h1 className="text-2xl font-bold mb-6 text-center" 
+        <h1
+          className="text-2xl font-bold mb-6 text-center"
           style={{
             fontFamily: "DCC-Ash",
             letterSpacing: "0.1rem",
           }}
-        >Connexion</h1>
+        >
+          Connexion
+        </h1>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <div className="space-y-4">
-          <DiscordBtn />
-          <GoogleBtn />
+          <DiscordBtn allowLogin />
+          <GoogleBtn allowLogin />
           <div className="text-center my-4">
             <span className="px-2 bg-white text-gray-500">or</span>
           </div>
-          <UsernameForm />
+          <UsernameForm allowLogin />
         </div>
         <div className="my-4">
           <Link
