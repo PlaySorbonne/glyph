@@ -105,7 +105,7 @@ export default function Page() {
                 marginBottom: "1rem",
               }}
             >
-              Rejoignez l&apos;aventure dès le 9 septembre !
+              Rejoignez l&apos;aventure en Septembre !
             </Link>
           </div>
         </div>
