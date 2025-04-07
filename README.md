@@ -8,7 +8,7 @@ https://glyph.playsorbonne.fr
 
 # Documentation
 
-je met juste qlq note ici en attendant de faire une vraie doc
+je met juste qlq notes ici en attendant de faire une vraie doc (surtout les particularités un peu bizarre du site)
 
 ## ENV variables
 
