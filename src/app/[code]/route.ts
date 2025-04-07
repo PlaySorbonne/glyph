@@ -17,9 +17,10 @@ export async function GET(
       appUrl(`/login?error=${"Connectez vous d'abord pour ça"}`)
     );
   }
-
-  let user = await getUserFromSession(session);
-  let code = await getCode(codeStr);
+  let [user, code] = await Promise.all([
+    getUserFromSession(session),
+    getCode(codeStr),
+  ]);
 
   if (!code) {
     return notFound();

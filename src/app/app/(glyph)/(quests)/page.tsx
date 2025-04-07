@@ -11,15 +11,18 @@ import { getUserFromSession } from "@/actions/auth";
 import { getGlyph } from "@/assets/glyphs";
 import Image from "next/image";
 
-export const revalidate = 3600 // invalidate every hour
-
+export const revalidate = 3600; // invalidate every hour
 
 export default async function Home() {
   let user = await getUserFromSession();
-  let quests = await getAvailableSecondaryQuests(user!.id);
-  let finishedQuests = await getFinishedQuests(user!.id);
-  let unavailableQuests = (await getUnavailableSecondaryQuests()).filter((q) => !q.ends || q.ends >= new Date());
+  let [quests, finishedQuests, unavailableQuests] = await Promise.all([
+    getAvailableSecondaryQuests(user!.id),
+    getFinishedQuests(user!.id),
+    getUnavailableSecondaryQuests(),
+  ]);
+
   unavailableQuests = unavailableQuests
+    .filter((q) => !q.ends || q.ends >= new Date())
     .map((quest) => {
       if (quest.ends && quest.ends < new Date()) {
         return null;

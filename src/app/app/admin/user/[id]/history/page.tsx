@@ -7,10 +7,12 @@ export default async function HistoryPage(props: {
   params: Promise<{ id: string }>;
 }) {
   let params = await props.params;
-  let history = await getUserScoreHistory(params.id);
-  let codes = await getCodes();
-  let user = await getUserById(params.id);
-  let quests = await getQuests();
+  let [history, codes, user, quests] = await Promise.all([
+    getUserScoreHistory(params.id),
+    getCodes(),
+    getUserById(params.id),
+    getQuests(),
+  ]);
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">
@@ -19,10 +21,10 @@ export default async function HistoryPage(props: {
       <Table
         data={history.map((h) => ({
           ...h,
-              href: "/app/admin/history/" + h.id,
-              codeId: codes.find((c) => c.id === h.codeId)?.code,
-              userId: user?.name,
-              questId: quests.find((q) => q.id === h.questId)?.title,
+          href: "/app/admin/history/" + h.id,
+          codeId: codes.find((c) => c.id === h.codeId)?.code,
+          userId: user?.name,
+          questId: quests.find((q) => q.id === h.questId)?.title,
         }))}
       />
     </div>

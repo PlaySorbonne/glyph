@@ -8,9 +8,11 @@ import { getUsers } from "@/actions/users";
 export const dynamic = "force-dynamic";
 
 export default async function AllHistoryPage() {
-  let quests = await getQuests();
-  let users = await getUsers();
-  let codes = await getCodes();
+  let [quests, users, codes] = await Promise.all([
+    getQuests(),
+    getUsers(),
+    getCodes(),
+  ]);
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Historique</h1>

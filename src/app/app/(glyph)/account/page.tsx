@@ -8,10 +8,12 @@ import Link from "next/link";
 
 export default async function Account() {
   let user = await getUserFromSession();
-  let fraternity = await getFraternity(user!.fraternityId);
-  let history = await getUserScoreHistory(user!.id);
-  let quests = await getQuests();
-  let finishedQuests = await getFinishedPrimaryQuests(user!.id);
+  let [fraternity, history, quests, finishedQuests] = await Promise.all([
+    getFraternity(user!.fraternityId),
+    getUserScoreHistory(user!.id),
+    getQuests(),
+    getFinishedPrimaryQuests(user!.id),
+  ]);
   let primaryQuests = quests.filter((quest) => !quest.secondary);
 
   return (
@@ -63,18 +65,25 @@ export default async function Account() {
           </Setting>
           <Setting label="Historique des scores" type="children">
             {history.map((item) => (
-              <div key={item.id} style={{
-                marginBottom: "1rem",
-                borderBottom: "1px solid #ddd",
-              }}>
-                <p style={{
-                  fontWeight: "bold",
-                }}>
+              <div
+                key={item.id}
+                style={{
+                  marginBottom: "1rem",
+                  borderBottom: "1px solid #ddd",
+                }}
+              >
+                <p
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
                   {item.questId
                     ? quests.find((quest) => quest.id === item.questId)?.title
                     : "Code"}
                 </p>
-                {item.description && item.description !== null &&  <p>{item.description}</p>}
+                {item.description && item.description !== null && (
+                  <p>{item.description}</p>
+                )}
                 <p>{item.points} points</p>
                 <p>{item.date.toLocaleDateString("en-GB")}</p>
               </div>

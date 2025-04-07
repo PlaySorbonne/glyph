@@ -9,11 +9,19 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const users = await prisma.user.findMany();
-    const quests = await prisma.quest.findMany();
-    const codes = await prisma.code.findMany();
-    const history = await prisma.history.findMany();
-    const fraternities = await prisma.fraternity.findMany();
+    let [
+      users,
+      quests,
+      codes,
+      history,
+      fraternities,
+    ] = await Promise.all([
+      prisma.user.findMany(),
+      prisma.quest.findMany(),
+      prisma.code.findMany(),
+      prisma.history.findMany(),
+      prisma.fraternity.findMany(),
+    ])
 
     const databaseExport = {
       users,

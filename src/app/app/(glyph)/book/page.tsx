@@ -15,10 +15,12 @@ export const revalidate = 3600; // invalidate every hour
 
 export default async function Book() {
   let user = await getUserFromSession();
-  let quests = await getAvailablePrimaryQuests(user!.id);
-  let finishedQuests = await getFinishedPrimaryQuests(user!.id);
-  let unavailableQuest = await getUnavailableMainQuests();
   let questNb = (await getPrimaryQuests()).length;
+  let [quests, finishedQuests, unavailableQuest] = await Promise.all([
+    getAvailablePrimaryQuests(user!.id),
+    getFinishedPrimaryQuests(user!.id),
+    getUnavailableMainQuests(),
+  ]);
 
   unavailableQuest = unavailableQuest
     .map((quest) => {
