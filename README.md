@@ -10,7 +10,7 @@ https://glyph.playsorbonne.fr
 
 je met juste qlq note ici en attendant de faire une vraie doc
 
-# ENV variables
+## ENV variables
 
 - MAIN_URL: l'url de l'instance de production (ex: https://glyph.playsorbonne.fr)
 
@@ -26,3 +26,8 @@ je met juste qlq note ici en attendant de faire une vraie doc
 - AUTH_DISCORD_ID et AUTH_DISCORD_SECRET: codes pour l'authentification discord
 
 - SALT: une chaîne de caractère aléatoire pour le hachage des emails, peut-être passer en un salt unique pas utilisateur
+
+## Quêtes accueil & fin
+
+- /welcome est la page d'accueil du jeu, mais au moment de la création du compte, on fait scanner autimatiquement le qrcode "/notwelcome". Donc pensez à attribuer ce qrcode à la quête d'accueil.
+- La quête de fin n'est pas encore gérée correctement. 
