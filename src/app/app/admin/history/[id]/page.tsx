@@ -12,11 +12,10 @@ import {
 import prisma from "@/lib/db";
 import { get } from "http";
 
-export default async function EditHistoryPage({
-  params,
-}: {
-  params: { id: string };
+export default async function EditHistoryPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const history = await getHistoryById(parseInt(params.id));
 
   if (!history) {

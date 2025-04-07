@@ -7,10 +7,10 @@ import { getHistoryByCodeId } from "@/actions/history";
 export default async function HistoryPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  let history = await getHistoryByCodeId(parseInt(params.id));
-  let code = await getCodeById(parseInt(params.id));
+  let history = await getHistoryByCodeId(parseInt((await params).id));
+  let code = await getCodeById(parseInt((await params).id));
   let users = await getUsers();
   let quests = await getQuests();
   return (

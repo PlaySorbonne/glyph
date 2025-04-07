@@ -5,11 +5,10 @@ import { getCodesOfQuest } from "@/actions/code";
 
 export const dynamic = "force-dynamic";
 
-export default async function QuestCodesPage({
-  params,
-}: {
-  params: { id: string };
+export default async function QuestCodesPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const codes = await getCodesOfQuest(params.id);
 
   return (

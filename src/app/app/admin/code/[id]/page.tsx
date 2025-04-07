@@ -5,11 +5,10 @@ import { codeFormat } from "@/utils/constants";
 import { appUrl } from "@/utils";
 import Link from "next/link";
 
-export default async function EditCodePage({
-  params,
-}: {
-  params: { id: string };
+export default async function EditCodePage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const code = await getCodeById(parseInt(params.id));
 
 

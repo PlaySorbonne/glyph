@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SESSION_TTL } from "@/utils/constants";
 import { appUrl } from "@/utils";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   let code = req.nextUrl.searchParams.get("code");
   let data = await signIn({ type: "discord", code });
 

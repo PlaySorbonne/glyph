@@ -6,11 +6,10 @@ import { revalidatePath } from "next/cache";
 import { appUrl } from "@/utils";
 import Link from "next/link";
 
-export default async function EditUserPage({
-  params,
-}: {
-  params: { id: string };
+export default async function EditUserPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const user = await getUserById(params.id);
 
   if (!user) {

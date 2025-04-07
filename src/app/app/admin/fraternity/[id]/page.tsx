@@ -3,11 +3,10 @@ import { getFraternity, updateFraternity } from "@/actions/fraternity";
 import Link from "next/link";
 import { appUrl } from "@/utils";
 
-export default async function EditFraternityPage({
-  params,
-}: {
-  params: { id: string };
+export default async function EditFraternityPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const fraternity = await getFraternity(parseInt(params.id));
 
   if (!fraternity) {

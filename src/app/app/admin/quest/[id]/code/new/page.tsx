@@ -3,11 +3,10 @@ import { addCodeToQuest } from "@/actions/code";
 import { redirect } from "next/navigation";
 import { appUrl } from "@/utils";
 
-export default function NewQuestCodePage({
-  params,
-}: {
-  params: { id: string };
+export default async function NewQuestCodePage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   const handleSubmit = async (formData: FormData) => {
     "use server";
 

@@ -1,11 +1,10 @@
 import prisma from "@/lib/db";
 import QRCode from "react-qr-code";
 
-export default async function CodePage({
-  params,
-}: {
-  params: { code: string };
+export default async function CodePage(props: {
+  params: Promise<{ code: string }>;
 }) {
+  let params = await props.params;
   let [code] = await prisma.code.findMany({
     where: {
       code: params.code,

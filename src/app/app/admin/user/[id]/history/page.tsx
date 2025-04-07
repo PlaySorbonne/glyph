@@ -3,11 +3,10 @@ import Table from "../../../components/Table";
 import { getQuests } from "@/actions/quests";
 import { getCodes } from "@/actions/code";
 
-export default async function HistoryPage({
-  params,
-}: {
-  params: { id: string };
+export default async function HistoryPage(props: {
+  params: Promise<{ id: string }>;
 }) {
+  let params = await props.params;
   let history = await getUserScoreHistory(params.id);
   let codes = await getCodes();
   let user = await getUserById(params.id);

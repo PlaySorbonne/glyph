@@ -8,11 +8,10 @@ import Image from "next/image";
 import { cookies } from "next/headers";
 import { getUserFromSession } from "@/actions/auth";
 
-export default async function WelcomePage({
-  searchParams,
-}: {
-  searchParams: { fraternityId: string };
+export default async function WelcomePage(props: {
+  searchParams: Promise<{ fraternityId: string }>;
 }) {
+  let searchParams = await props.searchParams;
   let fraternityString =
     searchParams.fraternityId ?? (await cookies()).get("fraternityId")?.value;
   const fraternityId = (
