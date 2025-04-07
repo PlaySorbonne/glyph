@@ -29,5 +29,14 @@ je met juste qlq note ici en attendant de faire une vraie doc
 
 ## Quêtes accueil & fin
 
-- /welcome est la page d'accueil du jeu, mais au moment de la création du compte, on fait scanner autimatiquement le qrcode "/notwelcome". Donc pensez à attribuer ce qrcode à la quête d'accueil.
+- /welcome est la page d'accueil du jeu, mais au moment de la création du compte, on fait scanner autimatiquement le qrcode "/notwelcome". Donc pensez à attribuer ce qrcode à la quête d'accueil. cf `/src/lib/auth/index.ts` ligne 66.
 - La quête de fin n'est pas encore gérée correctement. 
+
+## Connexion
+
+ça va changer donc attention <!> 
+
+mais pour l'instant les étapes de créations de compte sont `/welcome` -> `/welcome/2` -> `/app/welcome` -> `/app/welcome/1` -> `/app/welcome/2` -> `/app/welcome/3`.
+
+Pourquoi ? `/app/*` nécessite d'être connecté (cf middleware) alors que `/*` non.  
+Pourquoi rien puis 2 puis rien puis 1 puis 2 ? Vous posez trop de questions.
