@@ -30,7 +30,8 @@ je met juste qlq note ici en attendant de faire une vraie doc
 ## Quêtes accueil & fin
 
 - /welcome est la page d'accueil du jeu, mais au moment de la création du compte, on fait scanner autimatiquement le qrcode "/notwelcome". Donc pensez à attribuer ce qrcode à la quête d'accueil. cf `/src/lib/auth/index.ts` ligne 66.
-- La quête de fin n'est pas encore gérée correctement. 
+- La quête de fin n'est pas encore gérée correctement.
+  - Mais si le qrcode commence par `/ending` et que toutes les autres quêtes principales sont pas encore terminées. La quête de fin n'est pas validée. (cf `src/actions/code.ts` ligne 192).
 
 ## Connexion
 
