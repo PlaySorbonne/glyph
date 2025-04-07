@@ -38,5 +38,7 @@ je met juste qlq note ici en attendant de faire une vraie doc
 
 mais pour l'instant les étapes de créations de compte sont `/welcome` -> `/welcome/2` -> `/app/welcome` -> `/app/welcome/1` -> `/app/welcome/2` -> `/app/welcome/3`.
 
+Peut-être faire en sorte que `/welcome` soit une page qui félicite d'avoir scanné le QR code et réaliser la première quête, et que `/welcome/2` soit la page de connexion ? on sera redirigé vers /2 si on clique sur rejointre glyph sur le site principal.
+
 Pourquoi ? `/app/*` nécessite d'être connecté (cf middleware) alors que `/*` non.  
 Pourquoi rien puis 2 puis rien puis 1 puis 2 ? Vous posez trop de questions.
