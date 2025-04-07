@@ -89,7 +89,9 @@ export default function CodeScan() {
                   onError={qrError}
                   onScan={qrScan}
                   style={{ width: "100%" }}
-                  facingMode="rear"
+                  facingMode={{
+                    exact: "environment"
+                  }}
                 />
               )}
             </div>
