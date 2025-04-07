@@ -268,7 +268,7 @@ const words = [
   "annoncer",
   "coucher",
   "eleve",
-  "forêt",
+  "foret",
   "joli",
   "apercevoir",
   "ça",
