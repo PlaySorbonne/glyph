@@ -69,13 +69,18 @@ export async function signIn(data: signInData): Promise<
         quest: true,
       },
     });
-    if (!code) throw new Error("Code 'notwelcome' not found");
+
+    if (!code || !code.quest) {
+      console.warn("Pas de quête associé au code notwelcome.");
+      return out;
+    }
+
     await prisma.history.create({
       data: {
         userId: out.user.id,
-        questId: code?.quest!.id,
-        codeId: code!.id,
-        points: code!.quest!.points,
+        questId: code.quest.id,
+        codeId: code.id,
+        points: code.quest.points,
       },
     });
   } catch (e: any) {
