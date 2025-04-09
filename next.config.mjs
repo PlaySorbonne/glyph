@@ -13,6 +13,9 @@ let AR_url = "https://playsorbonne.github.io/jeu_piste_AR";
 
 let nextConfig = {
   output: "standalone",
+  experimental: {
+    viewTransition: true,
+  },
   reactStrictMode: true, // Enable React strict mode for improved error handling
   // swcMinify: true, // Enable SWC minification for improved performance
   compiler: {
