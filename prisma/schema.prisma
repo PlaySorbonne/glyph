@@ -125,3 +125,9 @@ model Code {
 
   History History[]
 }
+
+model QrCode {
+  id   Int    @id @default(autoincrement())
+  code String @unique // must be of size size², and is smth like "0100101101010010101".
+  size Int
+}
