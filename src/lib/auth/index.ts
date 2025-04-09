@@ -71,7 +71,7 @@ export async function signIn(data: signInData): Promise<
     });
 
     if (!code || !code.quest) {
-      console.warn("Pas de quête associé au code notwelcome.");
+      console.warn("WARNING: Pas de quête associé au code notwelcome.");
       return out;
     }
 
