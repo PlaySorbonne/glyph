@@ -1,91 +1,36 @@
-FROM node:20.10-alpine AS base
-
-ARG NODE_ENV="production"
-ARG MAIN_URL="http://localhost:3000"
-ARG PORT=3000
-
-ENV NODE_ENV=${NODE_ENV}
-ENV MAIN_URL=${MAIN_URL}
-ENV PORT=${PORT}
-
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat curl
-
-# Install pnpm globally
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# 1) Base + deps
+FROM node:20.10-alpine AS deps
+RUN apk add --no-cache libc6-compat curl tzdata sqlite \
+ && ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime \
+ && echo "Europe/Paris" > /etc/timezone \
+ && corepack enable \
+ && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
-
-# Copy pnpm lockfile
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
-FROM base AS dev
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
+# 2) Builder
+FROM deps AS builder
 COPY . .
-
-# Uncomment this if you're using prisma, generates prisma files for linting
-RUN npx prisma generate
-
-#Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
-ENV CHOKIDAR_USEPOLLING=true
-ENV WATCHPACK_POLLING=true
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm prisma generate \
+ && pnpm build \
+ && pnpm store prune
 
-RUN npx prisma generate
-RUN npm run build
-
-FROM base AS runner
+# 3) Runner
+FROM gcr.io/distroless/nodejs:20.10 AS runner
 WORKDIR /app
-
-ENV NEXT_TELEMETRY_DISABLED=1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules ./node_modules
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+USER nonroot:nonroot
+HEALTHCHECK --interval=30s --timeout=5s \
+  CMD curl --fail http://localhost:${PORT:-3000}/_health || exit 1
 
-VOLUME [ "/app/prisma" ]
-
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Uncomment this if you're using prisma, copies prisma files for linting
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-
-USER root
-
-
-RUN apk update && apk upgrade && apk add --no-cache tzdata sqlite
-RUN ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone
-ENV TZ="Europe/Paris"
-
-USER nextjs
-
-EXPOSE ${PORT}
-
-ENV PORT=${PORT}
-# set hostname to localhost
-ENV HOSTNAME="0.0.0.0"
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["npm", "run", "start:migrate:prod"]
+EXPOSE ${PORT:-3000}
+ENTRYPOINT ["pnpm", "run"]
+CMD ["start:migrate:prod"]
