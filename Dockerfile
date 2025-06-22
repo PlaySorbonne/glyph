@@ -1,5 +1,14 @@
 # 1) Base + deps
 FROM node:20.10-alpine AS deps
+
+ARG NODE_ENV="production"
+ARG MAIN_URL="http://localhost:3000"
+ARG PORT=3000
+
+ENV NODE_ENV=${NODE_ENV}
+ENV MAIN_URL=${MAIN_URL}
+ENV PORT=${PORT}
+
 RUN apk add --no-cache libc6-compat curl tzdata sqlite \
  && ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime \
  && echo "Europe/Paris" > /etc/timezone \
