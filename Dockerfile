@@ -30,7 +30,7 @@ COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY . .
 
 # Uncomment this if you're using prisma, generates prisma files for linting
-RUN pnpm prisma generate
+RUN npx prisma generate
 
 #Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
 ENV CHOKIDAR_USEPOLLING=true
@@ -43,8 +43,8 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN pnpm prisma generate
-RUN pnpm build
+RUN npx prisma generate
+RUN npm build
 
 FROM base AS runner
 WORKDIR /app
@@ -88,4 +88,4 @@ ENV HOSTNAME="0.0.0.0"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["pnpm", "run", "start:migrate:prod"]
+CMD ["npm", "run", "start:migrate:prod"]
