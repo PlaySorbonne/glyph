@@ -28,7 +28,7 @@ RUN pnpm prisma generate \
  && pnpm store prune
 
 # 3) Runner
-FROM gcr.io/distroless/nodejs:22 AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
@@ -37,8 +37,6 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules ./node_modules
 
 USER nonroot:nonroot
-HEALTHCHECK --interval=30s --timeout=5s \
-  CMD curl --fail http://localhost:${PORT:-3000}/_health || exit 1
 
 EXPOSE ${PORT:-3000}
 ENTRYPOINT ["pnpm", "run"]
