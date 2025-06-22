@@ -39,5 +39,5 @@ COPY --from=builder /app/node_modules ./node_modules
 USER nonroot:nonroot
 
 EXPOSE ${PORT:-3000}
-ENTRYPOINT ["pnpm", "run"]
+ENTRYPOINT ["npm", "run"]
 CMD ["start:migrate:prod"]
