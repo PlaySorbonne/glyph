@@ -28,7 +28,7 @@ RUN pnpm prisma generate \
  && pnpm store prune
 
 # 3) Runner
-FROM gcr.io/distroless/nodejs:20.10 AS runner
+FROM gcr.io/distroless/nodejs:22 AS runner
 WORKDIR /app
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
