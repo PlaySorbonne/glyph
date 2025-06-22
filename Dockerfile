@@ -1,5 +1,6 @@
-# 1) Base + deps
-FROM node:20.10-alpine AS deps
+FROM node:20.10-alpine AS base
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 ARG NODE_ENV="production"
 ARG MAIN_URL="http://localhost:3000"
@@ -9,34 +10,69 @@ ENV NODE_ENV=${NODE_ENV}
 ENV MAIN_URL=${MAIN_URL}
 ENV PORT=${PORT}
 
-RUN apk add --no-cache libc6-compat curl tzdata sqlite \
- && ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime \
- && echo "Europe/Paris" > /etc/timezone \
- && corepack enable \
- && corepack prepare pnpm@latest --activate
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat curl
+
+# Install pnpm globally
 
 WORKDIR /app
+
+# Copy pnpm lockfile
 COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
 
-# 2) Builder
-FROM deps AS builder
-COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm prisma generate \
- && pnpm build \
- && pnpm store prune
-
-# 3) Runner
-FROM node:24-alpine AS runner
+FROM base AS dev
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY . .
+
+RUN pnpm prisma generate
+
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN pnpm prisma generate
+RUN pnpm build
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules ./node_modules
 
-USER nonroot:nonroot
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
-EXPOSE ${PORT:-3000}
-CMD ["npm", "run", "start:migrate:prod"]
+VOLUME [ "/app/prisma" ]
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+
+USER root
+RUN apk update && apk upgrade && apk add --no-cache tzdata sqlite
+RUN ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone
+ENV TZ="Europe/Paris"
+
+USER nextjs
+
+EXPOSE ${PORT}
+ENV PORT=${PORT}
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["pnpm", "run", "start:migrate:prod"]
