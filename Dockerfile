@@ -30,7 +30,7 @@ COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY . .
 
 # Uncomment this if you're using prisma, generates prisma files for linting
-RUN pnpx prisma generate
+RUN pnpm prisma generate
 
 #Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
 ENV CHOKIDAR_USEPOLLING=true
