@@ -25,6 +25,10 @@ export const codeFormat = z
       "Le code ne peut contenir que des lettres, des chiffres, des tirets et des underscores. et avoir une longueur minimale de 3 caractères.",
   });
 
+export const hourFormat = z
+  .string()
+  .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format");
+
 export const codeSchema = z.object({
   code: codeFormat,
   isQuest: z.boolean().default(false),
@@ -48,16 +52,8 @@ export const questSchema = z
       .regex(/^[LMJVSDe,]*$/, "Invalid days format")
       .optional()
       .nullable(),
-    hourOpen: z
-      .string()
-      .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format")
-      .optional()
-      .nullable(),
-    hourClose: z
-      .string()
-      .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Invalid time format")
-      .optional()
-      .nullable(),
+    hourOpen: hourFormat.optional().nullable(),
+    hourClose: hourFormat.optional().nullable(),
     secondary: z.boolean().default(false),
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),

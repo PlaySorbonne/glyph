@@ -1,6 +1,6 @@
 import { appUrl } from "@/utils";
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 export default function AdminCodePage() {
-  return redirect(appUrl("/admin/fraternity/all"));
+  return permanentRedirect(appUrl("/admin/fraternity/all"));
 }
