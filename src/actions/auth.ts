@@ -9,7 +9,8 @@ export async function getSession() {
   return (await cookies()).get("session")?.value;
 }
 
-export async function logout(error: string = "Vous avez été déconnecté") {
+export async function logout(error: string | null) {
+  if (!error) error = "Vous avez été déconnecté";
   let session = await getSession();
   if (!session) {
     session = await getSession();
@@ -51,7 +52,7 @@ export async function getUserFromSession(sessionId?: string) {
     });
   } catch (error) {
     console.error("Error getting user from session", sessionId);
-    return redirect(appUrl("/logout?error=La session n'existe pas"));
+    await logout("La session n'existe pas");
   }
 
   if (!session) {
