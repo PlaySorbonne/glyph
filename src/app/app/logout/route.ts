@@ -7,6 +7,6 @@ export async function GET(request: NextRequest) {
   let error =
     request.nextUrl.searchParams.get("error") ?? "Vous avez été déconnecté";
 
-  await logout();
+  await logout(error);
   return NextResponse.redirect(appUrl(`/login?error=${error}`));
 }
