@@ -9,27 +9,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    let [
-      users,
-      quests,
-      codes,
-      history,
-      fraternities,
-    ] = await Promise.all([
+    const databaseExport = await Promise.all([
       prisma.user.findMany(),
       prisma.quest.findMany(),
       prisma.code.findMany(),
       prisma.history.findMany(),
       prisma.fraternity.findMany(),
     ])
-
-    const databaseExport = {
-      users,
-      quests,
-      codes,
-      history,
-      fraternities,
-    };
 
     // Remove null fields
     const removeNullFields = (obj: any) => {
