@@ -94,6 +94,7 @@ model Quest {
   ends        DateTime?
   createdAt   DateTime  @default(now())
   horaires    String?
+  glyph       String? // must be smth like 01010101,010101011,... chaque ligne doit être de taille 29
 
   Code Code[]
 
@@ -124,10 +125,4 @@ model Code {
   expires     DateTime?
 
   History History[]
-}
-
-model QrCode {
-  id   Int    @id @default(autoincrement())
-  code String @unique // must be of size size², and is smth like "0100101101010010101".
-  size Int
 }
