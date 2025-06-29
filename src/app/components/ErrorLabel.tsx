@@ -1,53 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useNotifications } from "@/contexts/NotificationContext";
 
 export default function ErrorLabel() {
-  let [show, setShow] = useState(true);
-  let searchParams = useSearchParams();
-  let error = searchParams.get("error");
+  const [show, setShow] = useState(true);
+  const searchParams = useSearchParams();
+  const { showError } = useNotifications();
+  const error = searchParams.get("error");
   
+  useEffect(() => {
+    if (error && show) {
+      showError(decodeURIComponent(error));
+      setShow(false);
+    }
+  }, [error, show, showError]);
   
-  if (!show) return null;
-  if (!error) return null;
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderRadius: "0 0 10px 10px",
-        top: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        maxWidth: "400px",
-        backgroundColor: "red",
-        color: "white",
-        padding: "10px",
-        display: "flex",
-        gap: "10px",
-        zIndex: 1000,
-      }}
-    >
-      <p>{error}</p>
-      <button
-        onClick={() => setShow(false)}
-        style={{
-          backgroundColor: "white",
-          color: "red",
-          borderRadius: "50%",
-          width: "20px",
-          height: "20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        X
-      </button>
-    </div>
-  );
+  // This component is now deprecated in favor of the notification system
+  // but kept for backward compatibility
+  return null;
 }

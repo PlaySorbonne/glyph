@@ -14,9 +14,12 @@ export async function GET(
 
   if (!session) {
     return NextResponse.redirect(
-      appUrl(`/login?error=${"Connectez vous d'abord pour ça"}`)
+      `${appUrl("/login")}?error=${encodeURIComponent(
+        "Connectez vous d'abord pour ça"
+      )}`
     );
   }
+
   let [user, code] = await Promise.all([
     getUserFromSession(session),
     getCode(codeStr),
@@ -26,16 +29,29 @@ export async function GET(
     return notFound();
   }
 
-  let redirectUrl = code?.isQuest
-    ? `/quest/${code.questId}?`
-    : `/?error=vous avez reçu ${code.points} points`;
+  let redirectUrl = code?.isQuest ? `/quest/${code.questId}` : `/`;
 
   try {
     await userScannedCode(user!, code);
+
+    if (code.isQuest) {
+      return NextResponse.redirect(
+        `${appUrl(redirectUrl)}?success=${encodeURIComponent(
+          "Quête terminée !"
+        )}`
+      );
+    } else {
+      return NextResponse.redirect(
+        `${appUrl(redirectUrl)}?success=${encodeURIComponent(
+          `Vous avez reçu ${code.points} points`
+        )}`
+      );
+    }
   } catch (e: any) {
     return NextResponse.redirect(
-      appUrl(`?error=${e.message ?? "Une erreur est survenue"}`)
+      `${appUrl("/")}?error=${encodeURIComponent(
+        e.message ?? "Une erreur est survenue"
+      )}`
     );
   }
-  return NextResponse.redirect(appUrl(`${redirectUrl}&finished=true`));
 }

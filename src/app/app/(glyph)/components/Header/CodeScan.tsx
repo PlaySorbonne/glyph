@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./CodeScan.module.css";
 import Image from "next/image";
 import icons from "@/assets/icons";
 import { handleUserScanForm } from "./actions";
 import { Scanner } from "@yudiel/react-qr-scanner";
-import { useRouter } from "next/navigation";
+import { useFlashMessage } from "@/contexts/FlashMessageContext";
 
 export default function CodeScan() {
   const [opened, setOpened] = useState(false);
   const [openQR, setOpenQR] = useState(false);
   const [code, setCode] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
+  const { redirectWithError } = useFlashMessage();
 
   function redirect(url: string) {
     router.push(url);
@@ -28,15 +30,17 @@ export default function CodeScan() {
     if (!result || !result[0]) return;
     const data = result[0].rawValue;
     if (
-      data.startsWith(process.env.NEXT_PUBLIC_MAIN_URL) ||
+      data.startsWith(process.env.NEXT_PUBLIC_MAIN_URL || '') ||
       data.startsWith("https://glyph.playsorbonne.fr")
-    )
+    ) {
       return redirect(data);
-    else return redirect(`?error=Invalid QR code. got ${data}`);
+    } else {
+      redirectWithError(window.location.pathname, `Code QR invalide: ${data}`);
+    }
   }
 
   function qrError(error: any) {
-    redirect(`?error=${error.message}`);
+    redirectWithError(window.location.pathname, `Erreur de scan: ${error.message}`);
   }
 
   return (
