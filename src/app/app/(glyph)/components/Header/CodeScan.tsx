@@ -6,14 +6,17 @@ import Image from "next/image";
 import icons from "@/assets/icons";
 import { handleUserScanForm } from "./actions";
 import { Scanner } from "@yudiel/react-qr-scanner";
+import { useRouter } from "next/navigation";
 
 export default function CodeScan() {
   const [opened, setOpened] = useState(false);
   const [openQR, setOpenQR] = useState(false);
   const [code, setCode] = useState("");
 
+  const router = useRouter()
+
   function redirect(url: string) {
-    window.location.href = url;
+    router.push(url);
   }
 
   function close() {
@@ -25,7 +28,7 @@ export default function CodeScan() {
     if (!result || !result[0]) return;
     const data = result[0].rawValue;
     if (
-      data.startsWith(process.env.MAIN_URL) ||
+      data.startsWith(process.env.NEXT_PUBLIC_MAIN_URL) ||
       data.startsWith("https://glyph.playsorbonne.fr")
     )
       return redirect(data);

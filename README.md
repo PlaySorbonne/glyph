@@ -12,7 +12,7 @@ je met juste qlq notes ici en attendant de faire une vraie doc (surtout les part
 
 ## ENV variables
 
-- MAIN_URL: l'url de l'instance de production (ex: https://glyph.playsorbonne.fr)
+- NEXT_PUBLIC_MAIN_URL: l'url de l'instance de production (ex: https://glyph.playsorbonne.fr)
 
 - NO_AUTH: utilisé en dev uniquement <!>, saute le middleware donc juste de vérification de l'authentification.
 

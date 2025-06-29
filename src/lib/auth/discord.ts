@@ -39,7 +39,7 @@ export async function signInWithDiscord(data: discordSignInData): Promise<
       client_secret: process.env.AUTH_DISCORD_SECRET ?? "",
       code: data.code,
       grant_type: "authorization_code",
-      redirect_uri: `${process.env.MAIN_URL}${discordCallback}`,
+      redirect_uri: `${process.env.NEXT_PUBLIC_MAIN_URL}${discordCallback}`,
     }),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

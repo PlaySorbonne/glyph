@@ -22,7 +22,7 @@ export function generateCode(): `${string}-${string}-${string}` {
 }
 
 export function appUrl(relativePath: string) {
-  return new URL(`/app${relativePath}`, process.env.MAIN_URL).toString();
+  return new URL(`/app${relativePath}`, process.env.NEXT_PUBLIC_MAIN_URL).toString();
 }
 
 export function cutString(str: string | null | undefined, maxLength: number) {

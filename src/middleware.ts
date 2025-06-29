@@ -25,14 +25,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/app/login?error=Vous devez vous connectez pour accéder à cette page",
-        process.env.MAIN_URL
+        process.env.NEXT_PUBLIC_MAIN_URL
       )
     );
   }
 
   let infoUrl = new URL(
     `/api/access/${encodeURIComponent(session ?? "")}`,
-    process.env.MAIN_URL
+    process.env.NEXT_PUBLIC_MAIN_URL
   );
   let infoResponse = await fetch(infoUrl, { cache: "force-cache" });
 
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
-        process.env.MAIN_URL
+        process.env.NEXT_PUBLIC_MAIN_URL
       )
     );
   }
@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
-        process.env.MAIN_URL
+        process.env.NEXT_PUBLIC_MAIN_URL
       )
     );
   }
@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(
         "/app?error=Vous n'avez pas les droits pour accéder à cette page",
-        process.env.MAIN_URL
+        process.env.NEXT_PUBLIC_MAIN_URL
       )
     );
   }
@@ -72,7 +72,7 @@ export async function middleware(request: NextRequest) {
     return continueResponse;
 
   if (!info.name || !info.fraternityId) {
-    return NextResponse.redirect(new URL("/welcome", process.env.MAIN_URL));
+    return NextResponse.redirect(new URL("/welcome", process.env.NEXT_PUBLIC_MAIN_URL));
   }
 
   return continueResponse;

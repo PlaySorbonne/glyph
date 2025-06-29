@@ -37,7 +37,7 @@ export async function signInWithGoogle(data: googleSignInData): Promise<
       code: data.code,
       client_id: process.env.AUTH_GOOGLE_ID ?? "",
       client_secret: process.env.AUTH_GOOGLE_SECRET ?? "",
-      redirect_uri: `${process.env.MAIN_URL}${googleCallback}`,
+      redirect_uri: `${process.env.NEXT_PUBLIC_MAIN_URL}${googleCallback}`,
       grant_type: "authorization_code",
     }),
   });

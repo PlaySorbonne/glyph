@@ -7,11 +7,11 @@ RUN ln -snf /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Pari
 ENV TZ="Europe/Paris"
 
 ARG NODE_ENV="production"
-ARG MAIN_URL="http://localhost:3000"
+ARG NEXT_PUBLIC_MAIN_URL="http://localhost:3000"
 ARG PORT=3000
 
 ENV NODE_ENV=${NODE_ENV}
-ENV MAIN_URL=${MAIN_URL}
+ENV NEXT_PUBLIC_MAIN_URL=${MAIN_URL}
 ENV PORT=${PORT}
 
 # Install dependencies only when needed

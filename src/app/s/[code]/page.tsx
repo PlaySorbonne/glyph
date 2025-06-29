@@ -30,7 +30,7 @@ export default async function CodePage(props: {
         textAlign: "center",
         fontFamily: "DCC-Ash",
       }}>{code.isQuest ? code.quest?.title : "Code à points"}</h1>}
-      <QRCode value={`${process.env.MAIN_URL}/${params.code}`} />
+      <QRCode value={`${process.env.NEXT_PUBLIC_MAIN_URL}/${params.code}`} />
       {code && (
         <h1 style={{
           fontSize: "2rem",
