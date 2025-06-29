@@ -5,8 +5,7 @@ import styles from "./CodeScan.module.css";
 import Image from "next/image";
 import icons from "@/assets/icons";
 import { handleUserScanForm } from "./actions";
-// @ts-ignore
-import QrReader from "react-qr-scanner";
+import { Scanner } from "@yudiel/react-qr-scanner";
 
 export default function CodeScan() {
   const [opened, setOpened] = useState(false);
@@ -22,14 +21,15 @@ export default function CodeScan() {
     setOpenQR(false);
   }
 
-  function qrScan(data: any) {
-    if (!data) return;
+  function qrScan(result: any) {
+    if (!result || !result[0]) return;
+    const data = result[0].rawValue;
     if (
-      data.text.startsWith(process.env.MAIN_URL) ||
-      data.text.startsWith("https://glyph.playsorbonne.fr")
+      data.startsWith(process.env.MAIN_URL) ||
+      data.startsWith("https://glyph.playsorbonne.fr")
     )
-      return redirect(data.text);
-    else return redirect(`?error=Invalid QR code. got ${data.text}`);
+      return redirect(data);
+    else return redirect(`?error=Invalid QR code. got ${data}`);
   }
 
   function qrError(error: any) {
@@ -84,13 +84,14 @@ export default function CodeScan() {
               )}
 
               {openQR && (
-                <QrReader
-                  delay={1000}
-                  onError={qrError}
+                <Scanner
                   onScan={qrScan}
-                  style={{ width: "100%" }}
-                  facingMode={{
-                    exact: "environment"
+                  onError={qrError}
+                  constraints={{
+                    facingMode: "environment"
+                  }}
+                  styles={{
+                    container: { width: "100%" }
                   }}
                 />
               )}
