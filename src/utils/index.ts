@@ -17,6 +17,52 @@ export function glyphArrayToString(glyph: boolean[][] | null | undefined) {
     .join(",");
 }
 
+export function smallestSquareContainingAllOnes(matrix: boolean[][]) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  let minRow = rows, maxRow = -1;
+  let minCol = cols, maxCol = -1;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (matrix[r][c]) {
+        minRow = Math.min(minRow, r);
+        maxRow = Math.max(maxRow, r);
+        minCol = Math.min(minCol, c);
+        maxCol = Math.max(maxCol, c);
+      }
+    }
+  }
+
+  if (maxRow === -1) return [];
+
+  const height = maxRow - minRow + 1;
+  const width = maxCol - minCol + 1;
+
+  const size = Math.max(height, width);
+
+  const rowStart = Math.max(0, minRow - Math.floor((size - height) / 2));
+  const colStart = Math.max(0, minCol - Math.floor((size - width) / 2));
+
+  const rowEnd = Math.min(rows, rowStart + size);
+  const colEnd = Math.min(cols, colStart + size);
+
+  const adjustedRowStart = rowEnd - size;
+  const adjustedColStart = colEnd - size;
+
+  const result = [];
+  for (let r = adjustedRowStart; r < adjustedRowStart + size; r++) {
+    const row = [];
+    for (let c = adjustedColStart; c < adjustedColStart + size; c++) {
+      row.push(matrix[r][c]);
+    }
+    result.push(row);
+  }
+
+  return result;
+}
+
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
 export function generateSession(id: string) {
   return `${randomBytes(2)

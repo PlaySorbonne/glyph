@@ -1,13 +1,25 @@
 import React from "react";
 import { createQuest } from "@/actions/quests";
-import { questSchema, QuestInput } from "@/utils/zod";
-import { ZodError } from "zod";
+import { QuestInput } from "@/utils/zod";
 import { redirect } from "next/navigation";
-import { appUrl, generateCode } from "@/utils";
+import { appUrl, generateCode, GLYPH_SIZE, glyphStringToArray } from "@/utils";
+import PixelMatch from "@/app/app/components/PixelMatch";
 
 export default function NewQuestPage() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
+
+    // Récupérer le glyph du formulaire
+    const glyphStr = formData.get("glyph") as string;
+    const glyphArr = glyphStringToArray(glyphStr) || [];
+    const glyphSize = Math.ceil(
+      Math.sqrt(
+        glyphArr.reduce(
+          (acc, row) => Math.max(acc, row.filter(Boolean).length),
+          0
+        )
+      )
+    );
 
     const questData: QuestInput = {
       title: formData.get("title") as string,
@@ -29,6 +41,8 @@ export default function NewQuestPage() {
         ? new Date(formData.get("ends") as string)
         : null,
       horaires: (formData.get("horaires") as string) || null,
+      glyph: glyphStr || null,
+      glyphSize: glyphSize,
     };
 
     const code = (formData.get("code") as string) || generateCode();
@@ -294,6 +308,19 @@ export default function NewQuestPage() {
                 id="code"
                 className="flex-1 rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="Enter code or leave blank to auto-generate"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Glyph Pattern
+            </label>
+            <div className="mt-1">
+              <PixelMatch
+                inputMode={true}
+                size={GLYPH_SIZE}
+                name="glyph"
               />
             </div>
           </div>

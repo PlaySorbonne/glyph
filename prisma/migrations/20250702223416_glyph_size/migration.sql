@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Quest" ADD COLUMN "glyphSize" INTEGER DEFAULT 29;

@@ -1,11 +1,10 @@
 import React from "react";
 import { updateQuest, getQuest, deleteQuest } from "@/actions/quests";
-import { questSchema, QuestInput } from "@/utils/zod";
-import { ZodError } from "zod";
+import { QuestInput } from "@/utils/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { appUrl } from "@/utils";
+import { appUrl, GLYPH_SIZE, glyphStringToArray } from "@/utils";
+import PixelMatch from "@/app/app/components/PixelMatch";
 
 export default async function EditQuestPage(props: {
   params: Promise<{ id: string }>;
@@ -19,6 +18,17 @@ export default async function EditQuestPage(props: {
 
   const submit = async (formData: FormData) => {
     "use server";
+
+    const glyphStr = formData.get("glyph") as string;
+    const glyphArr = glyphStringToArray(glyphStr) || [];
+    const glyphSize = Math.ceil(
+      Math.sqrt(
+        glyphArr.reduce(
+          (acc, row) => Math.max(acc, row.filter(Boolean).length),
+          0
+        )
+      )
+    );
 
     const questData: QuestInput = {
       title: formData.get("title") as string,
@@ -40,6 +50,8 @@ export default async function EditQuestPage(props: {
         ? new Date(formData.get("ends") as string)
         : null,
       horaires: (formData.get("horaires") as string) || null,
+      glyph: glyphStr || null,
+      glyphSize: glyphSize,
     };
 
     try {
@@ -329,31 +341,37 @@ export default async function EditQuestPage(props: {
             />
           </div>
 
-          <div className="flex justify-between items-center">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Glyph Pattern
+            </label>
+            <div className="mt-1">
+              <PixelMatch
+                inputMode={true}
+                size={GLYPH_SIZE}
+                defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
+                name="glyph"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-4 mt-6">
             <button
               type="submit"
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Update Quest
+              Save Changes
             </button>
           </div>
         </form>
-        <div className="mt-4 flex justify-between items-center">
-          <form action={deleteQuestAction}>
-            <button
-              type="submit"
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              Delete Quest
-            </button>
-          </form>
-          <Link
-            href={`/app/admin/quest/${params.id}/code`}
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        <form action={deleteQuestAction}>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
-            Afficher tous les codes
-          </Link>
-        </div>
+            Delete Quest
+          </button>
+        </form>
       </div>
     </div>
   );
