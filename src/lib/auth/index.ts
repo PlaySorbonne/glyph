@@ -2,10 +2,9 @@ import { discordSignInData, signInWithDiscord } from "./discord";
 import { nameSignInData, signInWithName } from "./username";
 import { googleSignInData, signInWithGoogle } from "./google";
 import { cookies } from "next/headers";
-import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
-import { getCode, userScannedCode } from "@/actions/code";
 import prisma from "../db";
+import { SESSION_TTL } from "@/utils";
 
 type signInData = nameSignInData | discordSignInData | googleSignInData;
 

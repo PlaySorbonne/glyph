@@ -1,6 +1,6 @@
 import React from "react";
 import { createQuest } from "@/actions/quests";
-import { questSchema, QuestInput } from "@/utils/constants";
+import { questSchema, QuestInput } from "@/utils/zod";
 import { ZodError } from "zod";
 import { redirect } from "next/navigation";
 import { appUrl, generateCode } from "@/utils";

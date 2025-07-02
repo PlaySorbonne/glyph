@@ -7,7 +7,7 @@ import {
   QuestInput,
   codeFormat,
   codeSchema,
-} from "@/utils/constants";
+} from "@/utils/zod";
 
 export async function getQuests(n?: number): Promise<Quest[]> {
   return await prisma.quest.findMany({

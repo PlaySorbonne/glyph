@@ -94,7 +94,9 @@ model Quest {
   ends        DateTime?
   createdAt   DateTime  @default(now())
   horaires    String?
-  glyph       String? // must be smth like 01010101,010101011,... chaque ligne doit être de taille 29
+  glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
+                      // Maximum 29 * 29
+  glyphSize  Int?     @default(29) // Taille du glyph, par défaut 29x29 pixels
 
   Code Code[]
 

@@ -1,5 +1,3 @@
-export const SESSION_TTL = -1;
-
 import { z } from "zod";
 
 export const nameFormat = z.custom<string>(

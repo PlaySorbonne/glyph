@@ -1,6 +1,6 @@
 import React from "react";
 import { getUserById, updateUser, deleteUser } from "@/actions/users";
-import { userSchema, UserInput } from "@/utils/constants";
+import { userSchema, UserInput } from "@/utils/zod";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { appUrl } from "@/utils";

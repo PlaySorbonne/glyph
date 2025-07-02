@@ -1,7 +1,6 @@
 import { updateUserWelcomed } from "@/actions/users";
 import { signIn } from "@/lib/auth";
-import { appUrl } from "@/utils";
-import { SESSION_TTL } from "@/utils/constants";
+import { appUrl, SESSION_TTL } from "@/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

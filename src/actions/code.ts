@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { codeFormat, codeSchema } from "@/utils/constants";
+import { codeFormat, codeSchema } from "@/utils/zod";
 import { Code, History, User } from "@prisma/client";
 import { getSession } from "./auth";
 import { getFinishedPrimaryQuests, getPrimaryQuests } from "./quests";

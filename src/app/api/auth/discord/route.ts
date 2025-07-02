@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
 import { signIn } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { SESSION_TTL } from "@/utils/constants";
-import { appUrl } from "@/utils";
+import { appUrl, SESSION_TTL } from "@/utils";
 
 export async function GET(req: NextRequest) {
   let code = req.nextUrl.searchParams.get("code");

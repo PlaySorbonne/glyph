@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { fraternitySchema } from "@/utils/constants";
+import { fraternitySchema } from "@/utils/zod";
 import { randomInt } from "crypto";
 
 export async function createDefaultFraternitys() {

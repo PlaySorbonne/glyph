@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { SESSION_TTL, UserInput, userSchema } from "@/utils/constants";
+import { UserInput, userSchema } from "@/utils/zod";
 import { getUserFromSession } from "./auth";
 import { cookies } from "next/headers";
 import {
@@ -9,6 +9,7 @@ import {
   getNextAvailableFraternity,
   isFraternityFull,
 } from "./fraternity";
+import { SESSION_TTL } from "@/utils";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({

@@ -1,6 +1,22 @@
 import { Quest } from "@prisma/client";
 import { createHash, randomBytes } from "crypto";
 
+export const SESSION_TTL = -1;
+
+export const GLYPH_SIZE = 29; // 29x29 pixels
+
+export function glyphStringToArray(glyph: string | null | undefined) {
+  return glyph
+    ?.split(",")
+    .map((line) => line.split("").map((char) => char === "1"));
+}
+
+export function glyphArrayToString(glyph: boolean[][] | null | undefined) {
+  return glyph
+    ?.map((line) => line.map((char) => (char ? "1" : "0")).join(""))
+    .join(",");
+}
+
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
 export function generateSession(id: string) {
   return `${randomBytes(2)
@@ -22,7 +38,10 @@ export function generateCode(): `${string}-${string}-${string}` {
 }
 
 export function appUrl(relativePath: string) {
-  return new URL(`/app${relativePath}`, process.env.NEXT_PUBLIC_MAIN_URL).toString();
+  return new URL(
+    `/app${relativePath}`,
+    process.env.NEXT_PUBLIC_MAIN_URL
+  ).toString();
 }
 
 export function cutString(str: string | null | undefined, maxLength: number) {

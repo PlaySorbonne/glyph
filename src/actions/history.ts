@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { historySchema } from "@/utils/constants";
+import { historySchema } from "@/utils/zod";
 import { History } from "@prisma/client";
 
 export async function getHistoryById(id: number) {

@@ -1,6 +1,5 @@
-import { generateSession, hash } from "@/utils";
+import { generateSession, hash, SESSION_TTL } from "@/utils";
 import prisma from "../db";
-import { SESSION_TTL } from "@/utils/constants";
 import { User } from "@prisma/client";
 
 export const googleCallback = "/api/auth/google";

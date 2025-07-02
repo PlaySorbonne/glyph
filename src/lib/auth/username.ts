@@ -1,5 +1,5 @@
-import { generateSession } from "@/utils";
-import { nameFormat, SESSION_TTL } from "@/utils/constants";
+import { generateSession, SESSION_TTL } from "@/utils";
+import { nameFormat } from "@/utils/zod";
 import prisma from "../db";
 import { User } from "@prisma/client";
 
