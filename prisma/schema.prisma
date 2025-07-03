@@ -96,8 +96,8 @@ model Quest {
   horaires    String?
   glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
                       // Maximum 29 * 29
-  glyphSize  Int?     @default(29) // Taille du glyph, par défaut 29x29 pixels
-
+  glyphPositionX Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
+  glyphPositionY Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   Code Code[]
 
   History History[]

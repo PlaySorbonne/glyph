@@ -3,7 +3,13 @@ import { updateQuest, getQuest, deleteQuest } from "@/actions/quests";
 import { QuestInput } from "@/utils/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { appUrl, GLYPH_SIZE, glyphStringToArray } from "@/utils";
+import {
+  appUrl,
+  GLYPH_SIZE,
+  glyphArrayToString,
+  glyphStringToArray,
+  smallestContainingAllOnes,
+} from "@/utils";
 import PixelMatch from "@/app/app/components/PixelMatch";
 
 export default async function EditQuestPage(props: {
@@ -19,16 +25,14 @@ export default async function EditQuestPage(props: {
   const submit = async (formData: FormData) => {
     "use server";
 
-    const glyphStr = formData.get("glyph") as string;
-    const glyphArr = glyphStringToArray(glyphStr) || [];
-    const glyphSize = Math.ceil(
-      Math.sqrt(
-        glyphArr.reduce(
-          (acc, row) => Math.max(acc, row.filter(Boolean).length),
-          0
-        )
-      )
-    );
+    const glyphInput = formData.get("glyph") as string;
+    const {
+      matrix: glyphArr,
+      coords: [glyphPositionX, glyphPositionY],
+    } =
+      smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ??
+      [];
+    const glyphStr = glyphArrayToString(glyphArr) || null;
 
     const questData: QuestInput = {
       title: formData.get("title") as string,
@@ -51,7 +55,8 @@ export default async function EditQuestPage(props: {
         : null,
       horaires: (formData.get("horaires") as string) || null,
       glyph: glyphStr || null,
-      glyphSize: glyphSize,
+      glyphPositionX,
+      glyphPositionY,
     };
 
     try {
@@ -347,9 +352,12 @@ export default async function EditQuestPage(props: {
             </label>
             <div className="mt-1">
               <PixelMatch
-                inputMode={true}
                 size={GLYPH_SIZE}
                 defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
+                coords={[
+                  quest.glyphPositionX ?? 0,
+                  quest.glyphPositionY ?? 0,
+                ]}
                 name="glyph"
               />
             </div>

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Quest" ADD COLUMN "glyphPositionX" INTEGER DEFAULT 0;
+ALTER TABLE "Quest" ADD COLUMN "glyphPositionY" INTEGER DEFAULT 0;

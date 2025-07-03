@@ -17,7 +17,10 @@ export function glyphArrayToString(glyph: boolean[][] | null | undefined) {
     .join(",");
 }
 
-export function smallestSquareContainingAllOnes(matrix: boolean[][]) {
+export function smallestContainingAllOnes(matrix: boolean[][]): {
+  matrix: boolean[][];
+  coords: [number, number];
+} {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
@@ -35,32 +38,23 @@ export function smallestSquareContainingAllOnes(matrix: boolean[][]) {
     }
   }
 
-  if (maxRow === -1) return [];
+  if (maxRow === -1) return { matrix: [], coords: [0, 0] };
 
+  // Rectangle dimensions
   const height = maxRow - minRow + 1;
   const width = maxCol - minCol + 1;
 
-  const size = Math.max(height, width);
-
-  const rowStart = Math.max(0, minRow - Math.floor((size - height) / 2));
-  const colStart = Math.max(0, minCol - Math.floor((size - width) / 2));
-
-  const rowEnd = Math.min(rows, rowStart + size);
-  const colEnd = Math.min(cols, colStart + size);
-
-  const adjustedRowStart = rowEnd - size;
-  const adjustedColStart = colEnd - size;
-
   const result = [];
-  for (let r = adjustedRowStart; r < adjustedRowStart + size; r++) {
+  for (let r = minRow; r <= maxRow; r++) {
     const row = [];
-    for (let c = adjustedColStart; c < adjustedColStart + size; c++) {
+    for (let c = minCol; c <= maxCol; c++) {
       row.push(matrix[r][c]);
     }
     result.push(row);
   }
 
-  return result;
+  // coords of the most left up pixel in the original matrix
+  return { matrix: result, coords: [minRow, minCol] };
 }
 
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
@@ -478,6 +472,15 @@ const words = [
   "citron",
   "orange",
   "cerise",
+  "fraise",
+  "framboise",
+  "melon",
+  "citrouille",
+  "pasteque",
+  "poire",
+  "peche",
+  "raisin",
+  "tomate",
   "fraise",
   "framboise",
   "melon",

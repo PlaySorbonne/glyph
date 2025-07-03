@@ -1,28 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { glyphArrayToString } from "@/utils";
 
 export interface PixelMatchType {
-  inputMode: boolean;
   size?: number;
   onChange?: (glyph: boolean[][]) => void;
-  defaultGlyph?: boolean[][];
+  defaultGlyph?: boolean[][]; // May be not a square
   locked?: boolean;
   name?: string;
+  coords?: [number, number];
 }
 
 export default function PixelMatch({
-  inputMode,
   size = 29,
   onChange,
   defaultGlyph = [],
   locked = false,
   name,
+  coords,
 }: PixelMatchType) {
+  const glyph = useMemo(
+    () => fillMatrixToSize(defaultGlyph, size, coords),
+    [defaultGlyph, size, coords]
+  );
   const [currentPattern, setCurrentPattern] = useState<boolean[][]>(() => {
-    if (defaultGlyph.length > 0) {
-      return defaultGlyph;
+    if (glyph.length > 0) {
+      return glyph;
     }
     return Array.from({ length: size }, () => Array(size).fill(false));
   });
@@ -71,4 +75,31 @@ export default function PixelMatch({
       )}
     </div>
   );
+}
+
+export function fillMatrixToSize(
+  matrix: boolean[][],
+  size: number,
+  coords: [number, number] | undefined
+) {
+  if (matrix.length === 0 || matrix[0].length === 0) {
+    return Array.from({ length: size }, () => Array(size).fill(false));
+  }
+  const mRows = matrix.length;
+  const mCols = matrix[0].length;
+  // Calculate top/left padding to center the matrix
+  const padTop = Math.floor((size - mRows) / 2);
+  const padLeft = Math.floor((size - mCols) / 2);
+
+  const newMatrix = Array.from({ length: size }, () => Array(size).fill(false));
+  for (let i = 0; i < mRows; i++) {
+    for (let j = 0; j < mCols; j++) {
+      const ni = i + padTop;
+      const nj = j + padLeft;
+      if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
+        newMatrix[ni][nj] = matrix[i][j];
+      }
+    }
+  }
+  return newMatrix;
 }

@@ -58,7 +58,20 @@ export const questSchema = z
     ends: z.coerce.date().optional().nullable(),
     horaires: z.string().optional().nullable(),
     glyph: z.string().optional().nullable(),
-    glyphSize: z.number().int().positive().default(29).optional(),
+    glyphPositionX: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(29)
+      .default(0)
+      .optional(),
+    glyphPositionY: z.coerce
+      .number()
+      .int()
+      .min(0)
+      .max(29)
+      .default(0)
+      .optional(),
   })
   .refine((data) => !data.starts || !data.ends || data.starts < data.ends, {
     message: "End date must be after start date",

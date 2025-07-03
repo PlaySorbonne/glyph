@@ -2,24 +2,28 @@ import React from "react";
 import { createQuest } from "@/actions/quests";
 import { QuestInput } from "@/utils/zod";
 import { redirect } from "next/navigation";
-import { appUrl, generateCode, GLYPH_SIZE, glyphStringToArray } from "@/utils";
+import {
+  appUrl,
+  generateCode,
+  GLYPH_SIZE,
+  glyphArrayToString,
+  glyphStringToArray,
+  smallestContainingAllOnes,
+} from "@/utils";
 import PixelMatch from "@/app/app/components/PixelMatch";
 
 export default function NewQuestPage() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
 
-    // Récupérer le glyph du formulaire
-    const glyphStr = formData.get("glyph") as string;
-    const glyphArr = glyphStringToArray(glyphStr) || [];
-    const glyphSize = Math.ceil(
-      Math.sqrt(
-        glyphArr.reduce(
-          (acc, row) => Math.max(acc, row.filter(Boolean).length),
-          0
-        )
-      )
-    );
+    const glyphInput = formData.get("glyph") as string;
+    const {
+      matrix: glyphArr,
+      coords: [glyphPositionX, glyphPositionY],
+    } =
+      smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ??
+      [];
+    const glyphStr = glyphArrayToString(glyphArr) || null;
 
     const questData: QuestInput = {
       title: formData.get("title") as string,
@@ -41,8 +45,9 @@ export default function NewQuestPage() {
         ? new Date(formData.get("ends") as string)
         : null,
       horaires: (formData.get("horaires") as string) || null,
-      glyph: glyphStr || null,
-      glyphSize: glyphSize,
+      glyph: glyphStr,
+      glyphPositionX: glyphPositionX,
+      glyphPositionY: glyphPositionY,
     };
 
     const code = (formData.get("code") as string) || generateCode();
@@ -317,11 +322,7 @@ export default function NewQuestPage() {
               Glyph Pattern
             </label>
             <div className="mt-1">
-              <PixelMatch
-                inputMode={true}
-                size={GLYPH_SIZE}
-                name="glyph"
-              />
+              <PixelMatch size={GLYPH_SIZE} name="glyph" />
             </div>
           </div>
 
