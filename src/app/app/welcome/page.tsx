@@ -1,14 +1,18 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
-import { updateUserSelf } from "@/actions/users";
+import { updateUserSelf, updateUserWelcomed } from "@/actions/users";
 import { appUrl } from "@/utils";
 import { redirect } from "next/navigation";
 import Fraternities from "@/assets/fraternities";
 
 export default async function Welcome1Page() {
   let session = await getSession();
-  let user = await getUserFromSession(session);
-  if (user!.name && user!.fraternityId) return redirect(appUrl("/"));
-  if (user!.name) redirect(appUrl("/welcome/1"));
+  let user = (await getUserFromSession(session))!;
+  if (!user.welcomed) await updateUserWelcomed({
+        userId: user.id,
+        sessionToken: undefined,
+      });
+  if (user.name && user.fraternityId) return redirect(appUrl("/"));
+  if (user.name) redirect(appUrl("/welcome/1"));
 
   async function handleSubmit(formData: FormData) {
     "use server";
