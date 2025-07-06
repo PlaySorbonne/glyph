@@ -1,3 +1,5 @@
+"use server";
+
 import { discordSignInData, signInWithDiscord } from "./discord";
 import { nameSignInData, signInWithName } from "./username";
 import { googleSignInData, signInWithGoogle } from "./google";
@@ -42,22 +44,28 @@ export async function signIn(data: signInData): Promise<
     };
   }
 
-  if (!out?.error) {
-    let ttl =
-      SESSION_TTL === -1
-        ? new Date(2147483647000)
-        : new Date(Date.now() + SESSION_TTL);
-    (await cookies()).set("session", out.session, {
-      expires: ttl,
-    });
-    if (out.name) {
-      (await cookies()).set("name", out.name, {
-        expires: ttl,
-      });
-    }
-  }
+  let cookie = await cookies();
 
   if (out.error || !out.registered) return out;
+
+  let ttl =
+    SESSION_TTL === -1
+      ? new Date(2147483647000)
+      : new Date(Date.now() + SESSION_TTL);
+
+  cookie.set("session", out.session, {
+    expires: ttl,
+  });
+
+  if (out.user.fraternityId)
+    cookie.set("fraternityId", out.user.fraternityId.toString(), {
+      expires: ttl,
+    });
+
+  if (out.name)
+    cookie.set("name", out.name, {
+      expires: ttl,
+    });
 
   try {
     let code = await prisma.code.findFirst({
@@ -84,56 +92,6 @@ export async function signIn(data: signInData): Promise<
     });
   } catch (e: any) {
     console.error(e);
-  }
-
-  return out;
-}
-
-export async function register(data: signInData): Promise<
-  | {
-      error: true;
-      msg: string;
-    }
-  | {
-      error: false;
-      session: string;
-      name?: string | null;
-      user: User;
-    }
-> {
-  if (process.env.DISABLE_LOGIN && data.type !== "google")
-    return {
-      error: true,
-      msg: "Login is disabled",
-    };
-
-  let out;
-  if (data.type === "discord") {
-    out = await signInWithDiscord(data);
-  } else if (data.type === "google") {
-    out = await signInWithGoogle(data);
-  } else if (data.type === "name") {
-    out = await signInWithName(data);
-  } else {
-    return {
-      error: true,
-      msg: "Invalid sign in type",
-    };
-  }
-
-  if (!out?.error) {
-    let ttl =
-      SESSION_TTL === -1
-        ? new Date(2147483647000)
-        : new Date(Date.now() + SESSION_TTL);
-    (await cookies()).set("session", out.session, {
-      expires: ttl,
-    });
-    if (out.name) {
-      (await cookies()).set("name", out.name, {
-        expires: ttl,
-      });
-    }
   }
 
   return out;

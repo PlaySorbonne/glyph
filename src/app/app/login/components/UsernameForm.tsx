@@ -1,59 +1,38 @@
+"use client";
+
 import { updateUserWelcomed } from "@/actions/users";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { signIn } from "@/lib/auth";
 import { appUrl, SESSION_TTL } from "@/utils";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { startTransition } from "react";
 
 export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
   allowLogin = allowLogin ?? true;
-  async function handleSubmit(formData: FormData) {
-    "use server";
+  const { showError } = useNotifications();
+  const router = useRouter();
 
-    const username = formData.get("username") as string;
-    const result = await signIn({
-      type: "name",
-      name: username,
-      allowLogin,
+  function handleSubmit(formData: FormData) {
+    startTransition(async () => {
+      const username = formData.get("username") as string;
+      const result = await signIn({
+        type: "name",
+        name: username,
+        allowLogin,
+      });
+
+      if (result.error) {
+        console.error(result.msg);
+        showError(result.msg);
+        return;
+      }
+
+      if (result.registered) {
+        router.push(appUrl("/welcome"));
+      } else {
+        router.push(appUrl("/"));
+      }
     });
-
-    if (result.error) {
-      console.error(result.msg);
-      redirect(`?error=${result.msg}`);
-    }
-
-    (await cookies()).set("session", result.session, {
-      expires:
-        SESSION_TTL === -1
-          ? new Date(2147483647000)
-          : new Date(Date.now() + SESSION_TTL),
-    });
-    if (result.user.fraternityId) {
-      (await cookies()).set("fraternityId", result.user.fraternityId.toString(), {
-        expires:
-          SESSION_TTL === -1
-            ? new Date(2147483647000)
-            : new Date(Date.now() + SESSION_TTL),
-      });
-    }
-
-    if (result.user.name) {
-      (await cookies()).set("name", result.user.name, {
-        expires:
-          SESSION_TTL === -1
-            ? new Date(2147483647000)
-            : new Date(Date.now() + SESSION_TTL),
-      });
-    }
-
-    if (result.registered) {
-      await updateUserWelcomed({
-        userId: result.user.id,
-        sessionToken: undefined,
-      });
-      redirect(appUrl("/welcome"));
-    } else {
-      redirect(appUrl("/"));
-    }
   }
 
   return (
