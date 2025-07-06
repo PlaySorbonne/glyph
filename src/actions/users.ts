@@ -10,6 +10,7 @@ import {
   isFraternityFull,
 } from "./fraternity";
 import { SESSION_TTL } from "@/utils";
+import { User } from "@prisma/client";
 
 export async function getUserById(id: string) {
   return await prisma.user.findUnique({
@@ -192,6 +193,44 @@ export async function updateUserSelf(
     });
   }
   return out;
+}
+
+export async function safeUpdateUserSefl(
+  sessionId: string,
+  data: Partial<UserInput>
+): Promise<
+  | {
+      error: true;
+      message: string;
+    }
+  | {
+      error: false;
+      user: User;
+    }
+> {
+  let out;
+  try {
+    out = await updateUserSelf(sessionId, data);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error updating user self:", error.message);
+      return {
+        error: true,
+        message: error.message,
+      };
+    } else {
+      console.error("Unknown error updating user self:", error);
+      return {
+        error: true,
+        message: "An unknown error occurred",
+      };
+    }
+  }
+
+  return {
+    error: false,
+    user: out,
+  };
 }
 
 export async function updateUserWelcomed({
