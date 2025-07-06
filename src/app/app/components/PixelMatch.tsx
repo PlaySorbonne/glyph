@@ -20,6 +20,7 @@ export default function PixelMatch({
   name,
   coords,
 }: PixelMatchType) {
+  console.log("PixelMatch rendered", { size, defaultGlyph, locked, name, coords });
   const glyph = useMemo(
     () => fillMatrixToSize(defaultGlyph, size, coords),
     [defaultGlyph, size, coords]
@@ -80,22 +81,19 @@ export default function PixelMatch({
 export function fillMatrixToSize(
   matrix: boolean[][],
   size: number,
-  coords: [number, number] | undefined
+  coords = [0,0] as [number, number]
 ) {
   if (matrix.length === 0 || matrix[0].length === 0) {
     return Array.from({ length: size }, () => Array(size).fill(false));
   }
   const mRows = matrix.length;
   const mCols = matrix[0].length;
-  // Calculate top/left padding to center the matrix
-  const padTop = Math.floor((size - mRows) / 2);
-  const padLeft = Math.floor((size - mCols) / 2);
 
   const newMatrix = Array.from({ length: size }, () => Array(size).fill(false));
   for (let i = 0; i < mRows; i++) {
     for (let j = 0; j < mCols; j++) {
-      const ni = i + padTop;
-      const nj = j + padLeft;
+      const ni = i + coords[0];
+      const nj = j + coords[1];
       if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
         newMatrix[ni][nj] = matrix[i][j];
       }
