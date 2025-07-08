@@ -81,17 +81,16 @@ model Quest {
   id          Int       @id @default(autoincrement())
   // Global Info
   title       String    @unique
-  img         String?
   mission     String?
   description String?
   indice      String?
   lore        String?
   lieu        String?
-  points      Int       @default(1)
   starts      DateTime?
   ends        DateTime?
   createdAt   DateTime  @default(now())
   horaires    String?
+  points      Int       @default(1)
   
   // for Secondary quests
   secondary   Boolean   @default(true)
@@ -101,6 +100,13 @@ model Quest {
   glyphPositionY Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
                       // Maximum 29 * 29
+  img         String? // may not be used, is replaced by the glyph
+
+  // For wrapping quests
+  // parentId   Int?    
+  // parent     Quest?     @relation("SubQuests", fields: [parentId], references: [id])
+  // subQuests  Quest[]    @relation("SubQuests")
+
 
   // mainly for secondary quests the qrcodes
   Code Code[]
@@ -125,7 +131,7 @@ model Code {
   id          Int       @id @default(autoincrement())
   code        String    @unique
   description String?
-  isQuest     Boolean   @default(false) // true si c'ça représente la fin d'une quête, faux si c'est juste des points
+  isQuest     Boolean   @default(false) // true si ça représente la fin d'une quête, faux si c'est juste des points
   questId     Int?
   quest       Quest?    @relation(fields: [questId], references: [id], onDelete: Cascade)
   points      Int       @default(1)
