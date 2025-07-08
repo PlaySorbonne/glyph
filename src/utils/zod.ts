@@ -45,13 +45,6 @@ export const questSchema = z
     indice: z.string().optional().nullable(),
     lore: z.string().optional().nullable(),
     lieu: z.string().optional().nullable(),
-    daysOpen: z
-      .string()
-      .regex(/^[LMJVSDe,]*$/, "Invalid days format")
-      .optional()
-      .nullable(),
-    hourOpen: hourFormat.optional().nullable(),
-    hourClose: hourFormat.optional().nullable(),
     secondary: z.boolean().default(false),
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),

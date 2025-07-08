@@ -33,9 +33,6 @@ export default function NewQuestPage() {
       indice: (formData.get("indice") as string) || null,
       lore: (formData.get("lore") as string) || null,
       lieu: (formData.get("lieu") as string) || null,
-      daysOpen: Array.from(formData.getAll("daysOpen")).join(","),
-      hourOpen: (formData.get("hourOpen") as string) || null,
-      hourClose: (formData.get("hourClose") as string) || null,
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
@@ -194,49 +191,6 @@ export default function NewQuestPage() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Jours d&apos;ouverture
             </label>
-            <div className="space-y-2">
-              {["L", "M", "Me", "J", "V", "S", "D"].map((day) => (
-                <label key={day} className="inline-flex items-center mr-4">
-                  <input
-                    type="checkbox"
-                    name="daysOpen"
-                    value={day}
-                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  />
-                  <span className="ml-2">{day}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="hourOpen"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Heure d&apos;ouverture (HH:MM)
-            </label>
-            <input
-              type="time"
-              name="hourOpen"
-              id="hourOpen"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="hourClose"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Heure de fermeture (HH:MM)
-            </label>
-            <input
-              type="time"
-              name="hourClose"
-              id="hourClose"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
           </div>
 
           <div>

@@ -77,7 +77,9 @@ model Fraternity {
 }
 
 model Quest {
+  // ID
   id          Int       @id @default(autoincrement())
+  // Global Info
   title       String    @unique
   img         String?
   mission     String?
@@ -85,19 +87,22 @@ model Quest {
   indice      String?
   lore        String?
   lieu        String?
-  daysOpen    String? // of type L,M,Me,J,V,S,D
-  hourOpen    String? // of type HH:MM
-  hourClose   String? // of type HH:MM
-  secondary   Boolean   @default(true)
   points      Int       @default(1)
   starts      DateTime?
   ends        DateTime?
   createdAt   DateTime  @default(now())
   horaires    String?
-  glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
-                      // Maximum 29 * 29
+  
+  // for Secondary quests
+  secondary   Boolean   @default(true)
+
+  // for Main Quest
   glyphPositionX Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   glyphPositionY Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
+  glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
+                      // Maximum 29 * 29
+
+  // mainly for secondary quests the qrcodes
   Code Code[]
 
   History History[]
