@@ -7,7 +7,7 @@ import Image from "next/image";
 import icons from "@/assets/icons";
 import { handleUserScanForm } from "./actions";
 import { Scanner } from "@yudiel/react-qr-scanner";
-import { useFlashMessage } from "@/contexts/FlashMessageContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 
 export default function CodeScan() {
   const [opened, setOpened] = useState(false);
@@ -15,7 +15,7 @@ export default function CodeScan() {
   const [code, setCode] = useState("");
 
   const router = useRouter();
-  const { redirectWithError } = useFlashMessage();
+  const { showError } = useNotifications();
 
   function redirect(url: string) {
     router.push(url);
@@ -30,17 +30,17 @@ export default function CodeScan() {
     if (!result || !result[0]) return;
     const data = result[0].rawValue;
     if (
-      data.startsWith(process.env.NEXT_PUBLIC_MAIN_URL || '') ||
+      data.startsWith(process.env.NEXT_PUBLIC_MAIN_URL) ||
       data.startsWith("https://glyph.playsorbonne.fr")
     ) {
       return redirect(data);
     } else {
-      redirectWithError(window.location.pathname, `Code QR invalide: ${data}`);
+      showError(`Code QR invalide: ${data}`);
     }
   }
 
   function qrError(error: any) {
-    redirectWithError(window.location.pathname, `Erreur de scan: ${error.message}`);
+    showError(`Erreur de scan: ${error.message}`);
   }
 
   return (
@@ -95,10 +95,10 @@ export default function CodeScan() {
                   onScan={qrScan}
                   onError={qrError}
                   constraints={{
-                    facingMode: "environment"
+                    facingMode: "environment",
                   }}
                   styles={{
-                    container: { width: "100%" }
+                    container: { width: "100%" },
                   }}
                 />
               )}
