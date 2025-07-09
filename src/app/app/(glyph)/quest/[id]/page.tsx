@@ -1,35 +1,35 @@
 import { getUserFromSession } from "@/actions/auth";
 import { getQuest, hasUserFinishedQuest } from "@/actions/quests";
-import { appUrl, isQuestAvailable } from "@/utils";
+import { appUrl, glyphStringToArray, isQuestAvailable } from "@/utils";
 import { redirect } from "next/navigation";
 import styles from "./page.module.css";
-import icons from "@/assets/icons";
-import Image from "next/image";
 import Setting from "../../account/components/Setting";
-import { getGlyph } from "@/assets/glyphs";
 import Link from "next/link";
+import PixelMatch from "@/app/app/components/PixelMatch";
+import { useMemo } from "react";
 
 export default async function QuestPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ finished?: string }>;
 }) {
-  let questId = parseInt((await params).id);
+  let paramsA = await params;
+  let questId = parseInt(paramsA.id);
   if (isNaN(questId)) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
   let user = await getUserFromSession();
   let hasFinishedQuest = await hasUserFinishedQuest(
     user!.id,
-    parseInt((await params).id)
+    parseInt(paramsA.id)
   );
-  let quest = await getQuest((await params).id);
+  let quest = await getQuest(paramsA.id);
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
+
+  let glyph = glyphStringToArray(quest.glyph) || [];
 
   if (!hasFinishedQuest && !isQuestAvailable(quest)) {
     quest = {
@@ -60,16 +60,17 @@ export default async function QuestPage({
     };
   }
 
+
   let indices =
     quest.indice &&
-    quest!.indice
+    quest.indice
       .split("\n")
       .filter((e) => e)
       .map((e) => e.trim());
 
   return (
     <div>
-      {((await searchParams).finished || hasFinishedQuest) && (
+      {hasFinishedQuest && (
         <div
           style={{
             backgroundColor: "green",
@@ -169,16 +170,14 @@ export default async function QuestPage({
             }}
           >
             {hasFinishedQuest ? (
-              <Image
-                src={getGlyph(quest.img)}
-                alt="quête terminée"
-                height={400}
-                style={{
-                  imageRendering: "pixelated",
-                }}
+              <PixelMatch
+                defaultGlyph={glyphStringToArray(quest.glyph)}
+                locked
               />
             ) : (
-              <Image src={icons.lock} alt="quête vérouillé" width={100} />
+              <PixelMatch
+                size={[glyph?.length || 29, glyph?.[0]?.length || 29]}
+              />
             )}
           </div>
         </section>

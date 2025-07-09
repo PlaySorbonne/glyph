@@ -20,9 +20,7 @@ export default function NewQuestPage() {
     const {
       matrix: glyphArr,
       coords: [glyphPositionX, glyphPositionY],
-    } =
-      smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ??
-      [];
+    } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
     const glyphStr = glyphArrayToString(glyphArr) || null;
 
     const questData: QuestInput = {
@@ -276,7 +274,7 @@ export default function NewQuestPage() {
               Glyph Pattern
             </label>
             <div className="mt-1">
-              <PixelMatch size={GLYPH_SIZE} name="glyph" />
+              <PixelMatch size={[GLYPH_SIZE, GLYPH_SIZE]} name="glyph" />
             </div>
           </div>
 

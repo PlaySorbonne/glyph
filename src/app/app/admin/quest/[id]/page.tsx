@@ -29,9 +29,7 @@ export default async function EditQuestPage(props: {
     const {
       matrix: glyphArr,
       coords: [glyphPositionX, glyphPositionY],
-    } =
-      smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ??
-      [];
+    } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
     const glyphStr = glyphArrayToString(glyphArr) || null;
 
     const questData: QuestInput = {
@@ -303,12 +301,9 @@ export default async function EditQuestPage(props: {
             </label>
             <div className="mt-1">
               <PixelMatch
-                size={GLYPH_SIZE}
+                size={[GLYPH_SIZE, GLYPH_SIZE]}
                 defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
-                coords={[
-                  quest.glyphPositionX ?? 0,
-                  quest.glyphPositionY ?? 0,
-                ]}
+                coords={[quest.glyphPositionX ?? 0, quest.glyphPositionY ?? 0]}
                 name="glyph"
               />
             </div>

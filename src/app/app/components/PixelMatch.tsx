@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { glyphArrayToString } from "@/utils";
 
 export interface PixelMatchType {
-  size?: number;
+  size?: [number, number]; // Now a tuple: [rows, cols]
   onChange?: (glyph: boolean[][]) => void;
   defaultGlyph?: boolean[][]; // May be not a square
   locked?: boolean;
@@ -13,14 +13,16 @@ export interface PixelMatchType {
 }
 
 export default function PixelMatch({
-  size = 29,
+  size,
   onChange,
   defaultGlyph = [],
   locked = false,
   name,
   coords,
 }: PixelMatchType) {
-  console.log("PixelMatch rendered", { size, defaultGlyph, locked, name, coords });
+  if (!size && defaultGlyph.length > 0)
+    size = [defaultGlyph.length, defaultGlyph[0].length];
+  else if (!size) size = [29, 29]; // Default size if not provided
   const glyph = useMemo(
     () => fillMatrixToSize(defaultGlyph, size, coords),
     [defaultGlyph, size, coords]
@@ -29,7 +31,7 @@ export default function PixelMatch({
     if (glyph.length > 0) {
       return glyph;
     }
-    return Array.from({ length: size }, () => Array(size).fill(false));
+    return Array.from({ length: size[0] }, () => Array(size[1]).fill(false));
   });
 
   const toggleCell = (rowIndex: number, colIndex: number) => {
@@ -50,8 +52,8 @@ export default function PixelMatch({
       <div
         className="grid gap-1"
         style={{
-          gridTemplateColumns: `repeat(${size}, 1fr)`,
-          width: `${size * 20}px`,
+          gridTemplateColumns: `repeat(${size[0]}, 1fr)`,
+          width: `${size[1] * 20}px`,
           margin: "0 auto",
         }}
       >
@@ -80,21 +82,22 @@ export default function PixelMatch({
 
 export function fillMatrixToSize(
   matrix: boolean[][],
-  size: number,
-  coords = [0,0] as [number, number]
+  size: [number, number],
+  coords = [0, 0] as [number, number]
 ) {
+  const [rows, cols] = size;
   if (matrix.length === 0 || matrix[0].length === 0) {
-    return Array.from({ length: size }, () => Array(size).fill(false));
+    return Array.from({ length: rows }, () => Array(cols).fill(false));
   }
   const mRows = matrix.length;
   const mCols = matrix[0].length;
 
-  const newMatrix = Array.from({ length: size }, () => Array(size).fill(false));
+  const newMatrix = Array.from({ length: rows }, () => Array(cols).fill(false));
   for (let i = 0; i < mRows; i++) {
     for (let j = 0; j < mCols; j++) {
       const ni = i + coords[0];
       const nj = j + coords[1];
-      if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
+      if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
         newMatrix[ni][nj] = matrix[i][j];
       }
     }
