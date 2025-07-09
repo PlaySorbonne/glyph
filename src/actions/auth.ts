@@ -12,9 +12,6 @@ export async function getSession() {
 export async function logout(error: string | null) {
   if (!error) error = "Vous avez été déconnecté";
   let session = await getSession();
-  if (!session) {
-    session = await getSession();
-  }
 
   try {
     await prisma.session.delete({
@@ -26,9 +23,10 @@ export async function logout(error: string | null) {
     console.error("Error deleting session", session);
   }
 
-  (await cookies()).delete("session");
-  (await cookies()).delete("name");
-  (await cookies()).delete("fraternityId");
+  const cookie = await cookies();
+  cookie.delete("session");
+  cookie.delete("name");
+  cookie.delete("fraternityId");
   return redirect(appUrl("/login?error=" + error));
 }
 
