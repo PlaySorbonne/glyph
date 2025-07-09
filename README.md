@@ -43,3 +43,9 @@ Peut-être faire en sorte que `/welcome` soit une page qui félicite d'avoir sca
 
 Pourquoi ? `/app/*` nécessite d'être connecté (cf middleware) alors que `/*` non.  
 Pourquoi rien puis 2 puis rien puis 1 puis 2 ? Vous posez trop de questions.
+
+# Bugs
+
+
+- `/app/quest/[id]` la largeur du contenue et dynamique donc quand il y a pas grand chose c'est miniscule. Peut-être donner une largeur minimum au conteneur 
+- 
