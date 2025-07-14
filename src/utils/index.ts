@@ -78,6 +78,9 @@ export function generateCode(): `${string}-${string}-${string}` {
 }
 
 export function appUrl(relativePath: string) {
+  if (!process.env.NEXT_PUBLIC_MAIN_URL) {
+    throw new Error("NEXT_PUBLIC_MAIN_URL is not defined");
+  }
   return new URL(
     `/app${relativePath}`,
     process.env.NEXT_PUBLIC_MAIN_URL
