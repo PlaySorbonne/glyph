@@ -60,7 +60,6 @@ export default async function QuestPage({
     };
   }
 
-
   let indices =
     quest.indice &&
     quest.indice
@@ -173,7 +172,7 @@ export default async function QuestPage({
               <PixelMatch defaultGlyph={glyph} locked />
             ) : (
               <GlyphMatch
-                glyphSize={[glyph?.[0].length || 29, glyph?.length || 29]}
+                glyphSize={[glyph.length || 29, glyph?.[0].length || 29]}
                 questId={questId.toString()}
               />
             )}

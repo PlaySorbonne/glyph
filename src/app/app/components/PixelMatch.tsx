@@ -44,8 +44,7 @@ export default function PixelMatch({
       if (onChange) {
         onChange(newPattern);
       }
-      console.log("New pattern:", newPattern);
-      console.log("smallestContainingAllOnes:", smallestContainingAllOnes(newPattern));
+
       return newPattern;
     });
   };
@@ -56,8 +55,8 @@ export default function PixelMatch({
       <div
         className="grid gap-1"
         style={{
-          gridTemplateColumns: `repeat(${size[0]}, 1fr)`,
-          width: `${size[1] * 20}px`,
+          gridTemplateColumns: `repeat(${size[1]}, 1fr)`,
+          width: `${size[0] * 20}px`,
           margin: "0 auto",
         }}
       >
@@ -68,6 +67,7 @@ export default function PixelMatch({
               className={`w-5 h-5 border ${
                 cell ? "bg-black" : "bg-white"
               } cursor-pointer transition-colors duration-150`}
+              data-name={`cell-${rowIndex}-${colIndex}`}
               onClick={() => toggleCell(rowIndex, colIndex)}
             />
           ))
