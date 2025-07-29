@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 import Setting from "../../account/components/Setting";
 import Link from "next/link";
 import PixelMatch from "@/app/app/components/PixelMatch";
-import { useMemo } from "react";
+import GlyphMatch from "./GlyphMatch";
 
 export default async function QuestPage({
   params,
@@ -170,13 +170,11 @@ export default async function QuestPage({
             }}
           >
             {hasFinishedQuest ? (
-              <PixelMatch
-                defaultGlyph={glyphStringToArray(quest.glyph)}
-                locked
-              />
+              <PixelMatch defaultGlyph={glyph} locked />
             ) : (
-              <PixelMatch
-                size={[glyph?.length || 29, glyph?.[0]?.length || 29]}
+              <GlyphMatch
+                glyphSize={[glyph?.[0].length || 29, glyph?.length || 29]}
+                questId={questId.toString()}
               />
             )}
           </div>

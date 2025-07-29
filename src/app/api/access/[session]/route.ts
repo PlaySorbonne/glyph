@@ -1,8 +1,8 @@
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ session: string }> }
 ) {
   const sessionId = (await params).session;

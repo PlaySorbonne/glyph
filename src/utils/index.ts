@@ -5,6 +5,7 @@ export const SESSION_TTL = -1;
 
 export const GLYPH_SIZE = 29; // 29x29 pixels
 
+
 export function glyphStringToArray(glyph: string | null | undefined) {
   return glyph
     ?.split(",")

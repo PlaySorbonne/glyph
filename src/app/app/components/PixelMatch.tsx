@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { glyphArrayToString } from "@/utils";
+import { glyphArrayToString, smallestContainingAllOnes } from "@/utils";
 
 export interface PixelMatchType {
   size?: [number, number]; // Now a tuple: [rows, cols]
-  onChange?: (glyph: boolean[][]) => void;
+  onChange?: (glyph: boolean[][]) => void; // Callback when the glyph changes, client function !!
   defaultGlyph?: boolean[][]; // May be not a square
   locked?: boolean;
   name?: string;
@@ -15,18 +15,20 @@ export interface PixelMatchType {
 export default function PixelMatch({
   size,
   onChange,
-  defaultGlyph = [],
+  defaultGlyph,
   locked = false,
   name,
-  coords,
+  coords = [0, 0],
 }: PixelMatchType) {
-  if (!size && defaultGlyph.length > 0)
+  if (!size && defaultGlyph && defaultGlyph.length > 0)
     size = [defaultGlyph.length, defaultGlyph[0].length];
-  else if (!size) size = [29, 29]; // Default size if not provided
+  else if (!size) size = [29, 29];
+
   const glyph = useMemo(
-    () => fillMatrixToSize(defaultGlyph, size, coords),
+    () => fillMatrixToSize(defaultGlyph ?? [], size, coords),
     [defaultGlyph, size, coords]
   );
+
   const [currentPattern, setCurrentPattern] = useState<boolean[][]>(() => {
     if (glyph.length > 0) {
       return glyph;
@@ -42,6 +44,8 @@ export default function PixelMatch({
       if (onChange) {
         onChange(newPattern);
       }
+      console.log("New pattern:", newPattern);
+      console.log("smallestContainingAllOnes:", smallestContainingAllOnes(newPattern));
       return newPattern;
     });
   };
@@ -89,6 +93,7 @@ export function fillMatrixToSize(
   if (matrix.length === 0 || matrix[0].length === 0) {
     return Array.from({ length: rows }, () => Array(cols).fill(false));
   }
+
   const mRows = matrix.length;
   const mCols = matrix[0].length;
 
