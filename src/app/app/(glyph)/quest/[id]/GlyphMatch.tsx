@@ -2,6 +2,7 @@
 
 import PixelMatch from "@/app/app/components/PixelMatch";
 import { glyphArrayToString } from "@/utils";
+import { useRouter } from "next/navigation";
 
 export default function GlyphMatch({
   questId,
@@ -10,6 +11,8 @@ export default function GlyphMatch({
   questId: string;
   glyphSize: [number, number];
 }) {
+  const router = useRouter();
+
   function handleGlyphChange(glyph: boolean[][]) {
     fetch(`/api/quest/${questId}/glyph/check`, {
       method: "POST",
@@ -27,6 +30,7 @@ export default function GlyphMatch({
             console.log("Glyph check result:", data);
             if (data.success) {
               alert(data.message);
+              router.refresh();
             }
           }
         }
