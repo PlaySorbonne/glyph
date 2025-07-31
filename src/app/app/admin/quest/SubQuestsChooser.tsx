@@ -103,7 +103,7 @@ export default function SubQuestsChooser({
                   <button
                     type="button"
                     onClick={() => removeQuest(id)}
-                    style={{ marginLeft: 8 }}
+                    style={{ marginLeft: 8, color: "red" }}
                   >
                     Retirer
                   </button>
