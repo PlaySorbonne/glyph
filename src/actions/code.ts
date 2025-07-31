@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { codeFormat, codeSchema } from "@/utils/zod";
+import { codeSchema } from "@/utils/zod";
 import { Code, History, User } from "@prisma/client";
 import { getSession } from "./auth";
 import { getFinishedPrimaryQuests, getPrimaryQuests } from "./quests";
@@ -234,6 +234,18 @@ export async function userScannedCode(user: User, code: Code) {
     code.points = quest?.points || 1;
   }
 
+  const out = await prisma.history.create({
+    data: {
+      userId: user.id,
+      codeId: code.id,
+      questId: code.questId,
+      points: code.points,
+      description: code.isQuest
+        ? `Vous avez fini la quête ${quest?.title} en scannant un qrcode`
+        : `Vous avez accompli une quête secondaire de ${code.points} points en scannant un qrcode`,
+    },
+  });
+
   await prisma.fraternity.update({
     where: {
       id: user.fraternityId!,
@@ -256,15 +268,5 @@ export async function userScannedCode(user: User, code: Code) {
     },
   });
 
-  return await prisma.history.create({
-    data: {
-      userId: user.id,
-      codeId: code.id,
-      questId: code.questId,
-      points: code.points,
-      description: code.isQuest
-        ? `Vous avez fini la quête ${quest?.title}`
-        : `Vous avez accompli une quête secondaire de ${code.points} points`,
-    },
-  });
+  return out;
 }

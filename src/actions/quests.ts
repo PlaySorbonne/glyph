@@ -1,10 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { Code, Quest } from "@prisma/client";
+import { Code, Quest, User } from "@prisma/client";
 import {
-  questSchema,
-  QuestInput,
+  normalQuestSchema,
+  NormalQuestInput,
   codeFormat,
   codeSchema,
 } from "@/utils/zod";
@@ -26,8 +26,8 @@ export async function getQuest(id: string) {
   });
 }
 
-export async function createQuest(data: QuestInput, code?: string) {
-  const validatedData = questSchema.safeParse(data);
+export async function createQuest(data: NormalQuestInput, code?: string) {
+  const validatedData = normalQuestSchema.safeParse(data);
   if (!validatedData.success) {
     console.error("Validation error:", validatedData.error);
     throw new Error("Invalid quest data");
@@ -55,6 +55,19 @@ export async function createQuest(data: QuestInput, code?: string) {
   }
 
   return quest;
+}
+
+interface WrapperQuest {
+  title: string;
+  img?: string | null;
+  description?: string | null;
+  starts?: Date | null;
+  ends?: Date | null;
+  subQuests: Quest[];
+}
+
+export async function createWrapperQuest(data: WrapperQuest) {
+
 }
 
 export async function updateQuest(id: string, data: Partial<Quest>) {
@@ -287,4 +300,61 @@ export async function getUnavailableSecondaryQuests() {
       ],
     },
   });
+}
+
+export async function userValidatedQuest(
+  user: User,
+  quest: Quest
+) {
+
+  if (process.env.NO_SCAN) {
+    throw new Error("Le scan est désactivé");
+  }
+
+  let history = await prisma.history.findFirst({
+    where: {
+      userId: user.id,
+      questId: quest.id,
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  if (history) {
+    throw new Error("La quête a déjà été validée");
+  }
+
+  const out = await prisma.history.create({
+    data: {
+      userId: user.id,
+      questId: quest.id,
+      points: quest.points,
+      description: `Vous avez fini la quête principale ${quest.title} en trouvant le Glyph`,
+    },
+  });
+
+  await prisma.fraternity.update({
+    where: {
+      id: user.fraternityId!,
+    },
+    data: {
+      score: {
+        increment: quest.points,
+      },
+    },
+  });
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      score: {
+        increment: quest.points,
+      },
+    },
+  });
+
+  return out;
 }

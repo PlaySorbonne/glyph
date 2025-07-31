@@ -3,7 +3,7 @@ import { createHash, randomBytes } from "crypto";
 
 export const SESSION_TTL = -1;
 
-export const GLYPH_SIZE = 29; // 29x29 pixels
+export const GLYPH_MAX_SIZE = 29; // glyph max size, 29x29 pixels
 
 
 export function glyphStringToArray(glyph: string | null | undefined) {
@@ -139,12 +139,12 @@ export const FAQ = [
     question:
       "Je ne suis pas étudiant de Sorbonne Université, puis-je participer ?",
     answer:
-      "Vous pouvez participer au tournois des trois familles MAIS vous serez bloqués dans la quête principale certaines quêtes nécessite d’avoir des identifiants SU.",
+      "Vous pouvez participer au tournois des trois familles MAIS vous serez bloqués dans la quête principale certaines quêtes nécessite d'avoir des identifiants SU.",
   },
   {
     question: "Mon téléphone ne peut pas scanner de QR code puis-je jouer ?",
     answer:
-      "Certains navigateurs tels que firefox et chrome propose la fonction de scanner des QR code lorsqu’on clique sur la barre d’URL.",
+      "Certains navigateurs tels que firefox et chrome propose la fonction de scanner des QR code lorsqu'on clique sur la barre d'URL.",
   },
   {
     question:
@@ -153,24 +153,24 @@ export const FAQ = [
       "Quête principale : les porteurs de brassard vert avec les pins qui sont dans le lieu de la quête. Autres quêtes : les Personnes Sympa et Utiles avec des brassards verts et pins qui sont au stand de PSU ou qui se baladent.",
   },
   {
-    question: "J’ai oublié de faire valider une de mes quêtes que faire ?",
+    question: "J'ai oublié de faire valider une de mes quêtes que faire ?",
     answer:
-      "Retournez simplement voir le donneur de quête ou la personne référente du lieu pour qu’il vous donne le QR code de validation de votre quête.",
+      "Retournez simplement voir le donneur de quête ou la personne référente du lieu pour qu'il vous donne le QR code de validation de votre quête.",
   },
   {
-    question: "Dois-je faire les quêtes principales dans l’ordre ?",
+    question: "Dois-je faire les quêtes principales dans l'ordre ?",
     answer:
-      "Non ! Hormis la dernière quête, vous pouvez faire les quêtes principales dans l’ordre que vous voulez, en fonction de vos disponibilités.",
+      "Non ! Hormis la dernière quête, vous pouvez faire les quêtes principales dans l'ordre que vous voulez, en fonction de vos disponibilités.",
   },
   {
-    question: "J’ai d’autres questions, qui puis-je contacter ?",
+    question: "J'ai d'autres questions, qui puis-je contacter ?",
     answer:
       "Envoyer un message à play_sorbonne_u sur instagram ou bien en nous écrivant à glyph@playsorbonne.fr.",
   },
   {
     question: "Je souhaite supprimer mes données, que faire ?",
     answer:
-      "Envoyer un mail à dev@playsorbonne.fr en précisant votre nom d’utilisateur et les données à supprimer.",
+      "Envoyer un mail à dev@playsorbonne.fr en précisant votre nom d'utilisateur et les données à supprimer.",
   },
 ];
 

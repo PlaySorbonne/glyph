@@ -2,35 +2,18 @@ import React from "react";
 import { createQuest } from "@/actions/quests";
 import { NormalQuestInput } from "@/utils/zod";
 import { redirect } from "next/navigation";
-import {
-  appUrl,
-  generateCode,
-  GLYPH_MAX_SIZE,
-  glyphArrayToString,
-  glyphStringToArray,
-  smallestContainingAllOnes,
-} from "@/utils";
-import PixelMatch from "@/app/app/components/PixelMatch";
+import { appUrl, generateCode } from "@/utils";
 
 export default function NewQuestPage() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
 
-    const glyphInput = formData.get("glyph") as string;
-    const {
-      matrix: glyphArr,
-      coords: [glyphPositionX, glyphPositionY],
-    } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
-    const glyphStr = glyphArrayToString(glyphArr) || null;
-
     const questData: NormalQuestInput = {
       title: formData.get("title") as string,
-      img: (formData.get("img") as string) || null,
       mission: (formData.get("mission") as string) || null,
       description: (formData.get("description") as string) || null,
-      indice: (formData.get("indice") as string) || null,
-      lore: (formData.get("lore") as string) || null,
-      lieu: (formData.get("lieu") as string) || null,
+      // lore: (formData.get("lore") as string) || null,
+      // lieu: (formData.get("lieu") as string) || null,
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
@@ -39,17 +22,16 @@ export default function NewQuestPage() {
       ends: formData.get("ends")
         ? new Date(formData.get("ends") as string)
         : null,
-      horaires: (formData.get("horaires") as string) || null,
-      glyph: glyphStr,
-      glyphPositionX: glyphPositionX,
-      glyphPositionY: glyphPositionY,
     };
 
-    const code = (formData.get("code") as string) || generateCode();
+    const subQuests = (formData.get("subQuests") as string)
+      .split(",")
+      .map((id) => parseInt(id))
+      .filter((id) => !isNaN(id));
 
     let newQuest;
     try {
-      newQuest = await createQuest(questData, code);
+      newQuest = await createQuest(questData);
     } catch (error) {
       console.error("Error creating quest:", error);
       return;
@@ -82,21 +64,6 @@ export default function NewQuestPage() {
 
           <div>
             <label
-              htmlFor="img"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Image URL
-            </label>
-            <input
-              type="text"
-              name="img"
-              id="img"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label
               htmlFor="mission"
               className="block text-sm font-medium text-gray-700"
             >
@@ -112,21 +79,6 @@ export default function NewQuestPage() {
 
           <div>
             <label
-              htmlFor="horaires"
-              className="block text-sm font-medium text-gray-700"
-            >
-              horaires
-            </label>
-            <input
-              type="text"
-              name="horaires"
-              id="horaires"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label
               htmlFor="description"
               className="block text-sm font-medium text-gray-700"
             >
@@ -135,21 +87,6 @@ export default function NewQuestPage() {
             <textarea
               name="description"
               id="description"
-              rows={3}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            ></textarea>
-          </div>
-
-          <div>
-            <label
-              htmlFor="indice"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Indice
-            </label>
-            <textarea
-              name="indice"
-              id="indice"
               rows={3}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></textarea>
@@ -183,12 +120,6 @@ export default function NewQuestPage() {
               id="lieu"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Jours d&apos;ouverture
-            </label>
           </div>
 
           <div>
@@ -252,38 +183,11 @@ export default function NewQuestPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="code"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Quest Code (optional)
-            </label>
-            <div className="mt-1 flex rounded-md shadow-sm">
-              <input
-                type="text"
-                name="code"
-                id="code"
-                className="flex-1 rounded-none rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Enter code or leave blank to auto-generate"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Glyph Pattern
-            </label>
-            <div className="mt-1">
-              <PixelMatch size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]} name="glyph" />
-            </div>
-          </div>
-
-          <div>
             <button
               type="submit"
               className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Create Quest
+              Create Wrapper Quest
             </button>
           </div>
         </form>

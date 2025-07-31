@@ -1,11 +1,11 @@
 import React from "react";
 import { updateQuest, getQuest, deleteQuest } from "@/actions/quests";
-import { QuestInput } from "@/utils/zod";
+import { NormalQuestInput } from "@/utils/zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   appUrl,
-  GLYPH_SIZE,
+  GLYPH_MAX_SIZE,
   glyphArrayToString,
   glyphStringToArray,
   smallestContainingAllOnes,
@@ -32,7 +32,7 @@ export default async function EditQuestPage(props: {
     } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
     const glyphStr = glyphArrayToString(glyphArr) || null;
 
-    const questData: QuestInput = {
+    const questData: NormalQuestInput = {
       title: formData.get("title") as string,
       img: (formData.get("img") as string) || null,
       mission: (formData.get("mission") as string) || null,
@@ -301,7 +301,7 @@ export default async function EditQuestPage(props: {
             </label>
             <div className="mt-1">
               <PixelMatch
-                size={[GLYPH_SIZE, GLYPH_SIZE]}
+                size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
                 defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
                 coords={[quest.glyphPositionX ?? 0, quest.glyphPositionY ?? 0]}
                 name="glyph"

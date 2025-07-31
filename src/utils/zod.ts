@@ -36,7 +36,37 @@ export const codeSchema = z.object({
   points: z.number().int().default(1).optional().nullable(),
 });
 
-export const questSchema = z
+export const wrapperQuestSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    mission: z.string().optional().nullable(),
+    description: z.string().optional().nullable(),
+    // lore: z.string().optional().nullable(),
+    // lieu: z.string().optional().nullable(),
+    secondary: z.boolean().default(false),
+    points: z.number().int().positive().default(1),
+    starts: z.coerce.date().optional().nullable(),
+    ends: z.coerce.date().optional().nullable(),
+    horaires: z.string().optional().nullable(),
+
+    subQuests: z.string().optional().nullable(), // TODO
+
+    img: z.undefined().optional().nullable(),
+    glyph: z.undefined().optional().nullable(),
+    glyphPositionX: z.undefined().optional().nullable(),
+    glyphPositionY: z.undefined().optional().nullable(),
+    indice: z.undefined().optional().nullable(),
+
+    lore: z.undefined().optional().nullable(),
+    lieu: z.undefined().optional().nullable(),
+  })
+  .refine((data) => !data.starts || !data.ends || data.starts < data.ends, {
+    message: "End date must be after start date",
+  });
+
+export type WrapperQuestInput = z.infer<typeof wrapperQuestSchema>;
+
+export const normalQuestSchema = z
   .object({
     title: z.string().min(1, "Title is required"),
     img: z.string().url().optional().nullable(),
@@ -70,6 +100,10 @@ export const questSchema = z
     message: "End date must be after start date",
     path: ["ends"],
   });
+
+export type NormalQuestInput = z.infer<typeof normalQuestSchema>;
+
+export const questSchema = z.union([wrapperQuestSchema, normalQuestSchema]);
 
 export type QuestInput = z.infer<typeof questSchema>;
 
