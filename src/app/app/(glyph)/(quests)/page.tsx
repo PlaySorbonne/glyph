@@ -85,27 +85,6 @@ export default async function Home() {
             >
               Cliquez ici pour continuer de reconstituer le Glyph principal !
             </h2>
-
-            <div
-              style={{
-                height: 200,
-                width: 200,
-              }}
-            >
-              {finishedPrimaryQuests.map((quest, index) => (
-                <Image
-                  src={getGlyph(quest.img)}
-                  alt="glyph"
-                  width={200}
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    left: "20%",
-                    imageRendering: "pixelated",
-                  }}
-                />
-              ))}
-            </div>
           </Link>
         </div>
 

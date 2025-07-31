@@ -113,7 +113,7 @@ export async function importDatabaseFromCSV(formData: FormData) {
       if (!record["Nom"]) {
         return null;
       }
-      return {
+      return { // FIXME
         title: record["Nom"],
         lieu: record["Lieu"],
         starts: convertDDMMToDate(record["Date Début"]),
@@ -126,7 +126,6 @@ export async function importDatabaseFromCSV(formData: FormData) {
         indice: record["Indice"],
         secondary: !["Principale", "Début"].includes(record["Style"]),
         horaires: record["Horaires"],
-        img: record["Glyph"],
       } as Quest & { code?: string };
     });
     quests = quests.filter((quest) => quest !== null);

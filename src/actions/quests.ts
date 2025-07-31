@@ -57,19 +57,6 @@ export async function createQuest(data: NormalQuestInput, code?: string) {
   return quest;
 }
 
-interface WrapperQuest {
-  title: string;
-  img?: string | null;
-  description?: string | null;
-  starts?: Date | null;
-  ends?: Date | null;
-  subQuests: Quest[];
-}
-
-export async function createWrapperQuest(data: WrapperQuest) {
-
-}
-
 export async function updateQuest(id: string, data: Partial<Quest>) {
   const existingQuest = await prisma.quest.findUnique({
     where: {

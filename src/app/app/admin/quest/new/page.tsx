@@ -11,8 +11,27 @@ import {
   smallestContainingAllOnes,
 } from "@/utils";
 import PixelMatch from "@/app/app/components/PixelMatch";
+import { Quest } from "@prisma/client";
+import prisma from "@/lib/db";
+import SubQuestsChooser from "../SubQuestsChooser";
 
-export default function NewQuestPage() {
+export default async function NewQuestPage() {
+
+  let EmptyQuests = await prisma.quest.findMany({
+    where: { parentId: null },
+    select: { id: true, title: true },
+    orderBy: { createdAt: "desc" },
+  });
+  let nonEmptyQuests = await prisma.quest.findMany({
+    where: { parentId: { not: null } },
+    select: { id: true, title: true },
+    orderBy: { createdAt: "desc" },
+  });
+  let quests = [...EmptyQuests, ...nonEmptyQuests].map((q) => ({
+    id: q.id,
+    title: `${q.title} - ${q.id}`,
+  }));
+
   const handleSubmit = async (formData: FormData) => {
     "use server";
 
@@ -25,7 +44,6 @@ export default function NewQuestPage() {
 
     const questData: NormalQuestInput = {
       title: formData.get("title") as string,
-      img: (formData.get("img") as string) || null,
       mission: (formData.get("mission") as string) || null,
       description: (formData.get("description") as string) || null,
       indice: (formData.get("indice") as string) || null,
@@ -47,9 +65,27 @@ export default function NewQuestPage() {
 
     const code = (formData.get("code") as string) || generateCode();
 
-    let newQuest;
+    let newQuest: Quest | null = null;
     try {
       newQuest = await createQuest(questData, code);
+
+      const subQuests = (formData.get("subQuests") as string)
+        .split(",")
+        .map((id) => parseInt(id))
+        .filter((id) => !isNaN(id));
+
+      console.log("SubQuests:", subQuests);
+
+      Promise.all(
+        subQuests.map((subQuestId) =>
+          prisma.quest.update({
+            where: { id: subQuestId },
+            data: { parentId: newQuest!.id },
+          })
+        )
+      ).catch((error) => {
+        console.error("Error updating subquests:", error);
+      });
     } catch (error) {
       console.error("Error creating quest:", error);
       return;
@@ -76,21 +112,6 @@ export default function NewQuestPage() {
               name="title"
               id="title"
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="img"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Image URL
-            </label>
-            <input
-              type="text"
-              name="img"
-              id="img"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
@@ -274,8 +295,21 @@ export default function NewQuestPage() {
               Glyph Pattern
             </label>
             <div className="mt-1">
-              <PixelMatch size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]} name="glyph" />
+              <PixelMatch
+                size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
+                name="glyph"
+              />
             </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="subQuests"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Sub Quests
+            </label>
+            <SubQuestsChooser name={"subQuests"} quests={quests} />
           </div>
 
           <div>

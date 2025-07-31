@@ -51,7 +51,6 @@ export const wrapperQuestSchema = z
 
     subQuests: z.string().optional().nullable(), // TODO
 
-    img: z.undefined().optional().nullable(),
     glyph: z.undefined().optional().nullable(),
     glyphPositionX: z.undefined().optional().nullable(),
     glyphPositionY: z.undefined().optional().nullable(),
@@ -69,7 +68,6 @@ export type WrapperQuestInput = z.infer<typeof wrapperQuestSchema>;
 export const normalQuestSchema = z
   .object({
     title: z.string().min(1, "Title is required"),
-    img: z.string().url().optional().nullable(),
     mission: z.string().optional().nullable(),
     description: z.string().optional().nullable(),
     indice: z.string().optional().nullable(),

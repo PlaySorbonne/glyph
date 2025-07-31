@@ -11,18 +11,42 @@ import {
   smallestContainingAllOnes,
 } from "@/utils";
 import PixelMatch from "@/app/app/components/PixelMatch";
+import prisma from "@/lib/db";
+import SubQuestsChooser from "../SubQuestsChooser";
 
 export default async function EditQuestPage(props: {
   params: Promise<{ id: string }>;
 }) {
   let params = await props.params;
-  const quest = await getQuest(params.id);
+  const quest = await prisma.quest.findUnique({
+    where: { id: parseInt(params.id) },
+    include: {
+      subQuests: true,
+    },
+  });
+
+  let EmptyQuests = await prisma.quest.findMany({
+    where: { parentId: null },
+    select: { id: true, title: true },
+    orderBy: { createdAt: "desc" },
+  });
+  let nonEmptyQuests = await prisma.quest.findMany({
+    where: { parentId: { not: null } },
+    select: { id: true, title: true },
+    orderBy: { createdAt: "desc" },
+  });
+  let quests = [...EmptyQuests, ...nonEmptyQuests].map((q) => ({
+    id: q.id,
+    title: `${q.title} - ${q.id}`,
+  }));
 
   if (!quest) {
     return <div>Quest not found</div>;
   }
 
-  const submit = async (formData: FormData) => {
+  let isWrapperQuest = quest.subQuests.length > 0;
+
+  const submitEdit = async (formData: FormData) => {
     "use server";
 
     const glyphInput = formData.get("glyph") as string;
@@ -34,7 +58,6 @@ export default async function EditQuestPage(props: {
 
     const questData: NormalQuestInput = {
       title: formData.get("title") as string,
-      img: (formData.get("img") as string) || null,
       mission: (formData.get("mission") as string) || null,
       description: (formData.get("description") as string) || null,
       indice: (formData.get("indice") as string) || null,
@@ -93,7 +116,7 @@ export default async function EditQuestPage(props: {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Modifier la quête</h1>
       <div className="bg-white shadow-md rounded-lg p-6">
-        <form action={submit} className="space-y-4">
+        <form action={submitEdit} className="space-y-4">
           <div>
             <label
               htmlFor="title"
@@ -107,22 +130,6 @@ export default async function EditQuestPage(props: {
               id="title"
               required
               defaultValue={quest.title}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="img"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Image URL
-            </label>
-            <input
-              type="text"
-              name="img"
-              id="img"
-              defaultValue={quest.img || ""}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
@@ -257,57 +264,60 @@ export default async function EditQuestPage(props: {
             ></textarea>
           </div>
 
-          <div>
-            <label
-              htmlFor="indice"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Indice
-            </label>
-            <textarea
-              name="indice"
-              id="indice"
-              rows={3}
-              defaultValue={quest.indice || ""}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            ></textarea>
-          </div>
+          {!isWrapperQuest && (
+            <div>
+              <label
+                htmlFor="indice"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Indice
+              </label>
+              <textarea
+                name="indice"
+                id="indice"
+                rows={3}
+                defaultValue={quest.indice || ""}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              ></textarea>
+            </div>
+          )}
 
-          <div>
-            <label
-              htmlFor="lieu"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Lieu
-            </label>
-            <input
-              type="text"
-              name="lieu"
-              id="lieu"
-              defaultValue={quest.lieu || ""}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Jours d&apos;ouverture
-            </label>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Glyph Pattern
-            </label>
-            <div className="mt-1">
-              <PixelMatch
-                size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
-                defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
-                coords={[quest.glyphPositionX ?? 0, quest.glyphPositionY ?? 0]}
-                name="glyph"
+          {!isWrapperQuest && (
+            <div>
+              <label
+                htmlFor="lieu"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Lieu
+              </label>
+              <input
+                type="text"
+                name="lieu"
+                id="lieu"
+                defaultValue={quest.lieu || ""}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               />
             </div>
-          </div>
+          )}
+
+          {!isWrapperQuest && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Glyph Pattern
+              </label>
+              <div className="mt-1">
+                <PixelMatch
+                  size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
+                  defaultGlyph={glyphStringToArray(quest.glyph) || undefined}
+                  coords={[
+                    quest.glyphPositionX ?? 0,
+                    quest.glyphPositionY ?? 0,
+                  ]}
+                  name="glyph"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end space-x-4 mt-6">
             <button
@@ -326,6 +336,35 @@ export default async function EditQuestPage(props: {
             Delete Quest
           </button>
         </form>
+      </div>
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Sub Quests</h2>
+          <SubQuestsChooser
+            quests={quests}
+            defaultSelected={quest.subQuests.map((q) => q.id)}
+            onAdd={async (id) => {
+              "use server";
+
+              await prisma.quest.update({
+                where: { id },
+                data: {
+                  parentId: parseInt(params.id),
+                },
+              });
+            }}
+            onRemove={async (id) => {
+              "use server";
+
+              await prisma.quest.update({
+                where: { id },
+                data: {
+                  parentId: null,
+                },
+              });
+            }}
+          />
+        </div>
       </div>
     </div>
   );
