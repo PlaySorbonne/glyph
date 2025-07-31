@@ -103,9 +103,9 @@ model Quest {
   img         String? // may not be used, is replaced by the glyph
 
   // For wrapping quests
-  // parentId   Int?    
-  // parent     Quest?     @relation("SubQuests", fields: [parentId], references: [id])
-  // subQuests  Quest[]    @relation("SubQuests")
+  parentId   Int?    
+  parent     Quest?     @relation("SubQuests", fields: [parentId], references: [id])
+  subQuests  Quest[]    @relation("SubQuests")
 
 
   // mainly for secondary quests the qrcodes
@@ -118,7 +118,7 @@ model History {
   id          Int      @id @default(autoincrement())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  codeId      Int
+  codeId      Int?
   code        Code?    @relation(fields: [codeId], references: [id], onDelete: NoAction)
   questId     Int?
   quest       Quest?   @relation(fields: [questId], references: [id], onDelete: Cascade)
