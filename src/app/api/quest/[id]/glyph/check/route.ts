@@ -48,8 +48,6 @@ function isGlyphRotateEqual(glyph1: string, glyph2: string): boolean {
   if (!glyphArray1 || !glyphArray2) return false;
 
   for (let i = 0; i < 3; i++) {
-    if (glyphArray1.length !== glyphArray2.length) return false;
-    if (glyphArray1[0].length !== glyphArray2[0].length) return false;
     if (isGlyphEqual(glyphArray1, glyphArray2)) {
       return true;
     }
@@ -82,7 +80,7 @@ export async function POST(
   }
 
   const glyph = body.trim();
-  if (!glyph || glyph.length > GLYPH_MAX_SIZE ** 2 || glyph.match(/^[01]+$/)) {
+  if (!glyph || glyph.length > GLYPH_MAX_SIZE ** 2 || !glyph.match(/^[01,]+$/)) {
     return NextResponse.json(
       { error: "Invalid glyph format" },
       { status: 400 }
