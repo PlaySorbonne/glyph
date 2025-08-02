@@ -221,50 +221,51 @@ export async function hasUserFinishedQuest(userId: string, questId: number) {
   }
 }
 
-let dateCheck = {
-  OR: [
-    {
-      starts: {
-        equals: null,
+function dateCheck() {
+  return {
+    OR: [
+      {
+        starts: {
+          equals: null,
+        },
+        ends: {
+          equals: null,
+        },
       },
-      ends: {
-        equals: null,
+      {
+        starts: {
+          lte: new Date(),
+        },
+        ends: {
+          gte: new Date(),
+        },
       },
-    },
-    {
-      starts: {
-        lte: new Date(),
+      {
+        starts: {
+          equals: null,
+        },
+        ends: {
+          gte: new Date(),
+        },
       },
-      ends: {
-        gte: new Date(),
+      {
+        starts: {
+          lte: new Date(),
+        },
+        ends: {
+          equals: null,
+        },
       },
-    },
-    {
-      starts: {
-        equals: null,
-      },
-      ends: {
-        gte: new Date(),
-      },
-    },
-    {
-      starts: {
-        lte: new Date(),
-      },
-      ends: {
-        equals: null,
-      },
-    },
-  ],
-};
-
+    ],
+  };
+}
 
 export async function getUnavailableMainQuests() {
   return await prisma.quest.findMany({
     where: {
       AND: [
         {
-          NOT: dateCheck,
+          NOT: dateCheck(),
         },
         {
           secondary: false,
@@ -279,7 +280,7 @@ export async function getUnavailableSecondaryQuests() {
     where: {
       AND: [
         {
-          NOT: dateCheck,
+          NOT: dateCheck(),
         },
         {
           secondary: true,
@@ -289,11 +290,7 @@ export async function getUnavailableSecondaryQuests() {
   });
 }
 
-export async function userValidatedQuest(
-  user: User,
-  quest: Quest
-) {
-
+export async function userValidatedQuest(user: User, quest: Quest) {
   if (process.env.NO_SCAN) {
     throw new Error("Le scan est désactivé");
   }
