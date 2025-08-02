@@ -6,6 +6,8 @@ import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
+export const revalidate = 3600; // invalidate every hour
+
 export default async function ScorePage() {
   let fraternities = await getClassement();
   let users = await getUsers({ sortByPoint: true, n: 10 });
