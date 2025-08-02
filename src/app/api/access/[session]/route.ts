@@ -16,29 +16,20 @@ export async function GET(
       sessionToken: sessionId,
     },
     include: {
-      user: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          isAdmin: true,
+          welcomed: true,
+          fraternityId: true,
+        },
+      },
     },
   });
 
   if (!session) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  // si l'utilisateur est membre de playsorbonne.fr, il est admin
-  if (
-    session?.user.email &&
-    session.user.emailVerified &&
-    session.user.email.endsWith("@playsorbonne.fr")
-  ) {
-    await prisma.user.update({
-      where: {
-        id: session.user.id,
-      },
-      data: {
-        isAdmin: true,
-      },
-    });
-    session.user.isAdmin = true;
   }
 
   return NextResponse.json({
