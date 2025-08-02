@@ -16,6 +16,7 @@ body {
   max-width: 100vw;
   height: 100%;
   overflow-x: hidden;
+  font-family: 'Arima Madurai', sans-serif;
 }
 
 a {
@@ -31,3 +32,75 @@ a {
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Regular.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-ExtraLight.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Light.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Black.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Thin.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Bold.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-Medium.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arima Madurai';
+    src: url('/fonts/ArimaMadurai/ArimaMadurai-ExtraBold.woff2') format('woff2'),
+        url('/fonts/ArimaMadurai/ArimaMadurai-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

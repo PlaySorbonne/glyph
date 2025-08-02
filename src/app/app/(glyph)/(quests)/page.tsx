@@ -60,36 +60,6 @@ export default async function Home() {
       <div>
         <div
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            borderRadius: "0.5rem",
-            padding: "1rem",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            border: "2px solid rgba(0, 0, 0, 0.9)",
-
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "1rem",
-          }}
-        >
-          <Link href={appUrl("/book")}>
-            <h2
-              className="text-2xl font-semibold mb-4"
-              style={{
-                fontFamily: "DCC-Ash",
-                letterSpacing: "0.2rem",
-                textAlign: "center",
-              }}
-            >
-              Cliquez ici pour continuer de reconstituer le Glyph principal !
-            </h2>
-          </Link>
-        </div>
-
-        <div
-          style={{
             fontFamily: "DCC-Ash",
             letterSpacing: "0.1rem",
             textAlign: "center",
@@ -107,21 +77,21 @@ export default async function Home() {
           </p>
         </div>
 
-        {questList.length > 0 && (
+        {/* {questList.length > 0 && (
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Quêtes secondaires</h2>
             <Quests quests={questList} />
           </section>
-        )}
+        )} */}
 
-        {finishedSecondaryQuests.length > 0 && (
+        {/* {finishedSecondaryQuests.length > 0 && (
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>
               Quêtes secondaires terminées
             </h2>
             <Quests quests={finishedSecondaryQuests} />
           </section>
-        )}
+        )} */}
       </div>
     </div>
   );

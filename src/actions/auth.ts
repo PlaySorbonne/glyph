@@ -59,8 +59,3 @@ export async function getUserFromSession(sessionId?: string) {
 
   return session.user;
 }
-
-export async function getHeaderUrl() {
-  const headersList = await headers();
-  return headersList.get("x-url") || "";
-}
