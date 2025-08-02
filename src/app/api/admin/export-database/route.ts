@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getUserFromSession } from "@/actions/auth";
 
+// FIXME OUTDATED
 export async function GET(req: NextRequest) {
   const user = await getUserFromSession();
   if (!user || !user.isAdmin) {
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
       prisma.code.findMany(),
       prisma.history.findMany(),
       prisma.fraternity.findMany(),
-    ])
+    ]);
 
     // Remove null fields
     const removeNullFields = (obj: any) => {
