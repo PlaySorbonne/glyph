@@ -84,7 +84,7 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
 export async function getAvailableQuests(userId: string) {
   return await prisma.quest.findMany({
     where: {
-      ...dateCheck,
+      ...dateCheck(),
       History: {
         none: {
           userId: userId,
@@ -131,7 +131,7 @@ export async function getAvailablePrimaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
       secondary: false,
-      ...dateCheck,
+      ...dateCheck(),
       History: userId
         ? {
             none: {
@@ -147,7 +147,7 @@ export async function getAvailableSecondaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
       secondary: true,
-      ...dateCheck,
+      ...dateCheck(),
       History: userId
         ? {
             none: {
@@ -186,7 +186,7 @@ export async function getPrimaryQuests() {
   return await prisma.quest.findMany({
     where: {
       secondary: false,
-      ...dateCheck,
+      ...dateCheck(),
     },
   });
 }
