@@ -73,7 +73,9 @@ export async function middleware(request: NextRequest) {
     return continueResponse;
 
   if (!info.name || !info.fraternityId) {
-    return NextResponse.redirect(new URL("/welcome", process.env.NEXT_PUBLIC_MAIN_URL));
+    return NextResponse.redirect(
+      new URL("/welcome", process.env.NEXT_PUBLIC_MAIN_URL)
+    );
   }
 
   return continueResponse;
