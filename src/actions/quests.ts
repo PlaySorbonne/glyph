@@ -9,6 +9,45 @@ import {
   codeSchema,
 } from "@/utils/zod";
 
+function dateCheck() {
+  return {
+    OR: [
+      {
+        starts: {
+          equals: null,
+        },
+        ends: {
+          equals: null,
+        },
+      },
+      {
+        starts: {
+          lte: new Date(),
+        },
+        ends: {
+          gte: new Date(),
+        },
+      },
+      {
+        starts: {
+          equals: null,
+        },
+        ends: {
+          gte: new Date(),
+        },
+      },
+      {
+        starts: {
+          lte: new Date(),
+        },
+        ends: {
+          equals: null,
+        },
+      },
+    ],
+  };
+}
+
 export async function getQuests(n?: number): Promise<Quest[]> {
   return await prisma.quest.findMany({
     orderBy: {
@@ -81,19 +120,6 @@ export async function updateQuest(id: string, data: Partial<Quest>) {
   });
 }
 
-export async function getAvailableQuests(userId: string) {
-  return await prisma.quest.findMany({
-    where: {
-      ...dateCheck(),
-      History: {
-        none: {
-          userId: userId,
-        },
-      },
-    },
-  });
-}
-
 export async function getFinishedQuests(userId: string) {
   return await prisma.quest.findMany({
     where: {
@@ -110,19 +136,6 @@ export async function deleteQuest(id: string) {
   return await prisma.quest.delete({
     where: {
       id: parseInt(id),
-    },
-  });
-}
-
-/* get quests that are recently active */
-export async function getRecenltyActiveQuests() {
-  const nbDays = 3;
-  return await prisma.quest.findMany({
-    where: {
-      starts: {
-        lte: new Date(),
-        gte: new Date(new Date().getTime() - nbDays * 24 * 60 * 60 * 1000),
-      },
     },
   });
 }
@@ -167,21 +180,6 @@ export async function getAvailableSecondaryQuests(userId?: string) {
   });
 }
 
-export async function getFinishedSecondaryQuests(userId?: string) {
-  return await prisma.quest.findMany({
-    where: {
-      secondary: true,
-      History: userId
-        ? {
-            some: {
-              userId: userId,
-            },
-          }
-        : undefined,
-    },
-  });
-}
-
 export async function getPrimaryQuests() {
   return await prisma.quest.findMany({
     where: {
@@ -221,44 +219,6 @@ export async function hasUserFinishedQuest(userId: string, questId: number) {
   }
 }
 
-function dateCheck() {
-  return {
-    OR: [
-      {
-        starts: {
-          equals: null,
-        },
-        ends: {
-          equals: null,
-        },
-      },
-      {
-        starts: {
-          lte: new Date(),
-        },
-        ends: {
-          gte: new Date(),
-        },
-      },
-      {
-        starts: {
-          equals: null,
-        },
-        ends: {
-          gte: new Date(),
-        },
-      },
-      {
-        starts: {
-          lte: new Date(),
-        },
-        ends: {
-          equals: null,
-        },
-      },
-    ],
-  };
-}
 
 export async function getUnavailableMainQuests() {
   return await prisma.quest.findMany({

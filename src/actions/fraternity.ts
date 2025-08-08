@@ -26,20 +26,6 @@ export async function createDefaultFraternitys() {
   });
 }
 
-export async function addFraternity(data: {
-  name: string;
-  description?: string;
-}) {
-  const parsedData = fraternitySchema.safeParse(data);
-  if (!parsedData.success) {
-    throw new Error("Invalid data");
-  }
-
-  return await prisma.fraternity.create({
-    data: parsedData.data,
-  });
-}
-
 export async function getFraternity(id?: number | null) {
   if (!id) {
     return null;
@@ -79,49 +65,10 @@ export async function updateFraternity(
   });
 }
 
-// Aucune idée de si ça marche
-export async function recalculateScore() {
-  const fraternities = await prisma.fraternity.findMany();
-  for (const fraternity of fraternities) {
-    const score = await prisma.user.aggregate({
-      where: {
-        fraternityId: fraternity.id,
-      },
-      _sum: {
-        score: true,
-      },
-    });
-    await prisma.fraternity.update({
-      where: {
-        id: fraternity.id,
-      },
-      data: {
-        score: score._sum.score || 0,
-      },
-    });
-  }
-}
-
 export async function getClassement() {
   return await prisma.fraternity.findMany({
     orderBy: {
       score: "desc",
-    },
-  });
-}
-
-export async function getFraternityMembers(fraternityId: number) {
-  return await prisma.user.findMany({
-    where: {
-      fraternityId,
-    },
-  });
-}
-
-export async function getFraternityMembersCount(fraternityId: number) {
-  return await prisma.user.count({
-    where: {
-      fraternityId,
     },
   });
 }

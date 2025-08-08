@@ -3,7 +3,6 @@ import {
   getFinishedQuests,
   getUnavailableSecondaryQuests,
 } from "@/actions/quests";
-import Quests from "./components/Quests";
 import { appUrl } from "@/utils";
 import Link from "next/link";
 import styles from "./page.module.css";

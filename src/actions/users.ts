@@ -20,22 +20,6 @@ export async function getUserById(id: string) {
   });
 }
 
-export async function getUserByEmail(email: string) {
-  return await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-}
-
-export async function getUserByName(name: string) {
-  return await prisma.user.findUnique({
-    where: {
-      name,
-    },
-  });
-}
-
 export async function getUsers(data?: { n?: number; sortByPoint?: boolean }) {
   let { n, sortByPoint } = data || {};
   return await prisma.user.findMany({
@@ -53,17 +37,6 @@ export async function getUsers(data?: { n?: number; sortByPoint?: boolean }) {
         createdAt: "desc",
       },
     ],
-  });
-}
-
-export async function createUser(data: UserInput) {
-  const validatedData = userSchema.safeParse(data);
-  if (!validatedData.success) {
-    console.error("Validation error:", validatedData.error);
-    throw new Error(validatedData.error.errors[0].message);
-  }
-  return await prisma.user.create({
-    data: validatedData.data,
   });
 }
 
@@ -135,23 +108,6 @@ export async function updateUser(
   }
 }
 
-export async function addUsername(id: string, username: string) {
-  let out = await prisma.user.update({
-    where: {
-      id,
-    },
-    data: {
-      name: username,
-    },
-  });
-  (await cookies()).set("name", out.name!, {
-    expires:
-      SESSION_TTL === -1
-        ? new Date(2147483647000)
-        : new Date(Date.now() + SESSION_TTL),
-  });
-  return out;
-}
 
 export async function updateUserSelf(
   sessionId: string,
