@@ -4,14 +4,14 @@ import Link from "next/link";
 import { getUserFromSession } from "@/actions/auth";
 import { getLogo, getName } from "@/assets/fraternities";
 import Image from "next/image";
-import { getFinishedPrimaryQuests, getQuests } from "@/actions/quests";
+import { getFinishedMainQuests, getQuests } from "@/actions/quests";
 import CodeScan from "./CodeScan";
 
 export default async function Header() {
   let user = await getUserFromSession();
   let fraternityId = user!.fraternityId! as 1 | 2 | 3;
   let fraternity = getLogo(fraternityId);
-  let finishedQuests = await getFinishedPrimaryQuests(user!.id);
+  let finishedQuests = await getFinishedMainQuests(user!.id);
   let quests = await getQuests();
   let primaryQuests = quests.filter((quest) => !quest.secondary);
 

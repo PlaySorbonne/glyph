@@ -3,7 +3,7 @@ import { getFraternity } from "@/actions/fraternity";
 import Setting from "./components/Setting";
 import { FAQ, appUrl } from "@/utils";
 import { getUserScoreHistory } from "@/actions/users";
-import { getFinishedPrimaryQuests, getQuests } from "@/actions/quests";
+import { getFinishedMainQuests, getQuests } from "@/actions/quests";
 import Link from "next/link";
 
 export default async function Account() {
@@ -12,7 +12,7 @@ export default async function Account() {
     getFraternity(user!.fraternityId),
     getUserScoreHistory(user!.id),
     getQuests(),
-    getFinishedPrimaryQuests(user!.id),
+    getFinishedMainQuests(user!.id),
   ]);
   let primaryQuests = quests.filter((quest) => !quest.secondary);
 

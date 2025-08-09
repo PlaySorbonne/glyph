@@ -2,13 +2,13 @@ import icons from "@/assets/icons";
 import Image from "next/image";
 
 import styles from "./page.module.css";
-import { getFinishedPrimaryQuests } from "@/actions/quests";
+import { getFinishedMainQuests } from "@/actions/quests";
 import { getUserFromSession } from "@/actions/auth";
 import Carte from "./Carte";
 
 export default async function Map() {
   let user = await getUserFromSession();
-  let quest = await getFinishedPrimaryQuests(user!.id);
+  let quest = await getFinishedMainQuests(user!.id);
   let unlocked = quest.find((q) => q.title.trim() === "La Plume");
 
   if (unlocked) {

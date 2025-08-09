@@ -1,4 +1,5 @@
 import {
+  getAvailableMainQuests,
   getAvailableSecondaryQuests,
   getFinishedQuests,
   getUnavailableSecondaryQuests,
@@ -9,6 +10,8 @@ import styles from "./page.module.css";
 import { getUserFromSession } from "@/actions/auth";
 import { getGlyph } from "@/assets/glyphs";
 import Image from "next/image";
+import MainQuestSlider from "./components/MainQuestSlider";
+import { Quest } from "@prisma/client";
 
 export const revalidate = 3600; // invalidate every hour
 
@@ -19,6 +22,7 @@ export default async function Home() {
     getFinishedQuests(user!.id),
     getUnavailableSecondaryQuests(),
   ]);
+  let mainQuests = await getAvailableMainQuests(user!.id);
 
   unavailableQuests = unavailableQuests
     .filter((q) => !q.ends || q.ends >= new Date())
@@ -76,12 +80,9 @@ export default async function Home() {
           </p>
         </div>
 
-        {/* {questList.length > 0 && (
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Quêtes secondaires</h2>
-            <Quests quests={questList} />
-          </section>
-        )} */}
+        <section className={styles.section}>
+          <MainQuestSlider quests={mainQuests} />
+        </section>
 
         {/* {finishedSecondaryQuests.length > 0 && (
           <section className={styles.section}>

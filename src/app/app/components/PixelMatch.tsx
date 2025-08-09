@@ -23,6 +23,8 @@ export default function PixelMatch({
   if (!size && defaultGlyph && defaultGlyph.length > 0)
     size = [defaultGlyph.length, defaultGlyph[0].length];
   else if (!size) size = [29, 29];
+  size[0] = Math.max(size[0], 1);
+  size[1] = Math.max(size[1], 1);
 
   const glyph = useMemo(
     () => fillMatrixToSize(defaultGlyph ?? [], size, coords),

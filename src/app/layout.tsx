@@ -1,11 +1,8 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { FlashMessageProvider } from "@/contexts/FlashMessageContext";
 import { NotificationHandler } from "@/components/NotificationHandler";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default async function RootLayout({
   children,
@@ -24,7 +21,7 @@ export default async function RootLayout({
           ></script>
         )}
       </head>
-      <body className={inter.className}>
+      <body>
         <NotificationProvider>
           <FlashMessageProvider>
             <Suspense fallback={null}>

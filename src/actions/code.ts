@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { codeSchema } from "@/utils/zod";
 import { Code, History, User } from "@prisma/client";
 import { getSession } from "./auth";
-import { getFinishedPrimaryQuests, getPrimaryQuests } from "./quests";
+import { getFinishedMainQuests, getMainQuests } from "./quests";
 
 export async function addCodeToQuest(
   id: string,
@@ -191,8 +191,8 @@ export async function userScannedCode(user: User, code: Code) {
 
   if (code.code.startsWith("ending")) {
     let [quests, completedQuests] = await Promise.all([
-      getPrimaryQuests(),
-      getFinishedPrimaryQuests(user.id),
+      getMainQuests(),
+      getFinishedMainQuests(user.id),
     ]);
     if (quests.length - 1 !== completedQuests.length) {
       throw new Error(

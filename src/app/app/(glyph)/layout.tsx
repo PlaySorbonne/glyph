@@ -29,18 +29,21 @@ export default async function GlyphLayout({
         className={styles.center}
         style={{
           backgroundImage: `url(${background.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundSize: "100% auto",
         }}
       >
         <div className={styles.content}>
           <Header />
-          <div style={{ height: "100px"}} />
-          <main style={{
-            minHeight: "calc(100vh - 150px)",
-            margin: "0 1rem"
-          }}>{children}</main>
-          <div style={{ height: "50px "}}/>
+          <div style={{ height: "100px" }} />
+          <main
+            style={{
+              minHeight: "calc(100vh - 150px)",
+              margin: "0 1rem",
+            }}
+          >
+            {children}
+          </main>
+          <div style={{ height: "50px " }} />
           <Navbar />
         </div>
       </div>

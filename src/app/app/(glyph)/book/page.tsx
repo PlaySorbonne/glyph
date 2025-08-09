@@ -1,8 +1,8 @@
 import { getUserFromSession } from "@/actions/auth";
 import {
-  getAvailablePrimaryQuests,
-  getFinishedPrimaryQuests,
-  getPrimaryQuests,
+  getAvailableMainQuests,
+  getFinishedMainQuests,
+  getMainQuests,
   getUnavailableMainQuests,
 } from "@/actions/quests";
 import Image from "next/image";
@@ -15,10 +15,10 @@ export const revalidate = 3600; // invalidate every hour
 
 export default async function Book() {
   let user = await getUserFromSession();
-  let questNb = (await getPrimaryQuests()).length;
+  let questNb = (await getMainQuests()).length;
   let [quests, finishedQuests, unavailableQuest] = await Promise.all([
-    getAvailablePrimaryQuests(user!.id),
-    getFinishedPrimaryQuests(user!.id),
+    getAvailableMainQuests(user!.id),
+    getFinishedMainQuests(user!.id),
     getUnavailableMainQuests(),
   ]);
 

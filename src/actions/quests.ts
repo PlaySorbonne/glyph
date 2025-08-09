@@ -140,7 +140,7 @@ export async function deleteQuest(id: string) {
   });
 }
 
-export async function getAvailablePrimaryQuests(userId?: string) {
+export async function getAvailableMainQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
       secondary: false,
@@ -180,7 +180,7 @@ export async function getAvailableSecondaryQuests(userId?: string) {
   });
 }
 
-export async function getPrimaryQuests() {
+export async function getMainQuests() {
   return await prisma.quest.findMany({
     where: {
       secondary: false,
@@ -189,7 +189,7 @@ export async function getPrimaryQuests() {
   });
 }
 
-export async function getFinishedPrimaryQuests(userId?: string) {
+export async function getFinishedMainQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
       secondary: false,

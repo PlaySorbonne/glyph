@@ -29,7 +29,7 @@ export default async function QuestPage({
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
 
-  let glyph = glyphStringToArray(quest.glyph) || [];
+  let glyph = glyphStringToArray(quest.glyph) ?? [[]];
 
   if (!hasFinishedQuest && !isQuestAvailable(quest)) {
     quest = {
@@ -172,7 +172,7 @@ export default async function QuestPage({
               <PixelMatch defaultGlyph={glyph} locked />
             ) : (
               <GlyphMatch
-                glyphSize={[glyph.length || 29, glyph?.[0].length || 29]}
+                glyphSize={[glyph.length || 29, glyph[0].length || 29]}
                 questId={questId.toString()}
               />
             )}

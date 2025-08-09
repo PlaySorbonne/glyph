@@ -5,6 +5,10 @@ export const SESSION_TTL = -1;
 
 export const GLYPH_MAX_SIZE = 29; // glyph max size, 29x29 pixels
 
+export const NB_MAIN_QUESTS = 8; // number of main quests
+
+export const MAINQUESTS_WRAPPERID = 1; // id of the wrapper for main quests in the database
+
 
 export function glyphStringToArray(glyph: string | null | undefined) {
   return glyph
