@@ -3,77 +3,41 @@
 import { getAvailableMainQuests } from "@/actions/quests";
 import { NB_MAIN_QUESTS } from "@/utils";
 import { Quest } from "@prisma/client";
-import icons from "@/assets/icons";
-import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 
-export default function MainQuestSlider({quests}: { quests: Quest[] }) {
-
-  // Render client-side slider
-  return <Slider quests={quests} />;
-}
-
-// Client component for slider
-function Slider({ quests }: { quests: Quest[] }) {
+export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
   const [index, setIndex] = useState(0);
 
-  function prev() {
-    setIndex((i) => (i > 0 ? i - 1 : quests.length - 1));
-  }
-  function next() {
-    setIndex((i) => (i < quests.length - 1 ? i + 1 : 0));
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((i) => (i < quests.length - 1 ? i + 1 : 0));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [quests.length]);
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${icons.corner.src}), url(${icons.corner.src})`,
-        backgroundRepeat: "no-repeat, no-repeat",
-        backgroundPosition: "top right, bottom left",
-        backgroundSize: "100px 100px, 100px 100px",
-        position: "relative",
-      }}
-    >
-      <button
-        type="button"
-        onClick={prev}
-        style={{
-          position: "absolute",
-          left: 10,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 1,
-        }}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={quests[index].id}
+        initial={{ x: 300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: -300, opacity: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        ◀
-      </button>
-      <QuestCard nb={index + 1} quest={quests[index]} />
-      <button
-        type="button"
-        onClick={next}
-        style={{
-          position: "absolute",
-          right: 10,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 1,
-        }}
-      >
-        ▶
-      </button>
-    </div>
+        <QuestCard
+          nb={index + 1}
+          quest={quests[index]}
+        />
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
 function QuestCard({ nb, quest }: { nb: number; quest: Quest }) {
   return (
-    <Link
-      style={{
-        padding: "1rem 1.5rem",
-      }}
-      href={`/app/quest/${quest.id}`}
-    >
+    <Link href={`/app/quest/${quest.id}`}>
       <div
         style={{
           width: "100%",
@@ -96,16 +60,21 @@ function QuestCard({ nb, quest }: { nb: number; quest: Quest }) {
         style={{
           paddingLeft: "1rem",
           paddingTop: "1rem",
+          height: "min(10vh, 150px)",
         }}
       >
         {quest.mission}
       </p>
-      <p style={{
-        width: "100%",
-        textAlign: "right",
-        textDecoration: "underline",
-        fontWeight: "600"
-      }}>
+      <p
+        style={{
+          width: "100%",
+          textAlign: "right",
+          textDecoration: "underline",
+          fontWeight: "600",
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+        }}
+      >
         PLUS DE DETAILS
       </p>
     </Link>
