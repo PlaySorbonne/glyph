@@ -13,7 +13,7 @@ export const revalidate = 3600; // invalidate every hour
 
 export default async function Home() {
   let user = await getUserFromSession();
-  let [SecondaryQuests, unavailableSecondaryQuests] = await Promise.all([
+  let [secondaryQuests, unavailableSecondaryQuests] = await Promise.all([
     getAvailableSecondaryQuests(user!.id),
     getUnavailableSecondaryQuests(),
   ]);
@@ -43,6 +43,8 @@ export default async function Home() {
     })
     .filter((quest) => quest !== null)
     .sort((a, b) => a.starts!.getTime() - b.starts!.getTime());
+  
+  let quests = [...secondaryQuests, ...unavailableSecondaryQuests];
 
   return (
     <div
@@ -77,7 +79,7 @@ export default async function Home() {
           padding: "2rem",
         }}
       >
-        <SecondaryQuestList quests={SecondaryQuests} />
+        <SecondaryQuestList quests={quests} />
       </section>
 
       <div

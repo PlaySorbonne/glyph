@@ -38,7 +38,8 @@ export default async function GlyphLayout({
           <main
             style={{
               minHeight: "calc(100vh - 150px)",
-              margin: "0 1rem",
+              padding: "0 1rem",
+              width: "100%",
             }}
           >
             {children}

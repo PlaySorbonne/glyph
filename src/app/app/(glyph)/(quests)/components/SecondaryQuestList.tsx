@@ -1,9 +1,21 @@
 "use client";
 
-import { Quest } from "@prisma/client";
 import Link from "next/link";
 
-export default function SecondaryQuestList({ quests }: { quests: Quest[] }) {
+interface Quest {
+  id: number;
+  title: string;
+  ends?: Date | null;
+  starts?: Date | null;
+}
+
+export default function SecondaryQuestList({
+  quests,
+  unavailableQuests,
+}: {
+  quests: Quest[];
+  unavailableQuests?: Quest[];
+}) {
   return (
     <div>
       <h1
@@ -13,9 +25,11 @@ export default function SecondaryQuestList({ quests }: { quests: Quest[] }) {
       >
         QUÊTES SECONDAIRES :
       </h1>
-      <div style={{
-        padding: "0 1rem"
-      }}>
+      <div
+        style={{
+          padding: "0 1rem",
+        }}
+      >
         {quests.map((quest) => (
           <QuestCard key={quest.id} quest={quest} />
         ))}
@@ -24,7 +38,13 @@ export default function SecondaryQuestList({ quests }: { quests: Quest[] }) {
   );
 }
 
-function QuestCard({ quest }: { quest: Quest }) {
+function QuestCard({
+  quest,
+  isUnavailable,
+}: {
+  quest: Quest;
+  isUnavailable?: boolean;
+}) {
   return (
     <Link
       style={{
@@ -45,7 +65,11 @@ function QuestCard({ quest }: { quest: Quest }) {
           fontWeight: "bold",
         }}
       >
-        PLUS DE DÉTAILS
+        {isUnavailable
+          ? `disponible à partir du ${quest.starts!.toLocaleDateString(
+              "fr-FR"
+            )}`
+          : "PLUS DE DÉTAILS"}
       </p>
     </Link>
   );
