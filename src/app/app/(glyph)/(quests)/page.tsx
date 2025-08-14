@@ -8,43 +8,41 @@ import { getUserFromSession } from "@/actions/auth";
 import MainQuestSlider from "./components/MainQuestSlider";
 import icons from "@/assets/icons";
 import SecondaryQuestList from "./components/SecondaryQuestList";
+import { keepKeysFromObjectArray } from "@/utils";
 
 export const revalidate = 3600; // invalidate every hour
 
+const keys = ["id", "title", "description", "starts", "ends"] as const;
+
 export default async function Home() {
   let user = await getUserFromSession();
-  let [secondaryQuests, unavailableSecondaryQuests] = await Promise.all([
-    getAvailableSecondaryQuests(user!.id),
-    getUnavailableSecondaryQuests(),
-  ]);
-  let mainQuests = await getAvailableMainQuests(user!.id);
-
-  unavailableSecondaryQuests = unavailableSecondaryQuests
-    .filter((q) => !q.ends || q.ends >= new Date())
-    .map((quest) => {
-      if (quest.ends && quest.ends < new Date()) {
-        return null;
-      }
-      return {
-        ...quest,
-        title: Array.from(
-          { length: 4 + Math.floor(Math.random() * 9) },
-          () => "█"
-        ).join(""),
-        mission:
-          "La quête sera disponible à partir du " +
-          quest.starts!.toLocaleDateString("fr-FR", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
-      };
-    })
-    .filter((quest) => quest !== null)
-    .sort((a, b) => a.starts!.getTime() - b.starts!.getTime());
-  
-  let quests = [...secondaryQuests, ...unavailableSecondaryQuests];
+  let [secondaryQuests, unavailableSecondaryQuests, mainQuests] =
+    await Promise.all([
+      getAvailableSecondaryQuests(user!.id),
+      getUnavailableSecondaryQuests(user!.id).then((quests) =>
+        quests
+          .filter((q) => !q.ends || q.ends >= new Date())
+          .map((quest) => {
+            return {
+              ...quest,
+              title: Array.from(
+                { length: 4 + Math.floor(Math.random() * 9) },
+                () => "█"
+              ).join(""),
+              mission:
+                "La quête sera disponible à partir du " +
+                quest.starts!.toLocaleDateString("fr-FR", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }),
+            };
+          })
+          .sort((a, b) => a.starts!.getTime() - b.starts!.getTime())
+      ),
+      getAvailableMainQuests(user!.id),
+    ]);
 
   return (
     <div
@@ -79,7 +77,13 @@ export default async function Home() {
           padding: "2rem",
         }}
       >
-        <SecondaryQuestList quests={quests} />
+        <SecondaryQuestList
+          quests={keepKeysFromObjectArray(secondaryQuests, keys)}
+          unavailableQuests={keepKeysFromObjectArray(
+            unavailableSecondaryQuests,
+            keys
+          )}
+        />
       </section>
 
       <div

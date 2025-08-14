@@ -33,6 +33,10 @@ export default function SecondaryQuestList({
         {quests.map((quest) => (
           <QuestCard key={quest.id} quest={quest} />
         ))}
+        {unavailableQuests &&
+          unavailableQuests.map((quest) => (
+            <QuestCard key={quest.id} quest={quest} isUnavailable />
+          ))}
       </div>
     </div>
   );
@@ -66,9 +70,10 @@ function QuestCard({
         }}
       >
         {isUnavailable
-          ? `disponible à partir du ${quest.starts!.toLocaleDateString(
-              "fr-FR"
-            )}`
+          ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
+              month: "numeric",
+              day: "numeric",
+            })}`
           : "PLUS DE DÉTAILS"}
       </p>
     </Link>

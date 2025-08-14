@@ -235,7 +235,7 @@ export async function getUnavailableMainQuests() {
   });
 }
 
-export async function getUnavailableSecondaryQuests() {
+export async function getUnavailableSecondaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
       AND: [
@@ -244,6 +244,13 @@ export async function getUnavailableSecondaryQuests() {
         },
         {
           secondary: true,
+          History: userId
+            ? {
+                none: {
+                  userId: userId,
+                },
+              }
+            : undefined,
         },
       ],
     },

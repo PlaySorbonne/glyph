@@ -9,6 +9,21 @@ export const NB_MAIN_QUESTS = 8; // number of main quests
 
 export const MAINQUESTS_WRAPPERID = 1; // id of the wrapper for main quests in the database
 
+export function keepKeysFromObject<T extends object, K extends keyof T>(
+  obj: T,
+  keys: K[] | readonly K[]
+): { [key in K]: T[key] } {
+  const result = {} as { [key in K]: T[key] };
+  for (const key of keys) result[key] = obj[key];
+  return result;
+}
+
+export function keepKeysFromObjectArray<T extends object, K extends keyof T>(
+  arr: T[],
+  keys: K[] | readonly K[]
+): Array<{ [key in K]: T[key] }> {
+  return arr.map((obj) => keepKeysFromObject(obj, keys));
+};
 
 export function glyphStringToArray(glyph: string | null | undefined) {
   return glyph
@@ -29,8 +44,10 @@ export function smallestContainingAllOnes(matrix: boolean[][]): {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  let minRow = rows, maxRow = -1;
-  let minCol = cols, maxCol = -1;
+  let minRow = rows,
+    maxRow = -1;
+  let minCol = cols,
+    maxCol = -1;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
