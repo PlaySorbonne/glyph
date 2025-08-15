@@ -13,7 +13,7 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((i) => (i < quests.length - 1 ? i + 1 : 0));
-    }, 10000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [quests.length]);
 
