@@ -78,7 +78,7 @@ export default async function Home() {
         }}
       >
         <SecondaryQuestList
-          quests={keepKeysFromObjectArray(secondaryQuests, keys)}
+          quests={keepKeysFromObjectArray(secondaryQuests, keys)} // keeping only relevant keys so no "sensitive" data is sent to the client
           unavailableQuests={keepKeysFromObjectArray(
             unavailableSecondaryQuests,
             keys
