@@ -9,6 +9,8 @@ export const NB_MAIN_QUESTS = 8; // number of main quests
 
 export const MAINQUESTS_WRAPPERID = 1; // id of the wrapper for main quests in the database
 
+export const isQuestSecondary = (quest: Quest) => quest.secondary; // May change so 
+
 export function keepKeysFromObject<T extends object, K extends keyof T>(
   obj: T,
   keys: K[] | readonly K[]
