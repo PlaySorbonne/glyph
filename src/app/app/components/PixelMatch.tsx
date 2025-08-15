@@ -46,7 +46,26 @@ export default function PixelMatch({
       const newPattern = prev.map((row) => [...row]);
       newPattern[rowIndex][colIndex] = !newPattern[rowIndex][colIndex];
       if (onChange) {
-        onChange(newPattern, [rowIndex, colIndex]);
+        /**
+         * We use setTimeout here to avoid a React state update conflict between
+         * parent and child components. The issue occurs because:
+         * 1. This function updates local state with setCurrentPattern
+         * 2. It then needs to notify the parent via onChange callback
+         * 3. The parent (GlyphMatch) updates its own state immediately
+         *
+         * This creates a situation where we're updating state in a parent component
+         * while the child is still rendering (forbidden in React's concurrent mode).
+         *
+         * By wrapping the onChange callback in setTimeout, we defer it to the next
+         * event loop tick, ensuring that:
+         * 1. The current render cycle completes first
+         * 2. The local state update is processed
+         * 3. Only then the parent's state update is triggered
+         *
+         **/
+        setTimeout(() => {
+          onChange(newPattern, [rowIndex, colIndex]);
+        }, 0);
       }
 
       return newPattern;
