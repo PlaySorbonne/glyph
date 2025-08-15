@@ -3,8 +3,9 @@
 import PixelMatch from "@/app/app/components/PixelMatch";
 import { glyphArrayToString } from "@/utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
+// FIXME used useCallback but not sure yet it is the best way. Maybe useRef/startTransition could be better
 export default function GlyphMatch({
   questId,
   glyphSize,
@@ -13,41 +14,48 @@ export default function GlyphMatch({
   glyphSize: [number, number];
 }) {
   const router = useRouter();
-  const [lastCheckedCoords, setLastCheckedCoords] = useState<[number, number] | undefined>();
+  const [lastCheckedCoords, setLastCheckedCoords] = useState<
+    [number, number] | undefined
+  >();
 
-  function handleGlyphChange(glyph: boolean[][], coords: [number, number]) {
-    setLastCheckedCoords(coords);
-    
-    fetch(`/api/quest/${questId}/glyph/check`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain",
-      },
-      body: glyphArrayToString(glyph),
-    })
-      .then((response) => response.json())
-      .then((data: { error: string } | { success: boolean; message: string }) => {
-        if ("error" in data) {
-          console.error("Error checking glyph:", data.error);
-        } else {
-          console.log("Glyph check result:", data);
-          if (data.success) {
-            alert(data.message);
-            router.refresh();
-          }
-        }
-        setLastCheckedCoords(undefined); // Clear the last checked coords after response
+  const handleGlyphChange = useCallback(
+    (glyph: boolean[][], coords: [number, number]) => {
+      setLastCheckedCoords(coords);
+
+      fetch(`/api/quest/${questId}/glyph/check`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
+        body: glyphArrayToString(glyph),
       })
-      .catch((error) => {
-        console.error("Error during glyph check:", error);
-        setLastCheckedCoords(undefined); // Clear on error too
-      });
-  }
+        .then((response) => response.json())
+        .then(
+          (data: { error: string } | { success: boolean; message: string }) => {
+            if ("error" in data) {
+              console.error("Error checking glyph:", data.error);
+            } else {
+              console.log("Glyph check result:", data);
+              if (data.success) {
+                alert(data.message);
+                router.refresh();
+              }
+            }
+            setLastCheckedCoords(undefined);
+          }
+        )
+        .catch((error) => {
+          console.error("Error during glyph check:", error);
+          setLastCheckedCoords(undefined);
+        });
+    },
+    [questId]
+  );
 
   return (
     <div>
-      <PixelMatch 
-        size={glyphSize} 
+      <PixelMatch
+        size={glyphSize}
         onChange={handleGlyphChange}
         lastCheckedCoords={lastCheckedCoords}
       />
