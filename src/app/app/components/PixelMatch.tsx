@@ -5,11 +5,12 @@ import { glyphArrayToString, smallestContainingAllOnes } from "@/utils";
 
 export interface PixelMatchType {
   size?: [number, number]; // Now a tuple: [rows, cols]
-  onChange?: (glyph: boolean[][]) => void; // Callback when the glyph changes, client function !!
+  onChange?: (glyph: boolean[][], lastCheckedCoords: [number, number]) => void; // Callback when the glyph changes, client function !!
   defaultGlyph?: boolean[][]; // May be not a square
   locked?: boolean;
   name?: string;
   coords?: [number, number];
+  lastCheckedCoords?: [number, number]; // New prop
 }
 
 export default function PixelMatch({
@@ -19,6 +20,7 @@ export default function PixelMatch({
   locked = false,
   name,
   coords = [0, 0],
+  lastCheckedCoords,
 }: PixelMatchType) {
   if (!size && defaultGlyph && defaultGlyph.length > 0)
     size = [defaultGlyph.length, defaultGlyph[0].length];
@@ -44,7 +46,7 @@ export default function PixelMatch({
       const newPattern = prev.map((row) => [...row]);
       newPattern[rowIndex][colIndex] = !newPattern[rowIndex][colIndex];
       if (onChange) {
-        onChange(newPattern);
+        onChange(newPattern, [rowIndex, colIndex]);
       }
 
       return newPattern;
@@ -52,29 +54,43 @@ export default function PixelMatch({
   };
 
   return (
-    <div className="text-center">
-      <h3 className="text-sm font-medium mb-2">Votre motif</h3>
-      <div
-        className="grid gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${size[1]}, 1fr)`,
-          width: `${size[0] * 20}px`,
-          margin: "0 auto",
-        }}
-      >
-        {currentPattern.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
+    <div
+      style={{
+        display: "grid",
+        gap: "0.25rem",
+        gridTemplateColumns: `repeat(${size[1]}, 1fr)`,
+        width: `100%`,
+        margin: "0 auto",
+      }}
+    >
+      {currentPattern.map((row, rowIndex) =>
+        row.map((cell, colIndex) => {
+          const isLastChecked =
+            lastCheckedCoords &&
+            rowIndex === lastCheckedCoords[0] &&
+            colIndex === lastCheckedCoords[1];
+
+          return (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`w-5 h-5 border ${
-                cell ? "bg-black" : "bg-white"
-              } cursor-pointer transition-colors duration-150`}
+              style={{
+                height: "auto",
+                border: "1px solid #d1d5db",
+                backgroundColor: isLastChecked
+                  ? "rgba(128, 128, 128, 0.9)"
+                  : cell
+                  ? "rgba(0, 0, 0, 0.9)"
+                  : "rgba(255, 255, 255, 0.9)",
+                cursor: locked ? "default" : "pointer",
+                transition: "background-color 150ms",
+                aspectRatio: "1 / 1",
+              }}
               data-name={`cell-${rowIndex}-${colIndex}`}
               onClick={() => toggleCell(rowIndex, colIndex)}
             />
-          ))
-        )}
-      </div>
+          );
+        })
+      )}
       {name && (
         <input
           type="hidden"
