@@ -58,8 +58,8 @@ export default async function Home() {
           backgroundPosition:
             "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
           backgroundSize: "100px 100px, 100px 100px",
-          position: "relative",
           padding: "2rem",
+          overflow: "hidden",
         }}
       >
         <MainQuestSlider quests={mainQuests} />
@@ -73,7 +73,6 @@ export default async function Home() {
           backgroundPosition:
             "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
           backgroundSize: "100px 100px, 100px 100px",
-          position: "relative",
           padding: "2rem",
         }}
       >
