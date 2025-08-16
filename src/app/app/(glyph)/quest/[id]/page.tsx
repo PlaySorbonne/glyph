@@ -168,6 +168,7 @@ export default async function QuestPage({
               style={{
                 padding: "0 1rem",
                 textAlign: "justify",
+                whiteSpace: "pre-wrap",
               }}
             >
               {quest.description}
