@@ -150,6 +150,19 @@ export default async function QuestPage({
           </p>
         )}
 
+        {quest.horaires && (
+          <p>
+            <span
+              style={{
+                fontWeight: "bold",
+              }}
+            >
+              Horaires :{" "}
+            </span>
+            {quest.horaires}
+          </p>
+        )}
+
         {quest.description && (
           <div
             style={{
