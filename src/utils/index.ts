@@ -7,7 +7,8 @@ export const GLYPH_MAX_SIZE = 29; // glyph max size, 29x29 pixels
 
 export const NB_MAIN_QUESTS = 8; // number of main quests
 
-export const MAINQUESTS_WRAPPERID = 1; // id of the wrapper for main quests in the database
+// cf prisma/migrations/..._init_db
+export const SECONDARYQUESTS_WRAPPERID = 1; // id of the wrapper for secondary quests in the database
 
 export const isQuestSecondary = (quest: Quest) => quest.secondary; // May change so 
 

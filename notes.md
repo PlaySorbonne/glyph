@@ -25,3 +25,7 @@ faire la liste de tout les mecs pour les quêtes
 
 le matos aussi et comment faire
 
+- Les quêtes principales ont juste le paramètre `secondary` à `false`
+- Les quêtes secondaires :
+  - J'affiche dans le dashboard ceux qui ont pour parentId `SECONDARYQUESTS_WRAPPERID`
+Pourquoi ? Parce que si je query que ceux qui ont `secondary` à `true`, j'aurais les quêtes wrapper ET les subquests. Donc faut nécessairement filtrer par `parentId`.

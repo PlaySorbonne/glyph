@@ -6,8 +6,8 @@ import {
   normalQuestSchema,
   NormalQuestInput,
   codeFormat,
-  codeSchema,
 } from "@/utils/zod";
+import { SECONDARYQUESTS_WRAPPERID } from "@/utils";
 
 function dateCheck() {
   return {
@@ -168,6 +168,7 @@ export async function getAvailableSecondaryQuests(userId?: string) {
             },
           }
         : undefined,
+      parentId: SECONDARYQUESTS_WRAPPERID
     },
     orderBy: [
       {
@@ -219,18 +220,11 @@ export async function hasUserFinishedQuest(userId: string, questId: number) {
   }
 }
 
-
 export async function getUnavailableMainQuests() {
   return await prisma.quest.findMany({
     where: {
-      AND: [
-        {
-          NOT: dateCheck(),
-        },
-        {
-          secondary: false,
-        },
-      ],
+      NOT: dateCheck(),
+      secondary: false,
     },
   });
 }
@@ -238,21 +232,16 @@ export async function getUnavailableMainQuests() {
 export async function getUnavailableSecondaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
-      AND: [
-        {
-          NOT: dateCheck(),
-        },
-        {
-          secondary: true,
-          History: userId
-            ? {
-                none: {
-                  userId: userId,
-                },
-              }
-            : undefined,
-        },
-      ],
+      NOT: dateCheck(),
+      secondary: true,
+      History: userId
+        ? {
+            none: {
+              userId: userId,
+            },
+          }
+        : undefined,
+      parentId: SECONDARYQUESTS_WRAPPERID,
     },
   });
 }
@@ -306,6 +295,23 @@ export async function userValidatedQuest(user: User, quest: Quest) {
       },
     },
   });
+
+  if (quest.parentId) {
+    const [parrentQuest] = await prisma.quest.findMany({
+      where: {
+        parentId: quest.parentId,
+      },
+      include: {
+        subQuests: true,
+      },
+    });
+
+    if (
+      parrentQuest.subQuests.length != 0 &&
+      parrentQuest.subQuests.every((q) => hasUserFinishedQuest(user.id, q.id))
+    )
+      userValidatedQuest(user, parrentQuest);
+  }
 
   return out;
 }
