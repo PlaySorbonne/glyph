@@ -96,10 +96,10 @@ export default function PixelMatch({
                 height: "auto",
                 border: "1px solid #d1d5db",
                 backgroundColor: isLastChecked
-                  ? "rgba(128, 128, 128, 0.9)"
+                  ? "rgba(128, 128, 128, 0.8)"
                   : cell
-                  ? "rgba(0, 0, 0, 0.9)"
-                  : "rgba(255, 255, 255, 0.9)",
+                  ? "rgba(0, 0, 0, 0.8)"
+                  : "rgba(255, 255, 255, 0.8)",
                 cursor: locked ? "default" : "pointer",
                 transition: "background-color 150ms",
                 aspectRatio: "1 / 1",
