@@ -62,11 +62,23 @@ function QuestCard({
       }}
       href={`/app/quest/${quest.id}`}
     >
-      <h1>{quest.title}</h1>
+      <h1
+        style={{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          marginRight: "1rem",
+          flex: "1",
+        }}
+      >
+        {quest.title}
+      </h1>
       <p
         style={{
           textDecoration: "underline",
           fontWeight: "bold",
+          whiteSpace: "nowrap",
+          flexShrink: 0,
         }}
       >
         {isUnavailable
