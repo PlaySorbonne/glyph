@@ -95,7 +95,7 @@ export default async function QuestPage({
             fontSize: "1.5rem",
           }}
         >
-          QUÊTE {isQuestSecondary(quest) ? "SECONDARY" : "PRINCIPALE"}
+          QUÊTE {isQuestSecondary(quest) ? "SECONDAIRE" : "PRINCIPALE"}
         </p>
         <Image
           src={icons.separator1}
