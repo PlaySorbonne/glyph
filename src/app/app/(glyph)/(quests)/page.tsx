@@ -70,9 +70,9 @@ export default async function Home() {
         </section>
       )}
 
-      {(secondaryQuests && secondaryQuests.length > 0) ||
+      {((secondaryQuests && secondaryQuests.length > 0) ||
         (unavailableSecondaryQuests &&
-          unavailableSecondaryQuests.length > 0 && (
+          unavailableSecondaryQuests.length > 0)) && (
             <section
               className={styles.section}
               style={{
@@ -92,7 +92,7 @@ export default async function Home() {
                 )}
               />
             </section>
-          ))}
+          )}
 
       <div
         style={{
