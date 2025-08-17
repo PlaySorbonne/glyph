@@ -2,11 +2,7 @@
 
 import prisma from "@/lib/db";
 import { Code, Quest, User } from "@prisma/client";
-import {
-  normalQuestSchema,
-  NormalQuestInput,
-  codeFormat,
-} from "@/utils/zod";
+import { normalQuestSchema, NormalQuestInput, codeFormat } from "@/utils/zod";
 import { SECONDARYQUESTS_WRAPPERID } from "@/utils";
 
 function dateCheck() {
@@ -57,10 +53,22 @@ export async function getQuests(n?: number): Promise<Quest[]> {
   });
 }
 
-export async function getQuest(id: string) {
+export async function getQuest({
+  id,
+  includeSubquests,
+}: {
+  id: string;
+  includeSubquests?: boolean;
+}) {
+  let intId = parseInt(id);
+  if (isNaN(intId) || id.match(/[^0-9]/)) return null;
+
   return await prisma.quest.findUnique({
     where: {
-      id: parseInt(id),
+      id: intId,
+    },
+    include: {
+      subQuests: includeSubquests,
     },
   });
 }
@@ -168,7 +176,7 @@ export async function getAvailableSecondaryQuests(userId?: string) {
             },
           }
         : undefined,
-      parentId: SECONDARYQUESTS_WRAPPERID
+      parentId: SECONDARYQUESTS_WRAPPERID,
     },
     orderBy: [
       {

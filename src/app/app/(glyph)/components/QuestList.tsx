@@ -9,14 +9,18 @@ interface Quest {
   starts?: Date | null;
 }
 
-export default function SecondaryQuestList({
+export default function QuestList({
   quests,
   unavailableQuests,
+  name
 }: {
   quests: Quest[];
   unavailableQuests?: Quest[];
+  name?: string;
 }) {
   if ((!quests || quests.length === 0) && (!unavailableQuests || unavailableQuests.length === 0)) return null;
+  if (!name) name = "QUÊTES SECONDAIRES";
+  name = name.toUpperCase();
 
   return (
     <div>
@@ -25,7 +29,7 @@ export default function SecondaryQuestList({
           fontWeight: "bold",
         }}
       >
-        QUÊTES SECONDAIRES :
+        {name} :
       </h1>
       <div
         style={{

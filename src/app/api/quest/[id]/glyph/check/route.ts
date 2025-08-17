@@ -80,7 +80,11 @@ export async function POST(
   }
 
   const glyph = body.trim();
-  if (!glyph || glyph.length > GLYPH_MAX_SIZE ** 2 || !glyph.match(/^[01,]+$/)) {
+  if (
+    !glyph ||
+    glyph.length > GLYPH_MAX_SIZE ** 2 ||
+    !glyph.match(/^[01,]+$/)
+  ) {
     return NextResponse.json(
       { error: "Invalid glyph format" },
       { status: 400 }
@@ -95,7 +99,7 @@ export async function POST(
     );
   }
 
-  const quest = await getQuest(questId);
+  const quest = await getQuest({ id: questId });
   if (!quest) {
     return NextResponse.json({ error: "Quest not found" }, { status: 404 });
   }

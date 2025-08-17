@@ -5,9 +5,9 @@ import {
 } from "@/actions/quests";
 import styles from "./page.module.css";
 import { getUserFromSession } from "@/actions/auth";
-import MainQuestSlider from "./components/MainQuestSlider";
+import MainQuestSlider from "./MainQuestSlider";
 import icons from "@/assets/icons";
-import SecondaryQuestList from "./components/SecondaryQuestList";
+import QuestList from "../components/QuestList";
 import { keepKeysFromObjectArray } from "@/utils";
 
 export const revalidate = 3600; // invalidate every hour
@@ -73,26 +73,26 @@ export default async function Home() {
       {((secondaryQuests && secondaryQuests.length > 0) ||
         (unavailableSecondaryQuests &&
           unavailableSecondaryQuests.length > 0)) && (
-            <section
-              className={styles.section}
-              style={{
-                backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
-                backgroundRepeat: "no-repeat, no-repeat",
-                backgroundPosition:
-                  "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
-                backgroundSize: "100px 100px, 100px 100px",
-                padding: "2rem",
-              }}
-            >
-              <SecondaryQuestList
-                quests={keepKeysFromObjectArray(secondaryQuests, secondaryKeys)} // keeping only relevant keys so no "sensitive" data is sent to the client
-                unavailableQuests={keepKeysFromObjectArray(
-                  unavailableSecondaryQuests,
-                  secondaryKeys
-                )}
-              />
-            </section>
-          )}
+        <section
+          className={styles.section}
+          style={{
+            backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
+            backgroundRepeat: "no-repeat, no-repeat",
+            backgroundPosition:
+              "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
+            backgroundSize: "100px 100px, 100px 100px",
+            padding: "2rem",
+          }}
+        >
+          <QuestList
+            quests={keepKeysFromObjectArray(secondaryQuests, secondaryKeys)} // keeping only relevant keys so no "sensitive" data is sent to the client
+            unavailableQuests={keepKeysFromObjectArray(
+              unavailableSecondaryQuests,
+              secondaryKeys
+            )}
+          />
+        </section>
+      )}
 
       <div
         style={{

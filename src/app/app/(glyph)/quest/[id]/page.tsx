@@ -29,7 +29,7 @@ export default async function QuestPage({
     user!.id,
     parseInt(paramsA.id)
   );
-  let quest = await getQuest(paramsA.id);
+  let quest = await getQuest({ id: paramsA.id, includeSubquests: true });
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
@@ -191,18 +191,22 @@ export default async function QuestPage({
       </section>
 
       {!isQuestSecondary(quest) && (
-        <section style={{
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
-          marginTop: "2rem",
-          padding: "2rem"
-        }}>
-          <h1 style={{
-            width: "100%",
-            textAlign: "center",
-            fontWeight: "bold",
-            paddingBottom: "0.5rem",
-            fontSize: "1.3rem"
-          }}>
+        <section
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            marginTop: "2rem",
+            padding: "2rem",
+          }}
+        >
+          <h1
+            style={{
+              width: "100%",
+              textAlign: "center",
+              fontWeight: "bold",
+              paddingBottom: "0.5rem",
+              fontSize: "1.3rem",
+            }}
+          >
             FRAGMENT DU GLYPH
           </h1>
           {hasFinishedQuest ? (

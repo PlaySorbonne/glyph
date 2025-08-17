@@ -1,6 +1,5 @@
 "use client";
 
-import { getAvailableMainQuests } from "@/actions/quests";
 import { NB_MAIN_QUESTS } from "@/utils";
 import { useState, useEffect } from "react";
 import Link from "next/link";
