@@ -99,6 +99,8 @@ export default function PixelMatch({
                   ? "rgba(128, 128, 128, 0.8)"
                   : cell
                   ? "rgba(0, 0, 0, 0.8)"
+                  : locked
+                  ? "transparent"
                   : "rgba(255, 255, 255, 0.8)",
                 cursor: locked ? "default" : "pointer",
                 transition: "background-color 150ms",
