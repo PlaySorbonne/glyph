@@ -10,7 +10,7 @@ INSERT INTO "Fraternity" ("id", "name", "description") VALUES
 (3, "Foli", "");
 
 
-INSERT INTO "Quest" ("id", "title", "mission", "description", "lieu", "points", "secondary") VALUES
-(1, "Quêtes secondaires", NULL, NULL, NULL, 0, true),
-(2, "Lieux cachés", NULL, NULL, NULL, 0, true),
-(3, "Les Associations", NULL, NULL, NULL, 0, true);
+INSERT INTO "Quest" ("id", "title", "mission", "description", "lieu", "points", "secondary", "parentId") VALUES
+(1, "Quêtes secondaires", NULL, NULL, NULL, 0, true, NULL),
+(2, "Lieux cachés", NULL, NULL, NULL, 0, true, 1),
+(3, "Les Associations", NULL, NULL, NULL, 0, true, 1);
