@@ -49,7 +49,7 @@ export default function GlyphMatch({
           setLastCheckedCoords(undefined);
         });
     },
-    [questId]
+    [questId, router]
   );
 
   return (
