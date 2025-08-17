@@ -50,7 +50,7 @@ export async function getUserFromSession(sessionId?: string) {
     });
   } catch (error) {
     console.error("Error getting user from session", sessionId);
-    await logout("La session n'existe pas");
+    return redirect(appUrl("/logout?error=Session%20invalide"));
   }
 
   if (!session) {
