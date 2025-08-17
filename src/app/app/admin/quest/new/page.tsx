@@ -15,6 +15,8 @@ import { Quest } from "@prisma/client";
 import prisma from "@/lib/db";
 import SubQuestsChooser from "../SubQuestsChooser";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewQuestPage() {
 
   let EmptyQuests = await prisma.quest.findMany({
