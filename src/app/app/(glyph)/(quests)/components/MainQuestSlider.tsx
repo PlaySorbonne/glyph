@@ -14,8 +14,6 @@ interface Quest {
 }
 
 export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
-  if (!quests || quests.length === 0) return null;
-
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -25,6 +23,7 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
     return () => clearInterval(interval);
   }, [quests.length]);
 
+  if (!quests || quests.length === 0) return null;
   return (
     <AnimatePresence mode="wait">
       <motion.div
