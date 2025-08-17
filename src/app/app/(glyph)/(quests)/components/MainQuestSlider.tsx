@@ -2,12 +2,20 @@
 
 import { getAvailableMainQuests } from "@/actions/quests";
 import { NB_MAIN_QUESTS } from "@/utils";
-import { Quest } from "@prisma/client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
+interface Quest {
+  id: number;
+  title: string;
+  description?: string | null;
+  mission?: string | null;
+}
+
 export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
+  if (!quests || quests.length === 0) return null;
+
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -20,7 +28,7 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={quests[index].id}
+        key={quests[index]?.id}
         initial={{ x: 300, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -300, opacity: 0 }}
@@ -36,6 +44,8 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
 }
 
 function QuestCard({ nb, quest }: { nb: number; quest: Quest }) {
+  if (!quest) return null;
+
   return (
     <Link href={`/app/quest/${quest.id}`}>
       <div

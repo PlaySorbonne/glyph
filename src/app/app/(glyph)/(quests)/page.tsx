@@ -12,7 +12,8 @@ import { keepKeysFromObjectArray } from "@/utils";
 
 export const revalidate = 3600; // invalidate every hour
 
-const keys = ["id", "title", "description", "starts", "ends"] as const;
+const secondaryKeys = ["id", "title", "description", "starts", "ends"] as const;
+const mainKeys = ["id", "title", "description", "mission"] as const;
 
 export default async function Home() {
   let user = await getUserFromSession();
@@ -50,40 +51,48 @@ export default async function Home() {
         width: "100%",
       }}
     >
-      <section
-        className={styles.section}
-        style={{
-          backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
-          backgroundRepeat: "no-repeat, no-repeat",
-          backgroundPosition:
-            "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
-          backgroundSize: "100px 100px, 100px 100px",
-          padding: "2rem",
-          overflow: "hidden",
-        }}
-      >
-        <MainQuestSlider quests={mainQuests} />
-      </section>
+      {mainQuests && mainQuests.length > 0 && (
+        <section
+          className={styles.section}
+          style={{
+            backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
+            backgroundRepeat: "no-repeat, no-repeat",
+            backgroundPosition:
+              "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
+            backgroundSize: "100px 100px, 100px 100px",
+            padding: "2rem",
+            overflow: "hidden",
+          }}
+        >
+          <MainQuestSlider
+            quests={keepKeysFromObjectArray(mainQuests, mainKeys)}
+          />
+        </section>
+      )}
 
-      <section
-        className={styles.section}
-        style={{
-          backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
-          backgroundRepeat: "no-repeat, no-repeat",
-          backgroundPosition:
-            "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
-          backgroundSize: "100px 100px, 100px 100px",
-          padding: "2rem",
-        }}
-      >
-        <SecondaryQuestList
-          quests={keepKeysFromObjectArray(secondaryQuests, keys)} // keeping only relevant keys so no "sensitive" data is sent to the client
-          unavailableQuests={keepKeysFromObjectArray(
-            unavailableSecondaryQuests,
-            keys
-          )}
-        />
-      </section>
+      {(secondaryQuests && secondaryQuests.length > 0) ||
+        (unavailableSecondaryQuests &&
+          unavailableSecondaryQuests.length > 0 && (
+            <section
+              className={styles.section}
+              style={{
+                backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
+                backgroundRepeat: "no-repeat, no-repeat",
+                backgroundPosition:
+                  "top -0.5rem right 0.5rem, bottom -0.5rem left 0.5rem",
+                backgroundSize: "100px 100px, 100px 100px",
+                padding: "2rem",
+              }}
+            >
+              <SecondaryQuestList
+                quests={keepKeysFromObjectArray(secondaryQuests, secondaryKeys)} // keeping only relevant keys so no "sensitive" data is sent to the client
+                unavailableQuests={keepKeysFromObjectArray(
+                  unavailableSecondaryQuests,
+                  secondaryKeys
+                )}
+              />
+            </section>
+          ))}
 
       <div
         style={{

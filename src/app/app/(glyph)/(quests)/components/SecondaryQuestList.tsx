@@ -16,6 +16,8 @@ export default function SecondaryQuestList({
   quests: Quest[];
   unavailableQuests?: Quest[];
 }) {
+  if ((!quests || quests.length === 0) && (!unavailableQuests || unavailableQuests.length === 0)) return null;
+
   return (
     <div>
       <h1
@@ -49,6 +51,8 @@ function QuestCard({
   quest: Quest;
   isUnavailable?: boolean;
 }) {
+  if (!quest) return null;
+
   return (
     <Link
       style={{
