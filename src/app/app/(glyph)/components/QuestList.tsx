@@ -12,13 +12,19 @@ interface Quest {
 export default function QuestList({
   quests,
   unavailableQuests,
-  name
+  name,
+  clickable = true,
 }: {
   quests: Quest[];
   unavailableQuests?: Quest[];
   name?: string;
+  clickable?: boolean;
 }) {
-  if ((!quests || quests.length === 0) && (!unavailableQuests || unavailableQuests.length === 0)) return null;
+  if (
+    (!quests || quests.length === 0) &&
+    (!unavailableQuests || unavailableQuests.length === 0)
+  )
+    return null;
   if (!name) name = "QUÊTES SECONDAIRES";
   name = name.toUpperCase();
 
@@ -41,7 +47,12 @@ export default function QuestList({
         ))}
         {unavailableQuests &&
           unavailableQuests.map((quest) => (
-            <QuestCard key={quest.id} quest={quest} isUnavailable />
+            <QuestCard
+              key={quest.id}
+              quest={quest}
+              isUnavailable
+              clickable={clickable}
+            />
           ))}
       </div>
     </div>
@@ -51,9 +62,11 @@ export default function QuestList({
 function QuestCard({
   quest,
   isUnavailable,
+  clickable,
 }: {
   quest: Quest;
   isUnavailable?: boolean;
+  clickable?: boolean;
 }) {
   if (!quest) return null;
 
@@ -67,8 +80,9 @@ function QuestCard({
         margin: "0.5rem 0",
         padding: "1rem",
         border: "1px solid #000",
+        cursor: clickable ? "pointer" : "default",
       }}
-      href={`/app/quest/${quest.id}`}
+      href={clickable ? `/app/quest/${quest.id}` : ""}
     >
       <h1
         style={{
@@ -89,12 +103,13 @@ function QuestCard({
           flexShrink: 0,
         }}
       >
-        {isUnavailable
-          ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
-              month: "numeric",
-              day: "numeric",
-            })}`
-          : "PLUS DE DÉTAILS"}
+        {clickable &&
+          (isUnavailable
+            ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
+                month: "numeric",
+                day: "numeric",
+              })}`
+            : "PLUS DE DÉTAILS")}
       </p>
     </Link>
   );

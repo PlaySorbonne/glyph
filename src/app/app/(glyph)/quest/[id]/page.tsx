@@ -13,6 +13,7 @@ import icons from "@/assets/icons";
 import Image from "next/image";
 import GlyphMatch from "./GlyphMatch";
 import PixelMatch from "@/app/app/components/PixelMatch";
+import QuestList from "../../components/QuestList";
 
 export default async function QuestPage({
   params,
@@ -187,6 +188,10 @@ export default async function QuestPage({
               {quest.description}
             </p>
           </div>
+        )}
+
+        {quest.subQuests && (
+          <QuestList quests={quest.subQuests} name="TÂCHES" clickable={false} />
         )}
       </section>
 
