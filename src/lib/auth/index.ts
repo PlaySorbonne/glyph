@@ -67,32 +67,5 @@ export async function signIn(data: signInData): Promise<
       expires: ttl,
     });
 
-  try {
-    let code = await prisma.code.findFirst({
-      where: {
-        code: "notwelcome",
-      },
-      include: {
-        quest: true,
-      },
-    });
-
-    if (!code || !code.quest) {
-      console.warn("WARNING: Pas de quête associé au code notwelcome.");
-      return out;
-    }
-
-    await prisma.history.create({
-      data: {
-        userId: out.user.id,
-        questId: code.quest.id,
-        codeId: code.id,
-        points: code.quest.points,
-      },
-    });
-  } catch (e: any) {
-    console.error(e);
-  }
-
   return out;
 }
