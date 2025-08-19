@@ -8,14 +8,13 @@ import {
 import Image from "next/image";
 import styles from "./page.module.css";
 import icons from "@/assets/icons";
-import { cutString } from "@/utils";
+import { cutString, NB_MAIN_QUESTS } from "@/utils";
 import Link from "next/link";
 
 export const revalidate = 3600; // invalidate every hour
 
 export default async function Book() {
   let user = await getUserFromSession();
-  let questNb = (await getMainQuests()).length;
   let [quests, finishedQuests, unavailableQuest] = await Promise.all([
     getAvailableMainQuests(user!.id),
     getFinishedMainQuests(user!.id),
@@ -48,7 +47,7 @@ export default async function Book() {
 
   return (
     <div className={styles.wrapper}>
-      {questNb === finishedQuests.length && (
+      {NB_MAIN_QUESTS === finishedQuests.length && (
         <section className={styles.finishedWrapper}>
           <div className={styles.finishedContent}>
             <h1 className={styles.title}>Félicitations !</h1>
