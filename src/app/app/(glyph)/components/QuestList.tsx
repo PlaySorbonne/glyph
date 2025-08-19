@@ -43,7 +43,7 @@ export default function QuestList({
         }}
       >
         {quests.map((quest) => (
-          <QuestCard key={quest.id} quest={quest} />
+          <QuestCard key={quest.id} quest={quest} clickable={clickable} />
         ))}
         {unavailableQuests &&
           unavailableQuests.map((quest) => (
@@ -69,6 +69,8 @@ function QuestCard({
   clickable?: boolean;
 }) {
   if (!quest) return null;
+
+  console.log(clickable)
 
   return (
     <Link
