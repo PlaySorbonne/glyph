@@ -51,7 +51,7 @@ export default function QuestList({
               key={quest.id}
               quest={quest}
               isUnavailable
-              clickable={clickable}
+              clickable={false}
             />
           ))}
       </div>
@@ -70,8 +70,6 @@ function QuestCard({
 }) {
   if (!quest) return null;
 
-  console.log(clickable)
-
   return (
     <Link
       style={{
@@ -84,7 +82,7 @@ function QuestCard({
         border: "1px solid #000",
         cursor: clickable ? "pointer" : "default",
       }}
-      href={clickable ? `/app/quest/${quest.id}` : ""}
+      href={clickable && !isUnavailable ? `/app/quest/${quest.id}` : ""}
     >
       <h1
         style={{
@@ -105,13 +103,14 @@ function QuestCard({
           flexShrink: 0,
         }}
       >
-        {clickable &&
-          (isUnavailable
-            ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
-                month: "numeric",
-                day: "numeric",
-              })}`
-            : "PLUS DE DÉTAILS")}
+        {isUnavailable
+          ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
+              month: "numeric",
+              day: "numeric",
+            })}`
+          : clickable
+          ? "PLUS DE DÉTAILS"
+          : ""}
       </p>
     </Link>
   );
