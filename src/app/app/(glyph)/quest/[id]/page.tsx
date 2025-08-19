@@ -1,5 +1,5 @@
 import { getUserFromSession } from "@/actions/auth";
-import { getQuest, hasUserFinishedQuest } from "@/actions/quests";
+import { getQuest, getSubQuests, hasUserFinishedQuest } from "@/actions/quests";
 import {
   appUrl,
   GLYPH_MAX_SIZE,
@@ -30,13 +30,18 @@ export default async function QuestPage({
     user!.id,
     parseInt(paramsA.id)
   );
-  let quest = await getQuest({ id: paramsA.id, includeSubquests: true });
+  let quest = await getQuest({ id: paramsA.id });
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
 
   let glyph = glyphStringToArray(quest.glyph) ?? [[]];
+
+  let [nonFinishedSubQuests, finishedSubQuests] = await getSubQuests(
+    quest.id,
+    user!.id
+  );
 
   if (!hasFinishedQuest && !isQuestAvailable(quest)) {
     quest = {
@@ -190,8 +195,14 @@ export default async function QuestPage({
           </div>
         )}
 
-        {quest.subQuests && (
-          <QuestList quests={quest.subQuests} name="TÂCHES" clickable={false} />
+        {((finishedSubQuests?.length ?? 0) > 0 ||
+          nonFinishedSubQuests?.length > 0) && (
+          <QuestList
+            quests={nonFinishedSubQuests}
+            finishedQuests={finishedSubQuests}
+            name="TÂCHES"
+            clickable={false}
+          />
         )}
       </section>
 

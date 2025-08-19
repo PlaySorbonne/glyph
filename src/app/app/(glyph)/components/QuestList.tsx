@@ -12,11 +12,13 @@ interface Quest {
 export default function QuestList({
   quests,
   unavailableQuests,
+  finishedQuests,
   name,
   clickable = true,
 }: {
   quests: Quest[];
   unavailableQuests?: Quest[];
+  finishedQuests?: Quest[];
   name?: string;
   clickable?: boolean;
 }) {
@@ -54,6 +56,15 @@ export default function QuestList({
               clickable={false}
             />
           ))}
+        {finishedQuests &&
+          finishedQuests.map((quest) => (
+            <QuestCard
+              key={quest.id}
+              quest={quest}
+              isFinished
+              clickable={false}
+            />
+          ))}
       </div>
     </div>
   );
@@ -63,10 +74,12 @@ function QuestCard({
   quest,
   isUnavailable,
   clickable,
+  isFinished,
 }: {
   quest: Quest;
   isUnavailable?: boolean;
   clickable?: boolean;
+  isFinished?: boolean;
 }) {
   if (!quest) return null;
 
@@ -110,6 +123,8 @@ function QuestCard({
             })}`
           : clickable
           ? "PLUS DE DÉTAILS"
+          : isFinished
+          ? "TERMINE"
           : ""}
       </p>
     </Link>

@@ -323,3 +323,41 @@ export async function userValidatedQuest(user: User, quest: Quest) {
 
   return out;
 }
+
+export async function getSubQuests(questId: number, userId?: string): Promise<[Quest[], undefined | Quest[]]> {
+  if (!userId) userId = undefined;
+  return Promise.all([
+    prisma.quest.findMany({
+      where: {
+        parentId: questId,
+        secondary: true,
+        ...dateCheck(),
+        History: userId
+          ? {
+              none: {
+                userId: userId,
+              },
+            }
+          : undefined,
+      },
+      orderBy: {
+        starts: "desc",
+      },
+    }),
+      prisma.quest.findMany({
+        where: {
+          parentId: questId,
+          secondary: true,
+          ...dateCheck(),
+          History: {
+            some: {
+              userId: userId,
+            },
+          },
+        },
+        orderBy: {
+          starts: "desc",
+        },
+      }),
+  ]);
+}
