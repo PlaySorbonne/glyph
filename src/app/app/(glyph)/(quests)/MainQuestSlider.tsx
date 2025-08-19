@@ -69,6 +69,8 @@ function QuestCard({ nb, quest }: { nb: number; quest: Quest }) {
           paddingLeft: "1rem",
           paddingTop: "1rem",
           height: "min(10vh, 150px)",
+          textOverflow: "ellipsis",
+          overflow: "hidden",
         }}
       >
         {quest.mission}
