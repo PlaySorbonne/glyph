@@ -91,7 +91,10 @@ model Quest {
   createdAt   DateTime  @default(now())
   horaires    String?
   points      Int       @default(1)
-  
+
+  clickable   Boolean   @default(true)
+  hidden      Boolean   @default(false)
+
   // for Secondary quests
   secondary   Boolean   @default(true)
 
@@ -100,7 +103,7 @@ model Quest {
   glyphPositionY Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
                       // Maximum 29 * 29
-  img         String? // LEGACY. may not be used, is replaced by the glyph
+  img         String? // DEPRECATED . may not be used, is replaced by the glyph
 
   // For wrapping quests
   parentId   Int?    
