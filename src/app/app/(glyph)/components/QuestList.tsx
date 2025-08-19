@@ -89,7 +89,7 @@ function QuestCard({
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        backgroundColor: "#ffe",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
         margin: "0.5rem 0",
         padding: "1rem",
         border: "1px solid #000",
