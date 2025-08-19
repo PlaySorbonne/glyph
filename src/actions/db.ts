@@ -103,7 +103,7 @@ export async function importDatabaseFromCSV(formData: FormData) {
   fileContent = fileContent.substring(position + 1, fileContent.length);
 
   let records;
-  let quests: (Quest & { code?: string })[];
+  let quests: Quest[];
   try {
     records = parse(fileContent, {
       columns: true,
@@ -113,12 +113,11 @@ export async function importDatabaseFromCSV(formData: FormData) {
       if (!record["Nom"]) {
         return null;
       }
-      return { // FIXME
+      return {
         title: record["Nom"],
         lieu: record["Lieu"],
         starts: convertDDMMToDate(record["Date Début"]),
         ends: convertDDMMToDate(record["Date Fin"]),
-        code: record["Qrcode"],
         mission: record["Mission"],
         description: record["Description immersive"],
         lore: record["Lore"],
@@ -126,7 +125,10 @@ export async function importDatabaseFromCSV(formData: FormData) {
         indice: record["Indice"],
         secondary: !["Principale", "Début"].includes(record["Style"]),
         horaires: record["Horaires"],
-      } as Quest & { code?: string };
+        glyph: record["glyph"],
+        glyphPositionX: parseInt(record["X"]),
+        glyphPositionY: parseInt(record["Y"]),
+      } as Quest;
     });
     quests = quests.filter((quest) => quest !== null);
   } catch (error) {
@@ -139,46 +141,17 @@ export async function importDatabaseFromCSV(formData: FormData) {
   let error = "";
 
   try {
-    for (const quest of quests) {
-      let { code, ...questWithoutCode } = quest;
-      console.log("adding quest", questWithoutCode.title);
-      let dbQuest = await prisma.quest.upsert({
-        where: { title: questWithoutCode.title },
-        update: questWithoutCode,
-        create: questWithoutCode,
-      });
-      console.log("quest added", dbQuest.id);
-      if (code) {
-        console.log("adding code", code);
-        let dbCode = await prisma.code.upsert({
-          where: { code: code },
-          update: {
-            questId: dbQuest.id,
-            isQuest: true,
-            points: quest.points,
-          },
-          create: {
-            code: code,
-            questId: dbQuest.id,
-            isQuest: true,
-            points: quest.points,
-          },
+    await Promise.all(
+      quests.map(async (quest) => {
+        console.log("adding quest", quest.title);
+        let dbQuest = await prisma.quest.upsert({
+          where: { title: quest.title },
+          update: quest,
+          create: quest,
         });
-        console.log("code added", dbCode.id);
-      } else {
-        code = generateCode();
-        console.log("generating code", code);
-        let dbCode = await prisma.code.create({
-          data: {
-            code: code,
-            questId: dbQuest.id,
-            isQuest: true,
-            points: quest.points,
-          },
-        });
-        console.log("code added", dbCode.id);
-      }
-    }
+        console.log("quest added", dbQuest.id);
+      })
+    );
   } catch (error) {
     console.error("Error importing database from CSV:", error);
     error = "Failed to import database from CSV";
@@ -195,44 +168,48 @@ export async function importDatabaseFromCSV(formData: FormData) {
 
 export async function recalculateScore() {
   "use server";
-  
+
   let codes = await prisma.code.findMany({
     include: {
       quest: true,
     },
   });
-  
-  for (let code of codes) {
-    if (code.quest) {
-      await prisma.code.update({
-        where: {
-          id: code.id,
-        },
-        data: {
-          points: code.quest.points,
-        },
-      });
-    }
-  }
-  
+
+  await Promise.all(
+    codes.map(async (code) => {
+      if (code.quest) {
+        await prisma.code.update({
+          where: {
+            id: code.id,
+          },
+          data: {
+            points: code.quest.points,
+          },
+        });
+      }
+    })
+  );
+
   let users = await prisma.user.findMany({
     include: {
       History: true,
     },
   });
 
-  for (let user of users) {
-    let score =
-      user?.History.reduce((acc, history) => acc + history.points, 0) || 0;
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        score,
-      },
-    });
-  }
+  await Promise.all(
+    users.map(async (user) => {
+      let score =
+        user?.History.reduce((acc, history) => acc + history.points, 0) || 0;
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          score,
+        },
+      });
+    })
+  );
 
   let fraternities = await prisma.fraternity.findMany({
     include: {
@@ -240,17 +217,19 @@ export async function recalculateScore() {
     },
   });
 
-  for (let fraternity of fraternities) {
-    let score = fraternity.users.reduce((acc, user) => acc + user.score, 0);
-    await prisma.fraternity.update({
-      where: {
-        id: fraternity.id,
-      },
-      data: {
-        score,
-      },
-    });
-  }
-  
+  await Promise.all(
+    fraternities.map(async (fraternity) => {
+      let score = fraternity.users.reduce((acc, user) => acc + user.score, 0);
+      await prisma.fraternity.update({
+        where: {
+          id: fraternity.id,
+        },
+        data: {
+          score,
+        },
+      });
+    })
+  );
+
   return redirect(appUrl("/admin?message=Scores recalculated"));
 }
