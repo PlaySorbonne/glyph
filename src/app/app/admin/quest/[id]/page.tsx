@@ -13,6 +13,7 @@ import {
 import PixelMatch from "@/app/app/components/PixelMatch";
 import prisma from "@/lib/db";
 import SubQuestsChooser from "../SubQuestsChooser";
+import { DateTime } from "luxon";
 
 export default async function EditQuestPage(props: {
   params: Promise<{ id: string }>;
@@ -66,10 +67,10 @@ export default async function EditQuestPage(props: {
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
-        ? new Date(formData.get("starts") as string)
+        ? DateTime.fromISO(formData.get("starts") as string, { zone: "Europe/Paris" }).toJSDate()
         : null,
       ends: formData.get("ends")
-        ? new Date(formData.get("ends") as string)
+        ? DateTime.fromISO(formData.get("ends") as string, { zone: "Europe/Paris" }).toJSDate()
         : null,
       horaires: (formData.get("horaires") as string) || null,
       glyph: glyphStr || null,

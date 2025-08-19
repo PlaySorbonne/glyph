@@ -2,6 +2,7 @@ import React from "react";
 import { addCode } from "@/actions/code";
 import { redirect } from "next/navigation";
 import { appUrl } from "@/utils";
+import { DateTime } from "luxon";
 
 export default function NewCodePage() {
   const handleSubmit = async (formData: FormData) => {
@@ -14,7 +15,7 @@ export default function NewCodePage() {
       isQuest: formData.get("questId") ? true : false,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
-        ? new Date(formData.get("expires") as string)
+        ? DateTime.fromISO(formData.get("expires") as string, { zone: "Europe/Paris" }).toJSDate()
         : undefined,
       questId: formData.get("questId")
         ? parseInt(formData.get("questId") as string)

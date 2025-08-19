@@ -2,6 +2,7 @@ import React from "react";
 import { addCodeToQuest } from "@/actions/code";
 import { redirect } from "next/navigation";
 import { appUrl } from "@/utils";
+import { DateTime } from "luxon";
 
 export default async function NewQuestCodePage(props: {
   params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ export default async function NewQuestCodePage(props: {
       code: formData.get("code") as string,
       description: (formData.get("description") as string) || null,
       expires: formData.get("expires")
-        ? new Date(formData.get("expires") as string)
+        ? DateTime.fromISO(formData.get("expires") as string, { zone: "Europe/Paris" }).toJSDate()
         : null,
     };
 

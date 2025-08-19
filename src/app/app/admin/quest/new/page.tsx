@@ -14,11 +14,11 @@ import PixelMatch from "@/app/app/components/PixelMatch";
 import { Quest } from "@prisma/client";
 import prisma from "@/lib/db";
 import SubQuestsChooser from "../SubQuestsChooser";
+import { DateTime } from "luxon";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewQuestPage() {
-
   let EmptyQuests = await prisma.quest.findMany({
     where: { parentId: null },
     select: { id: true, title: true },
@@ -54,10 +54,14 @@ export default async function NewQuestPage() {
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
-        ? new Date(formData.get("starts") as string)
+        ? DateTime.fromISO(formData.get("starts") as string, {
+            zone: "Europe/Paris",
+          }).toJSDate()
         : null,
       ends: formData.get("ends")
-        ? new Date(formData.get("ends") as string)
+        ? DateTime.fromISO(formData.get("ends") as string, {
+            zone: "Europe/Paris",
+          }).toJSDate()
         : null,
       horaires: (formData.get("horaires") as string) || null,
       glyph: glyphStr,

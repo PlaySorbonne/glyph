@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { codeFormat } from "@/utils/zod";
 import { appUrl } from "@/utils";
 import Link from "next/link";
+import { DateTime } from "luxon";
 
 export default async function EditCodePage(props: {
   params: Promise<{ id: string }>;
@@ -25,7 +26,7 @@ export default async function EditCodePage(props: {
       isQuest: formData.get("questId") ? true : false,
       points: parseInt(formData.get("points") as string) || undefined,
       expires: formData.get("expires")
-        ? new Date(formData.get("expires") as string)
+        ? DateTime.fromISO(formData.get("expires") as string, { zone: "Europe/Paris" }).toJSDate()
         : null,
       questId: formData.get("questId")
         ? parseInt(formData.get("questId") as string)
