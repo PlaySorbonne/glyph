@@ -19,7 +19,7 @@ export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
 
     if (result.error) {
       console.error(result.msg);
-      redirect(`?error=${result.msg}`);
+      redirect(appUrl(`/login?error=${result.msg}`));
     }
 
     (await cookies()).set("session", result.session, {
