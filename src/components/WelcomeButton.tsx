@@ -17,8 +17,6 @@ export default function WelcomeButton(props: {
         textDecoration: "none",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        fontFamily: "DCC-Ash",
-        letterSpacing: "0.1rem",
         fontSize: "1.2rem",
       }}
     >

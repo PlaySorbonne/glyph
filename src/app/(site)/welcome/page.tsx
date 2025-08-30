@@ -79,7 +79,7 @@ export default async function Welcome() {
                 justifyContent: "center",
               }}
             >
-              <WelcomeButton link="/app/login">Déjà un compte ?</WelcomeButton>
+              <WelcomeButton link="/app/login">Déjà Inscrit</WelcomeButton>
             </div>
 
             <div

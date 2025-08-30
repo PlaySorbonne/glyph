@@ -38,7 +38,8 @@ export default function WelcomePage(
           padding: "2rem",
           borderRadius: "1rem",
           minWidth: "70%",
-          maxWidth: "90%",
+          maxWidth: "900px",
+          margin: "0 2rem",
           backgroundColor: "rgba(255, 255, 255, 0.5)",
         }}
       >
