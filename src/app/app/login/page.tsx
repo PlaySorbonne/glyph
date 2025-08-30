@@ -31,7 +31,11 @@ export default async function Login({
         backgroundPosition: "center",
       }}
     >
-      <div className="p-8 bg-white shadow-md rounded-lg">
+      <div className="p-8 bg-white shadow-md rounded-lg" style={{
+        width: "100%",
+        maxWidth: "400px",
+        margin: "0 1rem",
+      }}>
         <h1
           className="text-2xl font-bold mb-6 text-center"
           style={{

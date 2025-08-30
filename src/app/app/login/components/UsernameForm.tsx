@@ -3,6 +3,7 @@ import { signIn } from "@/lib/auth";
 import { appUrl, SESSION_TTL } from "@/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import UserInput from "./UserInput";
 
 export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
   allowLogin = allowLogin ?? true;
@@ -65,13 +66,7 @@ export default function UsernameForm({ allowLogin }: { allowLogin?: boolean }) {
         >
           Nom d&apos;utilisateur
         </label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-          required
-        />
+        <UserInput name="username" />
       </div>
       <button
         type="submit"
