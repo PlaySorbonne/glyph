@@ -13,6 +13,7 @@ import Image from "next/image";
 import GlyphMatch from "./GlyphMatch";
 import PixelMatch from "@/app/app/components/PixelMatch";
 import QuestList from "../../components/QuestList";
+import TutoNew from "./TutoNew";
 
 export default async function QuestPage({
   params,
@@ -84,9 +85,11 @@ export default async function QuestPage({
         width: "100%",
       }}
     >
+      {quest.title.includes("Héros") && !hasFinishedQuest && <TutoNew />}
       <section
+        id="title-quest"
         style={{
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
           padding: "1rem",
           display: "flex",
           justifyContent: "center",
@@ -128,6 +131,7 @@ export default async function QuestPage({
           backgroundSize: "100px 100px, 100px 100px",
           padding: "2rem",
         }}
+        id="info-quest"
       >
         {quest.mission && (
           <p>
@@ -196,19 +200,22 @@ export default async function QuestPage({
 
         {((finishedSubQuests?.length ?? 0) > 0 ||
           nonFinishedSubQuests?.length > 0) && (
-          <QuestList
-            quests={nonFinishedSubQuests}
-            finishedQuests={finishedSubQuests}
-            name="TÂCHES"
-            clickable={false}
-          />
+          <div id="sub-quests">
+            <QuestList
+              quests={nonFinishedSubQuests}
+              finishedQuests={finishedSubQuests}
+              name="TÂCHES"
+              clickable={false}
+            />
+          </div>
         )}
       </section>
 
       {!quest.secondary && (
         <section
+          id="glyph-quest"
           style={{
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
             marginTop: "2rem",
             padding: "2rem",
           }}

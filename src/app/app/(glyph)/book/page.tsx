@@ -21,6 +21,14 @@ export default async function Book() {
     getUnavailableMainQuests(),
   ]);
 
+  const nbFinishedMainQuests = finishedQuests.length;
+
+  if (nbFinishedMainQuests === 0) {
+    let [heroQuest] = quests.filter((q) => q.title.includes("Héros"));
+    unavailableQuest = [...quests, ...unavailableQuest];
+    quests = [heroQuest];
+  }
+
   unavailableQuest = unavailableQuest
     .map((quest) => {
       if (quest.ends && quest.ends < new Date()) {
@@ -32,18 +40,19 @@ export default async function Book() {
           { length: 4 + Math.floor(Math.random() * 9) },
           () => "█"
         ).join(""),
-        mission:
-          "La quête sera disponible à partir du " +
-          quest.starts!.toLocaleDateString("fr-FR", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
+        mission: quest.starts
+          ? "La quête sera disponible à partir du " +
+            quest.starts!.toLocaleDateString("fr-FR", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "Vous n'avez pas encore débloqué cette quête",
       };
     })
     .filter((quest) => quest !== null)
-    .sort((a, b) => a.starts!.getTime() - b.starts!.getTime());
+    .sort((a, b) => (a.starts?.getTime() ?? 0) - (b.starts?.getTime() ?? 0));
 
   return (
     <div className={styles.wrapper}>
@@ -79,10 +88,19 @@ export default async function Book() {
           </div>
         </section>
       )}
-      <h1 className={styles.title}>Quêtes du Glyph</h1>
-      <p className={styles.description}>
-        Accomplissez les quêtes pour progresser et découvrir le campus
-      </p>
+      <section
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          padding: "2rem",
+          borderRadius: "8px",
+          margin: "1rem 0",
+        }}
+      >
+        <h1 className={styles.title}>Quêtes du Glyph</h1>
+        <p className={styles.description}>
+          Accomplissez les quêtes pour progresser et découvrir le campus
+        </p>
+      </section>
       <section className={styles.quests}>
         {quests.map((quest) => (
           <Link

@@ -10,7 +10,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={styles.navbar} id="navbar">
       <Link
         href="/app"
         className={`${styles.navItem} ${

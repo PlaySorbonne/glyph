@@ -168,20 +168,10 @@ export const FAQ = [
       "Vous pouvez participer au tournois des trois familles MAIS vous serez bloqués dans la quête principale certaines quêtes nécessite d'avoir des identifiants SU.",
   },
   {
-    question: "Mon téléphone ne peut pas scanner de QR code puis-je jouer ?",
-    answer:
-      "Certains navigateurs tels que firefox et chrome propose la fonction de scanner des QR code lorsqu'on clique sur la barre d'URL.",
-  },
-  {
     question:
       "Je suis bloqué dans une quête à qui puis-je demander des indices ?",
     answer:
-      "Quête principale : les porteurs de brassard vert avec les pins qui sont dans le lieu de la quête. Autres quêtes : les Personnes Sympa et Utiles avec des brassards verts et pins qui sont au stand de PSU ou qui se baladent.",
-  },
-  {
-    question: "J'ai oublié de faire valider une de mes quêtes que faire ?",
-    answer:
-      "Retournez simplement voir le donneur de quête ou la personne référente du lieu pour qu'il vous donne le QR code de validation de votre quête.",
+      "À l'accueil si c'est dans une bibliothèque. Sinon les Personnes Sympa et Utiles qui sont au stand de PSU devant la Maison Vie Étudiante ou qui se baladent. Mais aussi sur le serveur discord de Play Sorbonne Université !",
   },
   {
     question: "Dois-je faire les quêtes principales dans l'ordre ?",
@@ -191,12 +181,12 @@ export const FAQ = [
   {
     question: "J'ai d'autres questions, qui puis-je contacter ?",
     answer:
-      "Envoyer un message à play_sorbonne_u sur instagram ou bien en nous écrivant à glyph@playsorbonne.fr.",
+      "Vous pouvez soit envoyer un message à play_sorbonne_u sur instagram, ou nous écrire à glyph@playsorbonne.fr, ou nous contacter sur le serveur discord de Play Sorbonne Université.",
   },
   {
     question: "Je souhaite supprimer mes données, que faire ?",
     answer:
-      "Envoyer un mail à dev@playsorbonne.fr en précisant votre nom d'utilisateur et les données à supprimer.",
+      "Envoyez un mail à dev@playsorbonne.fr en précisant votre nom d'utilisateur et les données à supprimer. Pour information, nous ne stockons aucune donnée personnelle sauf votre adresse mail chiffrée (hashée) si vous utilisez une méthode de connexion tel que google ou discord.",
   },
 ];
 

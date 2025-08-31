@@ -10,6 +10,7 @@ import MainQuestSlider from "./MainQuestSlider";
 import icons from "@/assets/icons";
 import QuestList from "../components/QuestList";
 import { keepKeysFromObjectArray } from "@/utils";
+import TutoNew from "./TutoNew";
 
 export const revalidate = 3600; // invalidate every hour
 
@@ -57,9 +58,8 @@ export default async function Home() {
         width: "100%",
       }}
     >
-
-
-      <div
+      <TutoNew />
+      {nbFinishedMainQuests > 0 && <div
         style={{
           textAlign: "center",
           backgroundColor: "rgba(255, 255, 255, 0.7)",
@@ -75,10 +75,11 @@ export default async function Home() {
           Retrouvez-nous à nos permanences devant la maison de vie étudiante
           pour plus de quêtes !
         </p>
-      </div>
+      </div>}
 
       {mainQuests && mainQuests.length > 0 && (
         <section
+          id="main-quests-section"
           className={styles.section}
           style={{
             backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
@@ -108,6 +109,7 @@ export default async function Home() {
         (unavailableSecondaryQuests &&
           unavailableSecondaryQuests.length > 0)) && (
         <section
+          id="secondary-quests-section"
           className={styles.section}
           style={{
             backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,

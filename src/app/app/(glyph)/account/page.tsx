@@ -28,7 +28,7 @@ export default async function Account() {
       >
         Mon Compte
       </h1>
-      <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-6">
+      <div className="bg-white bg-opacity-70 backdrop-blur-lg rounded-xl shadow-lg p-6">
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Informations</h2>
           <div className="space-y-2">
