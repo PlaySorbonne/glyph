@@ -21,7 +21,6 @@ export async function GET(
           id: true,
           name: true,
           isAdmin: true,
-          welcomed: true,
           fraternityId: true,
         },
       },
@@ -37,7 +36,6 @@ export async function GET(
     name: session.user.name,
     session: session,
     isAdmin: session.user.isAdmin,
-    welcomed: session.user.welcomed,
     fraternityId: session.user.fraternityId,
   });
 }
