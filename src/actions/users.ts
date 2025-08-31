@@ -64,7 +64,6 @@ export async function updateUser(
     if (!hasProvider) {
       console.warn("User has no provider, cannot update isAdmin");
     }
-    // let emailVerified = user?.emailVerified ?? false;
     data.isAdmin = Boolean(hasProvider);
   }
 
