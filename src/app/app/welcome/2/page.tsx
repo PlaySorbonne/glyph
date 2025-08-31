@@ -1,5 +1,9 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
-import { joinRandomFraternity, updateUserSelf } from "@/actions/users";
+import {
+  joinFraternity,
+  joinRandomFraternity,
+  updateUserSelf,
+} from "@/actions/users";
 import Fraternities from "@/assets/fraternities";
 import { appUrl } from "@/utils";
 import { cookies } from "next/headers";
@@ -12,23 +16,36 @@ export default async function Welcome1Page() {
     redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
   }
 
+  let awaitedCookie = await cookies();
+
+  let alreadyCookie = awaitedCookie.get("fraternityId")?.value;
+
   async function handleSubmit() {
     "use server";
     if (user?.fraternityId) {
       redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
     }
 
+    let awaitedCookie = await cookies();
+
     let fraternityId: number;
     try {
-      fraternityId = await joinRandomFraternity(user!.id);
+      if (alreadyCookie) {
+        // If cookie already exists, probably same player so same fraternity hihi
+        fraternityId = parseInt(alreadyCookie);
+        await joinFraternity(user!.id, fraternityId);
+      } else fraternityId = await joinRandomFraternity(user!.id);
     } catch (error) {
+      awaitedCookie.delete("fraternityId");
       if (error instanceof Error) {
-        redirect(appUrl(`/welcome/2?error=${error.message}`));
+        redirect(
+          appUrl(`/welcome/2?error=Une erreur est survenue : ${error.message}`)
+        );
       } else {
         redirect(appUrl(`/welcome/2?error=Une erreur inconnue est survenue`));
       }
     }
-    (await cookies()).set("fraternityId", fraternityId.toString());
+    awaitedCookie.set("fraternityId", fraternityId.toString());
     redirect(appUrl(`/welcome/3?fraternityId=${fraternityId}`));
   }
 
@@ -42,15 +59,23 @@ export default async function Welcome1Page() {
       }}
     >
       <div className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center" style={{
-          fontFamily: "DCC-Ash",
-          letterSpacing: "0.2rem",
-        }}>
+        <h1
+          className="text-3xl font-bold mb-6 text-center"
+          style={{
+            fontFamily: "DCC-Ash",
+            letterSpacing: "0.2rem",
+          }}
+        >
           Votre fratrie...
         </h1>
-        <p style={{
-          padding: "1rem 0"
-        }}>Répondez à cette question pour que l&apos;on vous assigne votre fratrie</p>
+        <p
+          style={{
+            padding: "1rem 0",
+          }}
+        >
+          Répondez à cette question pour que l&apos;on vous assigne votre
+          fratrie
+        </p>
         <form action={handleSubmit} className="space-y-4">
           <Questions questions={questions} submit={handleSubmit} />
         </form>
