@@ -25,7 +25,7 @@ je met juste qlq notes ici en attendant de faire une vraie doc (surtout les part
 - AUTH_GOOGLE_ID et AUTH_GOOGLE_SECRET: codes pour l'authentification google
 - AUTH_DISCORD_ID et AUTH_DISCORD_SECRET: codes pour l'authentification discord
 
-- SALT: une chaîne de caractère aléatoire pour le hachage des emails, peut-être passer en un salt unique pas utilisateur
+- PEPPER: une chaîne de caractère aléatoire pour le hachage des emails, peut-être ajouter un salt
 
 ## Quêtes accueil & fin
 

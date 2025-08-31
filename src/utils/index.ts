@@ -151,12 +151,12 @@ export function convertDDMMToDate(
   return date;
 }
 
-export function hash(str: string, salt: string | undefined = process.env.SALT) {
-  if (!salt) {
-    throw new Error("No salt provided");
+export function hash(str: string, pepper: string | undefined = process.env.PEPPER) {
+  if (!pepper) {
+    throw new Error("No pepper provided");
   }
   return createHash("sha256")
-    .update(str + salt)
+    .update(str + pepper)
     .digest("hex");
 }
 
