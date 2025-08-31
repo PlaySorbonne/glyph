@@ -261,3 +261,15 @@ export async function getUserScoreHistory(userId: string) {
     },
   });
 }
+
+export async function getUserClassement(score: number): Promise<number> {
+  let classement = await prisma.user.findMany({
+    select: {
+      score: true,
+    },
+    orderBy: {
+      score: "desc",
+    },
+  });
+  return classement.findIndex((u) => u.score === score) + 1;
+}

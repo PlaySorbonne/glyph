@@ -1,7 +1,6 @@
 .wrapper {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.7);
   padding: 1rem;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 2rem; 
 }

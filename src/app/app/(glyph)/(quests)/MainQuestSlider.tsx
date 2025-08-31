@@ -48,9 +48,13 @@ export default function MainQuestSlider({
 
 function QuestCard({ nb, quest }: { nb: number; quest: Quest }) {
   if (!quest) return null;
+  let link = `/app/book`;
+  if (quest.title.includes("Héros")) {
+    link = `/app/quest/${quest.id}`;
+  }
 
   return (
-    <Link href={`/app/quest/${quest.id}`}>
+    <Link href={link}>
       <div
         style={{
           width: "100%",

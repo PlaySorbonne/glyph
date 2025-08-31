@@ -2,7 +2,7 @@ import { getUserFromSession } from "@/actions/auth";
 import { getFraternity } from "@/actions/fraternity";
 import Setting from "./components/Setting";
 import { FAQ, appUrl } from "@/utils";
-import { getUserScoreHistory } from "@/actions/users";
+import { getUserScoreHistory, getUserClassement } from "@/actions/users";
 import { getFinishedMainQuests, getQuests } from "@/actions/quests";
 import Link from "next/link";
 
@@ -37,6 +37,9 @@ export default async function Account() {
             </p>
             <p className="text-lg">
               <span className="font-semibold">Score:</span> {user?.score} points
+            </p>
+            <p className="text-lg">
+              <span className="font-semibold">Classement:</span> {await getUserClassement(user!.score)}
             </p>
             <p className="text-lg">
               <span className="font-semibold">
@@ -96,6 +99,35 @@ export default async function Account() {
               </Setting>
             ))}
           </Setting>
+        </section>
+        <section style={{
+          marginTop: "2rem",
+          paddingLeft: "1rem"
+        }}>
+          <p>
+            Suivez Play Sorbonne Université sur les réseaux !
+          </p>
+          <p>
+            <Link href="https://www.instagram.com/play_sorbonne_u/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+              Instagram
+            </Link>
+          </p>
+          <p>
+            <Link href="https://discord.gg/be5X7qMNSQ" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+              Discord
+            </Link>
+          </p>
+          <p>
+            <Link href="https://www.youtube.com/@PlaySorbonne" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+              Youtube
+            </Link>
+          </p>
+          <p>
+            <Link href="https://www.twitch.tv/play_sorbonne" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+              Twitch
+            </Link>
+          </p>
+
         </section>
       </div>
     </div>

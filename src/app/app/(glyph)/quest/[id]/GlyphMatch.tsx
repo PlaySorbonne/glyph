@@ -37,7 +37,6 @@ export default function GlyphMatch({
             } else {
               console.log("Glyph check result:", data);
               if (data.success) {
-                alert(data.message);
                 router.refresh();
               }
             }
