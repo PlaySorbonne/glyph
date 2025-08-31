@@ -3,6 +3,8 @@
 import Link from "next/link";
 import styles from "./Navbar.module.css";
 import { usePathname } from "next/navigation";
+import BooleanGridSVG from "../BooleanGridSVG";
+import { HeroGlyphBool } from "@/utils";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -38,20 +40,12 @@ export default function Navbar() {
         </svg>
       </Link>
       <Link
-        href="/app/score"
+        href="/app/glyph"
         className={`${styles.navItem} ${
-          pathname === "/app/score" ? styles.active : ""
+          pathname === "/app/glyph" ? styles.active : ""
         }`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          width="24"
-          height="24"
-        >
-          <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
-        </svg>
+        <BooleanGridSVG grid={HeroGlyphBool} width={24} height={24}/>
       </Link>
       <Link
         href="/app/book"
@@ -67,22 +61,6 @@ export default function Navbar() {
           height="24"
         >
           <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z" />
-        </svg>
-      </Link>
-      <Link
-        href="/app/map"
-        className={`${styles.navItem} ${
-          pathname === "/app/map" ? styles.active : ""
-        }`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          width="24"
-          height="24"
-        >
-          <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
         </svg>
       </Link>
       <Link

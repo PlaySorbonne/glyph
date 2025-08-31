@@ -10,7 +10,9 @@ export const NB_MAIN_QUESTS = 8; // number of main quests
 // cf prisma/migrations/..._init_db
 export const SECONDARYQUESTS_WRAPPERID = 1; // id of the wrapper for secondary quests in the database
 
-export const isQuestSecondary = (quest: Quest) => quest.secondary; // May change so 
+export const HeroGlyphString =
+  "00100000,01110000,11101000,01110100,11110011,10110000,00010000";
+export const HeroGlyphBool = glyphStringToArray(HeroGlyphString)!;
 
 export function keepKeysFromObject<T extends object, K extends keyof T>(
   obj: T,
@@ -26,7 +28,7 @@ export function keepKeysFromObjectArray<T extends object, K extends keyof T>(
   keys: K[] | readonly K[]
 ): Array<{ [key in K]: T[key] }> {
   return arr.map((obj) => keepKeysFromObject(obj, keys));
-};
+}
 
 export function glyphStringToArray(glyph: string | null | undefined) {
   return glyph
@@ -350,5 +352,5 @@ const words = [
   "four",
   "onde",
   "fusee",
-  "livre"
-]
+  "livre",
+];
