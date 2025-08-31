@@ -2,6 +2,17 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const softCache = new Map<
+  string,
+  {
+    id: string;
+    name: string | null;
+    isAdmin: boolean;
+    fraternityId: number | null;
+    session: string;
+  }
+>();
+
 export async function middleware(request: NextRequest) {
   // Store current request url in a custom header, which you can read later
   const requestHeaders = new Headers(request.headers);
@@ -31,31 +42,39 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  let infoUrl = new URL(
-    `/api/access/${encodeURIComponent(session ?? "")}`,
-    process.env.NEXT_PUBLIC_MAIN_URL
-  );
-  let infoResponse = await fetch(infoUrl, { cache: "force-cache" });
-
-  if (!infoResponse.ok) {
-    return NextResponse.redirect(
-      new URL(
-        "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
-        process.env.NEXT_PUBLIC_MAIN_URL
-      )
-    );
-  }
-
   let info;
-  try {
-    info = await infoResponse.json();
-  } catch (error) {
-    return NextResponse.redirect(
-      new URL(
-        "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
-        process.env.NEXT_PUBLIC_MAIN_URL
-      )
+
+  if (softCache.has(session)) {
+    info = softCache.get(session);
+  } else {
+    let infoUrl = new URL(
+      `/api/access/${encodeURIComponent(session ?? "")}`,
+      process.env.NEXT_PUBLIC_MAIN_URL
     );
+    let infoResponse = await fetch(infoUrl, { cache: "force-cache" });
+
+    if (!infoResponse.ok) {
+      return NextResponse.redirect(
+        new URL(
+          "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
+          process.env.NEXT_PUBLIC_MAIN_URL
+        )
+      );
+    }
+
+    try {
+      info = await infoResponse.json();
+    } catch (error) {
+      return NextResponse.redirect(
+        new URL(
+          "/app/logout?error=Il y a eu un problème lors de la vérification de votre statut",
+          process.env.NEXT_PUBLIC_MAIN_URL
+        )
+      );
+    }
+    if (info && info.fraternityId && info.name) {
+      softCache.set(session, info);
+    }
   }
 
   if (request.nextUrl.pathname.includes("/admin") && !info.isAdmin) {
