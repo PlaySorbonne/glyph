@@ -57,6 +57,26 @@ export default async function Home() {
         width: "100%",
       }}
     >
+
+
+      <div
+        style={{
+          textAlign: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          borderRadius: "0.5rem",
+          padding: "1rem",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        <p>
+          Retrouvez-nous à nos permanences devant la maison de vie étudiante
+          pour plus de quêtes !
+        </p>
+      </div>
+
       {mainQuests && mainQuests.length > 0 && (
         <section
           className={styles.section}
@@ -82,7 +102,9 @@ export default async function Home() {
         </section>
       )}
 
-      {((secondaryQuests && secondaryQuests.length > 0) ||
+      {((nbFinishedMainQuests > 0 &&
+        secondaryQuests &&
+        secondaryQuests.length > 0) ||
         (unavailableSecondaryQuests &&
           unavailableSecondaryQuests.length > 0)) && (
         <section
@@ -106,10 +128,10 @@ export default async function Home() {
         </section>
       )}
 
-      <div
+      {nbFinishedMainQuests === 0 && <div
         style={{
           textAlign: "center",
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
           borderRadius: "0.5rem",
           padding: "1rem",
           backdropFilter: "blur(16px)",
@@ -119,10 +141,9 @@ export default async function Home() {
         }}
       >
         <p>
-          Retrouvez-nous à nos permanences devant la maison de vie étudiante
-          pour plus de quêtes !
+          Cliquez sur la quête du héros pour commencer votre aventure !
         </p>
-      </div>
+      </div>}
     </div>
   );
 }

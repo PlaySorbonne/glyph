@@ -119,7 +119,7 @@ export default async function QuestPage({
 
       <section
         style={{
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
           marginTop: "2rem",
           backgroundImage: `url(${icons.corner.src}), url(${icons.corner2.src})`,
           backgroundRepeat: "no-repeat, no-repeat",
