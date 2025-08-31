@@ -45,15 +45,12 @@ model TheGame {
 }
 
 model User {
-  id            String  @id @default(cuid())
-  name          String? @unique
-  displayName   String?
-  email         String? @unique
-  emailVerified Boolean @default(false)
-  image         String?
-  isAdmin       Boolean @default(false)
-  score         Int     @default(0)
-  welcomed      Boolean @default(false)
+  id          String  @id @default(cuid())
+  name        String? @unique
+  displayName String?
+  email       String? @unique
+  isAdmin     Boolean @default(false)
+  score       Int     @default(0) // More of a cache, the source of truth is the History table
 
   createdAt DateTime @default(now())
 
@@ -64,14 +61,19 @@ model User {
   sessions Session[]
   History  History[]
 
+  // LEGACY
+  emailVerified Boolean @default(false) // should not be stored tbh
+  welcomed      Boolean @default(false) // should not be used, cause it's litteraly (name && fraternityId)
+  image         String? // was never used
+
   @@map("users")
 }
 
 model Fraternity {
   id          Int     @id @default(autoincrement())
   name        String  @unique
-  description String?
-  score       Int     @default(0)
+  description String? // Not really used
+  score       Int     @default(0) // More of a cache, the source of truth is the History table
 
   users User[]
 }
@@ -92,24 +94,23 @@ model Quest {
   horaires    String?
   points      Int       @default(1)
 
-  clickable   Boolean   @default(true)
-  hidden      Boolean   @default(false)
+  clickable Boolean @default(true)
+  hidden    Boolean @default(false)
 
   // for Secondary quests
-  secondary   Boolean   @default(true)
+  secondary Boolean @default(true)
 
   // for Main Quest
-  glyphPositionX Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
-  glyphPositionY Int? @default(0) // Position du glyph dans la grille, par défaut 0, max 29
-  glyph       String? // must be smth like 01010101,010101011,... Doit être un carré parfait, nombre de lignes = nombre de colonnes.
-                      // Maximum 29 * 29
-  img         String? // DEPRECATED . may not be used, is replaced by the glyph
+  glyphPositionX Int?    @default(0) // Position du glyph dans la grille, par défaut 0, max 29
+  glyphPositionY Int?    @default(0) // Position du glyph dans la grille, par défaut 0, max 29
+  glyph          String? // must be smth like 01010101,010101011,... Doit être un rectangle
+  // Maximum 29 * 29
+  img            String? // DEPRECATED . may not be used, is replaced by the glyph
 
   // For wrapping quests
-  parentId   Int?    
-  parent     Quest?     @relation("SubQuests", fields: [parentId], references: [id])
-  subQuests  Quest[]    @relation("SubQuests")
-
+  parentId  Int?
+  parent    Quest?  @relation("SubQuests", fields: [parentId], references: [id])
+  subQuests Quest[] @relation("SubQuests")
 
   // mainly for secondary quests the qrcodes
   Code Code[]
