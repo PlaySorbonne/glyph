@@ -12,7 +12,13 @@ interface Quest {
   mission?: string | null;
 }
 
-export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
+export default function MainQuestSlider({
+  quests,
+  offset = 0,
+}: {
+  quests: Quest[];
+  offset?: number;
+}) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -23,6 +29,8 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
   }, [quests.length]);
 
   if (!quests || quests.length === 0) return null;
+  if (quests.length === 1) return <QuestCard nb={offset + 1} quest={quests[0]} />;
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -32,10 +40,7 @@ export default function MainQuestSlider({ quests }: { quests: Quest[] }) {
         exit={{ x: -300, opacity: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <QuestCard
-          nb={index + 1}
-          quest={quests[index]}
-        />
+        <QuestCard nb={offset + index + 1} quest={quests[index]} />
       </motion.div>
     </AnimatePresence>
   );
