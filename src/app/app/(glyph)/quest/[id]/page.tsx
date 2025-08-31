@@ -85,7 +85,7 @@ export default async function QuestPage({
         width: "100%",
       }}
     >
-      {quest.title.includes("Héros") && !hasFinishedQuest && <TutoNew />}
+      {/* {quest.title.includes("Héros") && !hasFinishedQuest && <TutoNew />} */}
       <section
         id="title-quest"
         style={{

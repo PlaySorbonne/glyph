@@ -63,7 +63,7 @@ export default async function Home() {
         width: "100%",
       }}
     >
-      {nbFinishedMainQuests === 0 && <TutoNew />}
+      {/* {nbFinishedMainQuests === 0 && <TutoNew />} */}
       {nbFinishedMainQuests > 0 && (
         <div
           style={{
