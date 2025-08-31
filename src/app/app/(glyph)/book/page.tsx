@@ -125,8 +125,7 @@ export default async function Book() {
       {unavailableQuest.length > 0 && (
         <section className={styles.quests}>
           {unavailableQuest.map((quest) => (
-            <Link
-              href={"/app/quest/" + quest.id}
+            <div
               key={quest.id}
               className={styles.quest}
             >
@@ -140,7 +139,7 @@ export default async function Book() {
                   )}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </section>
       )}
