@@ -1,6 +1,7 @@
 import {
   getAvailableMainQuests,
   getAvailableSecondaryQuests,
+  getFinishedMainQuests,
   getUnavailableSecondaryQuests,
 } from "@/actions/quests";
 import styles from "./page.module.css";
@@ -16,34 +17,39 @@ const secondaryKeys = ["id", "title", "description", "starts", "ends"] as const;
 const mainKeys = ["id", "title", "description", "mission"] as const;
 
 export default async function Home() {
-  let user = await getUserFromSession();
-  let [secondaryQuests, unavailableSecondaryQuests, mainQuests] =
-    await Promise.all([
-      getAvailableSecondaryQuests(user!.id),
-      getUnavailableSecondaryQuests(user!.id).then((quests) =>
-        quests
-          .filter((q) => !q.ends || q.ends >= new Date())
-          .map((quest) => {
-            return {
-              ...quest,
-              title: Array.from(
-                { length: 4 + Math.floor(Math.random() * 9) },
-                () => "█"
-              ).join(""),
-              mission:
-                "La quête sera disponible à partir du " +
-                quest.starts!.toLocaleDateString("fr-FR", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }),
-            };
-          })
-          .sort((a, b) => a.starts!.getTime() - b.starts!.getTime())
-      ),
-      getAvailableMainQuests(user!.id),
-    ]);
+  let user = (await getUserFromSession())!;
+  let [
+    secondaryQuests,
+    unavailableSecondaryQuests,
+    mainQuests,
+    nbFinishedMainQuests,
+  ] = await Promise.all([
+    getAvailableSecondaryQuests(user.id),
+    getUnavailableSecondaryQuests(user.id).then((quests) =>
+      quests
+        .filter((q) => !q.ends || q.ends >= new Date())
+        .map((quest) => {
+          return {
+            ...quest,
+            title: Array.from(
+              { length: 4 + Math.floor(Math.random() * 9) },
+              () => "█"
+            ).join(""),
+            mission:
+              "La quête sera disponible à partir du " +
+              quest.starts!.toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }),
+          };
+        })
+        .sort((a, b) => a.starts!.getTime() - b.starts!.getTime())
+    ),
+    getAvailableMainQuests(user.id),
+    getFinishedMainQuests(user.id).then((q) => q.length),
+  ]);
 
   return (
     <div
@@ -65,7 +71,13 @@ export default async function Home() {
           }}
         >
           <MainQuestSlider
-            quests={keepKeysFromObjectArray(mainQuests, mainKeys)}
+            quests={keepKeysFromObjectArray(
+              nbFinishedMainQuests === 0
+                ? mainQuests.filter((e) => e.title.includes("Héros"))
+                : mainQuests,
+              mainKeys
+            )}
+            offset={nbFinishedMainQuests}
           />
         </section>
       )}
