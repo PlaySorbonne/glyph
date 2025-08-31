@@ -5,7 +5,6 @@ import {
   GLYPH_MAX_SIZE,
   glyphStringToArray,
   isQuestAvailable,
-  isQuestSecondary,
   NB_MAIN_QUESTS,
 } from "@/utils";
 import { redirect } from "next/navigation";
@@ -101,7 +100,7 @@ export default async function QuestPage({
             fontSize: "1.5rem",
           }}
         >
-          QUÊTE {isQuestSecondary(quest) ? "SECONDAIRE" : "PRINCIPALE"}
+          QUÊTE {quest.secondary ? "SECONDAIRE" : "PRINCIPALE"}
         </p>
         <Image
           src={icons.separator1}
@@ -206,7 +205,7 @@ export default async function QuestPage({
         )}
       </section>
 
-      {!isQuestSecondary(quest) && (
+      {!quest.secondary && (
         <section
           style={{
             backgroundColor: "rgba(255, 255, 255, 0.5)",
