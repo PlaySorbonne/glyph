@@ -74,6 +74,8 @@ export const normalQuestSchema = z
     lore: z.string().optional().nullable(),
     lieu: z.string().optional().nullable(),
     secondary: z.boolean().default(false),
+    clickable: z.boolean().default(true),
+    hidden: z.boolean().default(false),
     points: z.number().int().positive().default(1),
     starts: z.coerce.date().optional().nullable(),
     ends: z.coerce.date().optional().nullable(),

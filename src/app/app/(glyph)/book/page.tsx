@@ -42,7 +42,7 @@ export default async function Book() {
         ).join(""),
         mission: quest.starts
           ? "La quête sera disponible à partir du " +
-            quest.starts!.toLocaleDateString("fr-FR", {
+            quest.starts.toLocaleDateString("fr-FR", {
               weekday: "long",
               year: "numeric",
               month: "long",

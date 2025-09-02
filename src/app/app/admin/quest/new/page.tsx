@@ -67,6 +67,8 @@ export default async function NewQuestPage() {
       glyph: glyphStr,
       glyphPositionX: glyphPositionX,
       glyphPositionY: glyphPositionY,
+      clickable: formData.get("clickable") === "on",
+      hidden: formData.get("hidden") === "on",
     };
 
     const code = (formData.get("code") as string) || generateCode();
@@ -215,6 +217,31 @@ export default async function NewQuestPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Jours d&apos;ouverture
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="clickable" className="flex items-center">
+              <input
+                type="checkbox"
+                name="clickable"
+                id="clickable"
+                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                defaultChecked
+              />
+              <span className="ml-2 text-sm text-gray-700">clickable</span>
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="hidden" className="flex items-center">
+              <input
+                type="checkbox"
+                name="hidden"
+                id="hidden"
+                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              />
+              <span className="ml-2 text-sm text-gray-700">hidden</span>
             </label>
           </div>
 

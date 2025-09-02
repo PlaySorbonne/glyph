@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 interface Quest {
@@ -7,6 +5,8 @@ interface Quest {
   title: string;
   ends?: Date | null;
   starts?: Date | null;
+  clickable?: boolean;
+  hidden?: boolean;
 }
 
 export default function QuestList({
@@ -14,13 +14,11 @@ export default function QuestList({
   unavailableQuests,
   finishedQuests,
   name,
-  clickable = true,
 }: {
   quests: Quest[];
   unavailableQuests?: Quest[];
   finishedQuests?: Quest[];
   name?: string;
-  clickable?: boolean;
 }) {
   if (
     (!quests || quests.length === 0) &&
@@ -45,25 +43,19 @@ export default function QuestList({
         }}
       >
         {quests.map((quest) => (
-          <QuestCard key={quest.id} quest={quest} clickable={clickable} />
+          <QuestCard key={quest.id} quest={quest} />
         ))}
         {unavailableQuests &&
           unavailableQuests.map((quest) => (
             <QuestCard
               key={quest.id}
-              quest={quest}
+              quest={{ ...quest, clickable: false }}
               isUnavailable
-              clickable={false}
             />
           ))}
         {finishedQuests &&
           finishedQuests.map((quest) => (
-            <QuestCard
-              key={quest.id}
-              quest={quest}
-              isFinished
-              clickable={false}
-            />
+            <QuestCard key={quest.id} quest={quest} isFinished />
           ))}
       </div>
     </div>
@@ -73,12 +65,10 @@ export default function QuestList({
 function QuestCard({
   quest,
   isUnavailable,
-  clickable,
   isFinished,
 }: {
   quest: Quest;
   isUnavailable?: boolean;
-  clickable?: boolean;
   isFinished?: boolean;
 }) {
   if (!quest) return null;
@@ -93,9 +83,9 @@ function QuestCard({
         margin: "0.5rem 0",
         padding: "1rem",
         border: "1px solid #000",
-        cursor: clickable ? "pointer" : "default",
+        cursor: quest.clickable ? "pointer" : "default",
       }}
-      href={clickable && !isUnavailable ? `/app/quest/${quest.id}` : ""}
+      href={quest.clickable && !isUnavailable ? `/app/quest/${quest.id}` : ""}
     >
       <h1
         style={{
@@ -116,12 +106,12 @@ function QuestCard({
           flexShrink: 0,
         }}
       >
-        {isUnavailable
-          ? `À partir du ${quest.starts!.toLocaleDateString("fr-FR", {
+        {isUnavailable && quest.starts
+          ? `À partir du ${quest.starts.toLocaleDateString("fr-FR", {
               month: "numeric",
               day: "numeric",
             })}`
-          : clickable
+          : quest.clickable
           ? "PLUS DE DÉTAILS"
           : isFinished
           ? "TERMINE"

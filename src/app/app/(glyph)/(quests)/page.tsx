@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export const revalidate = 3600; // invalidate every hour
 
-const secondaryKeys = ["id", "title", "description", "starts", "ends"] as const;
+const secondaryKeys = ["id", "title", "description", "starts", "ends", "clickable"] as const;
 const mainKeys = ["id", "title", "description", "mission"] as const;
 
 export default async function Home() {
@@ -41,13 +41,16 @@ export default async function Home() {
               () => "█"
             ).join(""),
             mission:
-              "La quête sera disponible à partir du " +
-              quest.starts!.toLocaleDateString("fr-FR", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }),
+              quest.starts
+                ? "La quête sera disponible à partir du " +
+                  quest.starts.toLocaleDateString("fr-FR", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                : null,
+            clickable: false
           };
         })
         .sort((a, b) => a.starts!.getTime() - b.starts!.getTime())
@@ -56,6 +59,7 @@ export default async function Home() {
     getFinishedMainQuests(user.id).then((q) => q.length),
     getClassement(),
   ]);
+
 
   return (
     <div

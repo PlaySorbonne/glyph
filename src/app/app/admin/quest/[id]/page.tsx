@@ -31,11 +31,16 @@ export default async function EditQuestPage(props: {
     select: { id: true, title: true },
     orderBy: { createdAt: "desc" },
   });
-  let nonEmptyQuests = await prisma.quest.findMany({
-    where: { parentId: { not: null } },
-    select: { id: true, title: true },
-    orderBy: { createdAt: "desc" },
+  let nonEmptyQuests = (
+    await prisma.quest.findMany({
+      where: { parentId: { not: null } },
+      select: { id: true, title: true, parentId: true },
+      orderBy: { createdAt: "desc" },
+    })
+  ).map((q) => {
+    return { ...q, title: `${q.title} - ${q.parentId}` };
   });
+
   let quests = [...EmptyQuests, ...nonEmptyQuests].map((q) => ({
     id: q.id,
     title: `${q.title} - ${q.id}`,
@@ -67,15 +72,21 @@ export default async function EditQuestPage(props: {
       secondary: formData.get("secondary") === "on",
       points: parseInt(formData.get("points") as string) || 1,
       starts: formData.get("starts")
-        ? DateTime.fromISO(formData.get("starts") as string, { zone: "Europe/Paris" }).toJSDate()
+        ? DateTime.fromISO(formData.get("starts") as string, {
+            zone: "Europe/Paris",
+          }).toJSDate()
         : null,
       ends: formData.get("ends")
-        ? DateTime.fromISO(formData.get("ends") as string, { zone: "Europe/Paris" }).toJSDate()
+        ? DateTime.fromISO(formData.get("ends") as string, {
+            zone: "Europe/Paris",
+          }).toJSDate()
         : null,
       horaires: (formData.get("horaires") as string) || null,
       glyph: glyphStr || null,
       glyphPositionX,
       glyphPositionY,
+      clickable: formData.get("clickable") === "on",
+      hidden: formData.get("hidden") === "on",
     };
 
     try {
@@ -181,6 +192,32 @@ export default async function EditQuestPage(props: {
               defaultValue={quest.lore || ""}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             ></textarea>
+          </div>
+
+          <div>
+            <label htmlFor="clickable" className="flex items-center">
+              <input
+                type="checkbox"
+                name="clickable"
+                id="clickable"
+                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                defaultChecked={quest.clickable}
+              />
+              <span className="ml-2 text-sm text-gray-700">clickable</span>
+            </label>
+          </div>
+
+          <div>
+            <label htmlFor="hidden" className="flex items-center">
+              <input
+                type="checkbox"
+                name="hidden"
+                id="hidden"
+                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                defaultChecked={quest.hidden}
+              />
+              <span className="ml-2 text-sm text-gray-700">hidden</span>
+            </label>
           </div>
 
           <div>

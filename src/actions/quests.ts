@@ -169,6 +169,7 @@ export async function getAvailableSecondaryQuests(userId?: string) {
     where: {
       secondary: true,
       ...dateCheck(),
+      hidden: false,
       History: userId
         ? {
             none: {
@@ -240,7 +241,14 @@ export async function getUnavailableMainQuests() {
 export async function getUnavailableSecondaryQuests(userId?: string) {
   return await prisma.quest.findMany({
     where: {
-      NOT: dateCheck(),
+      OR: [
+        {
+          NOT: dateCheck(),
+        },
+        {
+          hidden: true,
+        },
+      ],
       secondary: true,
       History: userId
         ? {
@@ -324,7 +332,10 @@ export async function userValidatedQuest(user: User, quest: Quest) {
   return out;
 }
 
-export async function getSubQuests(questId: number, userId?: string): Promise<[Quest[], undefined | Quest[]]> {
+export async function getSubQuests(
+  questId: number,
+  userId?: string
+): Promise<[Quest[], undefined | Quest[]]> {
   if (!userId) userId = undefined;
   return Promise.all([
     prisma.quest.findMany({
@@ -344,20 +355,20 @@ export async function getSubQuests(questId: number, userId?: string): Promise<[Q
         starts: "desc",
       },
     }),
-      prisma.quest.findMany({
-        where: {
-          parentId: questId,
-          secondary: true,
-          ...dateCheck(),
-          History: {
-            some: {
-              userId: userId,
-            },
+    prisma.quest.findMany({
+      where: {
+        parentId: questId,
+        secondary: true,
+        ...dateCheck(),
+        History: {
+          some: {
+            userId: userId,
           },
         },
-        orderBy: {
-          starts: "desc",
-        },
-      }),
+      },
+      orderBy: {
+        starts: "desc",
+      },
+    }),
   ]);
 }

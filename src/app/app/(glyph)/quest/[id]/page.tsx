@@ -43,6 +43,31 @@ export default async function QuestPage({
     user!.id
   );
 
+  nonFinishedSubQuests = nonFinishedSubQuests
+    .map((sq) => {
+      if (!sq.hidden) return sq;
+
+      return {
+        ...sq,
+        title: Array.from(
+          { length: 4 + Math.floor(Math.random() * 9) },
+          () => "█"
+        ).join(""),
+        clickable: false,
+        description: null,
+        lore: null,
+        indice: null,
+      };
+    })
+    .sort((a, b) => {
+      const priority = (q: { hidden: boolean; clickable: boolean }) => {
+        if (q.hidden) return 2;
+        if (!q.clickable) return 1;
+        return 0;
+      };
+      return priority(a) - priority(b);
+    });
+
   if (!hasFinishedQuest && !isQuestAvailable(quest)) {
     quest = {
       ...quest,
@@ -58,9 +83,7 @@ export default async function QuestPage({
               }),
           }
         : {
-            mission:
-              "La quête est actuellement indisponible\n" +
-              (quest.mission ?? ""),
+            mission: "La quête est actuellement indisponible\n",
           }),
       title: Array.from(
         { length: 4 + Math.floor(Math.random() * 9) },
@@ -205,7 +228,6 @@ export default async function QuestPage({
               quests={nonFinishedSubQuests}
               finishedQuests={finishedSubQuests}
               name="TÂCHES"
-              clickable={false}
             />
           </div>
         )}
