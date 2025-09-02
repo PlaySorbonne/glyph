@@ -21,11 +21,12 @@ export default async function CodePage(props: {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
         alignItems: "center",
         height: "100vh",
         width: "100vw",
         flexDirection: "column",
+        rowGap: "50px",
       }}
     >
       {code && (
