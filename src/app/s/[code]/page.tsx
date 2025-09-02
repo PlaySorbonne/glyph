@@ -1,5 +1,8 @@
+import Fraternities from "@/assets/fraternities";
 import prisma from "@/lib/db";
 import QRCode from "react-qr-code";
+import Image from "next/image";
+import Link from "next/link";
 
 export default async function CodePage(props: {
   params: Promise<{ code: string }>;
@@ -25,17 +28,50 @@ export default async function CodePage(props: {
         flexDirection: "column",
       }}
     >
-      {code && <h1 style={{
-        fontSize: "2rem",
-        textAlign: "center",
-        fontFamily: "DCC-Ash",
-      }}>{code.isQuest ? code.quest?.title : "Code à points"}</h1>}
-      <QRCode value={`${process.env.NEXT_PUBLIC_MAIN_URL}/${params.code}`} />
       {code && (
-        <h1 style={{
-          fontSize: "2rem",
-          textAlign: "center",
-        }}>{code.isQuest ? code.quest?.points : code.points} Points</h1>
+        <h1
+          style={{
+            fontSize: "2rem",
+            textAlign: "center",
+            fontFamily: "DCC-Ash",
+          }}
+        >
+          {code.isQuest ? code.quest?.title : "Code à points"}
+        </h1>
+      )}
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}>
+        <Image
+          src={Fraternities.default.logo}
+          alt="Glyph logo"
+          style={{
+            paddingBottom: "10px",
+          }}
+          width={300}
+        />
+        <QRCode value={`${process.env.NEXT_PUBLIC_MAIN_URL}/${params.code}`} />
+        <p>
+          {params.code}
+        </p>
+        <Link href={process.env.NEXT_PUBLIC_MAIN_URL || "/"} style={{
+          paddingTop: "20px",
+        }}>
+          <p>Cet élément fait parti du jeu de piste GLYPH : {process.env.NEXT_PUBLIC_MAIN_URL}</p>
+        </Link>
+      </div>
+      {code && (
+        <h1
+          style={{
+            fontSize: "2rem",
+            textAlign: "center",
+          }}
+        >
+          {code.isQuest ? code.quest?.points : code.points} Points
+        </h1>
       )}
     </div>
   );
