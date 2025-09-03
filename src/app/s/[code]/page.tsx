@@ -60,8 +60,13 @@ export default async function CodePage(props: {
         </p>
         <Link href={process.env.NEXT_PUBLIC_MAIN_URL || "/"} style={{
           paddingTop: "20px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
         }}>
           <p>Cet élément fait parti du jeu de piste GLYPH : {process.env.NEXT_PUBLIC_MAIN_URL}</p>
+          <p>Il sera retiré le 15 octobre</p>
         </Link>
       </div>
       {code && (
