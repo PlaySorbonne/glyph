@@ -84,6 +84,32 @@ export function smallestContainingAllOnes(matrix: boolean[][]): {
   return { matrix: result, coords: [minRow, minCol] };
 }
 
+export function fillMatrixToSize(
+  matrix: boolean[][],
+  size: [number, number],
+  coords = [0, 0] as [number, number]
+) {
+  const [rows, cols] = size;
+  if (matrix.length === 0 || matrix[0].length === 0) {
+    return Array.from({ length: rows }, () => Array(cols).fill(false));
+  }
+
+  const mRows = matrix.length;
+  const mCols = matrix[0].length;
+
+  const newMatrix = Array.from({ length: rows }, () => Array(cols).fill(false));
+  for (let i = 0; i < mRows; i++) {
+    for (let j = 0; j < mCols; j++) {
+      const ni = i + coords[0];
+      const nj = j + coords[1];
+      if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
+        newMatrix[ni][nj] = matrix[i][j];
+      }
+    }
+  }
+  return newMatrix;
+}
+
 // 4 first characters are random, 11 next characters are the date it was generated, last characters are the user id in hex
 export function generateSession(id: string) {
   return `${randomBytes(2)
