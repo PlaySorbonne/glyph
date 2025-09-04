@@ -214,6 +214,20 @@ export async function getFinishedMainQuests(userId?: string) {
   });
 }
 
+export async function getFinishedOnMainHistory(userId: string) {
+  return await prisma.history.findMany({
+    where: {
+      userId: userId,
+      quest: {
+        secondary: false,
+      }
+    },
+    include: {
+      quest: true,
+    },
+  });
+}
+
 export async function hasUserFinishedQuest(userId: string, questId: number) {
   try {
     let history = await prisma.history.findFirst({
