@@ -1,5 +1,8 @@
 import { getSession, getUserFromSession } from "@/actions/auth";
-import { getFinishedMainQuests, getFinishedOnMainHistory } from "@/actions/quests";
+import {
+  getFinishedMainQuests,
+  getFinishedOnMainHistory,
+} from "@/actions/quests";
 import { glyphStringToArray } from "@/utils";
 import GlyphGallery from "./GlyphGallery";
 import { randomInt } from "crypto";
@@ -9,12 +12,22 @@ export default async function Page() {
 
   const finishedHistory = await getFinishedOnMainHistory(user.id);
 
-  const galleryProps = finishedHistory.map((h) => ({
-    quest_title: h.quest!.title,
-    glyph: glyphStringToArray(h.quest!.glyph)!,
-    id: randomInt(1, 1000000),
-    found_on: h.date,
-  }));
+  const galleryProps = finishedHistory.map((h) => {
+    if (!h.quest || !h.quest.glyph) return null;
+    if (!h.quest.glyphPositionX || !h.quest.glyphPositionY) return null;
+    let glyphArray = glyphStringToArray(h.quest.glyph);
+    if (!glyphArray) glyphArray = [];
+    return {
+      quest_title: h.quest.title,
+      glyph: glyphArray,
+      id: randomInt(1, 1000000),
+      found_on: h.date,
+      coords: [h.quest.glyphPositionX, h.quest.glyphPositionY] as [
+        number,
+        number
+      ],
+    };
+  });
 
   return (
     <div
@@ -22,7 +35,6 @@ export default async function Page() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "70vh",
         backgroundColor: "rgba(255, 255, 255, 0.8)",
         backdropFilter: "blur(10px)",
         border: "1px solid rgba(255, 255, 255, 0.2)",

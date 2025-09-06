@@ -8,64 +8,57 @@ interface GlyphData {
   glyph: boolean[][];
   found_on: Date | string;
   id: number;
-  coords?: [number, number]; // Position dans la grille 29x29
-  [key: string]: any; // Pour d'autres propriétés optionnelles
+  coords?: [number, number];
+  [key: string]: any;
 }
 
 interface GlyphGalleryProps {
-  glyphs: GlyphData[];
-  highlight?: number; // ID du glyph à faire clignoter
+  glyphs: (GlyphData | null)[];
+  highlight?: number;
 }
 
-// Fonction pour placer un glyph dans la grille 29x29 à des coordonnées spécifiques
+// Fonction pour placer un glyph dans la grille 29x29
 function placeGlyphInGrid(
   grid: (number | null)[][],
   glyph: boolean[][],
   glyphId: number,
   coords: [number, number] = [0, 0]
 ): (number | null)[][] {
-  const newGrid = grid.map(row => [...row]);
+  const newGrid = grid.map((row) => [...row]);
   const [startRow, startCol] = coords;
-  
+
   for (let i = 0; i < glyph.length; i++) {
     for (let j = 0; j < glyph[i].length; j++) {
       const gridRow = startRow + i;
       const gridCol = startCol + j;
-      
-      // Vérifier que nous sommes dans les limites de la grille 29x29
+
       if (gridRow >= 0 && gridRow < 29 && gridCol >= 0 && gridCol < 29) {
         if (glyph[i][j]) {
-          // Si la cellule est active, on place l'ID du glyph
           newGrid[gridRow][gridCol] = glyphId;
         }
       }
     }
   }
-  
+
   return newGrid;
 }
 
 // Composant pour afficher la grille composite
-function CompositeGlyphDisplay({ 
+function CompositeGlyphDisplay({
   glyphs,
   highlightedId,
-  onCellClick
+  onCellClick,
 }: {
   glyphs: GlyphData[];
   highlightedId?: number;
   onCellClick: (glyphId: number) => void;
 }) {
-  // Créer la grille composite avec tous les glyphs superposés
   const compositeGrid = useMemo(() => {
-    // Initialiser une grille 29x29 vide (null = pas de glyph)
-    let grid: (number | null)[][] = Array.from(
-      { length: 29 }, 
-      () => Array(29).fill(null)
+    let grid: (number | null)[][] = Array.from({ length: 29 }, () =>
+      Array(29).fill(null)
     );
-    
-    // Placer chaque glyph dans la grille
-    // On traite les glyphs dans l'ordre pour que les derniers soient "au-dessus"
-    glyphs.forEach(glyphData => {
+
+    glyphs.forEach((glyphData) => {
       grid = placeGlyphInGrid(
         grid,
         glyphData.glyph,
@@ -73,127 +66,67 @@ function CompositeGlyphDisplay({
         glyphData.coords || [0, 0]
       );
     });
-    
+
     return grid;
   }, [glyphs]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gap: '1px',
-        gridTemplateColumns: `repeat(29, 1fr)`,
-        width: '580px',
-        height: '580px',
-        margin: '0 auto',
-        backgroundColor: '#e0e0e0',
-        padding: '10px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      {compositeGrid.map((row, rowIndex) =>
-        row.map((glyphId, colIndex) => {
-          const isHighlighted = glyphId === highlightedId;
-          const hasGlyph = glyphId !== null;
-          
-          // Trouver le glyph correspondant pour obtenir sa couleur/style
-          const glyphData = glyphId !== null 
-            ? glyphs.find(g => g.id === glyphId) 
-            : null;
-          
-          return (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              style={{
-                backgroundColor: hasGlyph 
-                  ? (isHighlighted ? '#3498db' : '#2c3e50')
-                  : '#f8f9fa',
-                aspectRatio: '1 / 1',
-                cursor: hasGlyph ? 'pointer' : 'default',
-                transition: 'all 0.2s ease',
-                animation: isHighlighted ? 'pulse 1s infinite' : 'none',
-                border: hasGlyph ? '0.5px solid rgba(0,0,0,0.1)' : 'none',
-              }}
-              onClick={() => {
-                if (glyphId !== null) {
-                  onCellClick(glyphId);
-                }
-              }}
-              onMouseEnter={(e) => {
-                if (hasGlyph && !isHighlighted) {
-                  e.currentTarget.style.backgroundColor = '#34495e';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (hasGlyph && !isHighlighted) {
-                  e.currentTarget.style.backgroundColor = '#2c3e50';
-                  e.currentTarget.style.transform = 'scale(1)';
-                }
-              }}
-              title={glyphData ? glyphData.quest_title : ''}
-            />
-          );
-        })
-      )}
+    <div className="composite-grid-container">
+      <div className="composite-grid">
+        {compositeGrid.map((row, rowIndex) =>
+          row.map((glyphId, colIndex) => {
+            const isHighlighted = glyphId === highlightedId;
+            const hasGlyph = glyphId !== null;
+            const glyphData =
+              glyphId !== null ? glyphs.find((g) => g.id === glyphId) : null;
+
+            return (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={`grid-cell ${hasGlyph ? "has-glyph" : ""} ${
+                  isHighlighted ? "highlighted" : ""
+                }`}
+                onClick={() => {
+                  if (glyphId !== null) {
+                    onCellClick(glyphId);
+                  }
+                }}
+                title={glyphData ? glyphData.quest_title : ""}
+              />
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }
 
-// Composant pour la liste des glyphs sur le côté
-function GlyphList({ 
+// Composant pour la liste des glyphs
+function GlyphList({
   glyphs,
   highlightedId,
-  onGlyphSelect
+  onGlyphSelect,
 }: {
   glyphs: GlyphData[];
   highlightedId?: number;
   onGlyphSelect: (glyph: GlyphData) => void;
 }) {
   return (
-    <div style={{
-      maxHeight: '580px',
-      overflowY: 'auto',
-      padding: '10px',
-      backgroundColor: '#f5f5f5',
-      borderRadius: '8px',
-    }}>
-      <h3 style={{ margin: '0 0 15px 0', color: '#2c3e50' }}>
-        Glyphs collectés ({glyphs.length})
-      </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {glyphs.map(glyphData => {
+    <div className="glyph-list-container">
+      <h3 className="glyph-list-title">Glyphs collectés ({glyphs.length})</h3>
+      <div className="glyph-list">
+        {glyphs.map((glyphData, i) => {
           const isHighlighted = glyphData.id === highlightedId;
           return (
             <div
-              key={glyphData.id}
+              key={i}
               onClick={() => onGlyphSelect(glyphData)}
-              style={{
-                padding: '10px',
-                backgroundColor: isHighlighted ? '#e3f2fd' : 'white',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                border: isHighlighted ? '2px solid #3498db' : '1px solid #ddd',
-                animation: isHighlighted ? 'pulse 1s infinite' : 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (!isHighlighted) {
-                  e.currentTarget.style.backgroundColor = '#f0f0f0';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isHighlighted) {
-                  e.currentTarget.style.backgroundColor = 'white';
-                }
-              }}
+              className={`glyph-item ${isHighlighted ? "highlighted" : ""}`}
             >
-              <div style={{ fontWeight: 'bold', color: '#2c3e50', marginBottom: '4px' }}>
-                {glyphData.quest_title}
-              </div>
-              <div style={{ fontSize: '12px', color: '#7f8c8d' }}>
-                ID: #{glyphData.id} | Position: [{glyphData.coords?.[0] ?? 0}, {glyphData.coords?.[1] ?? 0}]
+              <div className="glyph-item-title">{glyphData.quest_title}</div>
+              <div className="glyph-item-meta">
+                ID: #{glyphData.id} | Position: [{glyphData.coords?.[0] ?? 0},{" "}
+                {glyphData.coords?.[1] ?? 0}]
               </div>
             </div>
           );
@@ -204,9 +137,9 @@ function GlyphList({
 }
 
 // Composant modal pour afficher les détails
-function GlyphModal({ 
+function GlyphModal({
   glyphData,
-  onClose
+  onClose,
 }: {
   glyphData: GlyphData | null;
   onClose: () => void;
@@ -214,115 +147,70 @@ function GlyphModal({
   if (!glyphData) return null;
 
   const formatDate = (date: Date | string) => {
-    const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    const d = typeof date === "string" ? new Date(date) : date;
+    return d.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          backgroundColor: 'white',
-          borderRadius: '12px',
-          padding: '24px',
-          maxWidth: '500px',
-          width: '90%',
-          maxHeight: '80vh',
-          overflow: 'auto',
-          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '20px' }}>
-          <h2 style={{ margin: 0, color: '#2c3e50', fontSize: '24px' }}>
-            {glyphData.quest_title}
-          </h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              fontSize: '24px',
-              cursor: 'pointer',
-              color: '#7f8c8d',
-              padding: '0',
-              width: '30px',
-              height: '30px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#2c3e50'}
-            onMouseLeave={(e) => e.currentTarget.style.color = '#7f8c8d'}
-          >
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2 className="modal-title">{glyphData.quest_title}</h2>
+          <button onClick={onClose} className="modal-close">
             ×
           </button>
         </div>
 
-        {/* Afficher le glyph individuel */}
-        <div style={{ marginBottom: '20px', backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '8px' }}>
+        <div className="modal-glyph-display">
           <div
+            className="modal-glyph-grid"
             style={{
-              display: 'grid',
-              gap: '1px',
-              gridTemplateColumns: `repeat(${glyphData.glyph[0]?.length || 1}, 1fr)`,
-              width: '200px',
-              margin: '0 auto',
+              gridTemplateColumns: `repeat(${
+                glyphData.glyph[0]?.length || 1
+              }, 1fr)`,
             }}
           >
             {glyphData.glyph.map((row, rowIndex) =>
               row.map((cell, colIndex) => (
                 <div
                   key={`${rowIndex}-${colIndex}`}
-                  style={{
-                    backgroundColor: cell ? '#2c3e50' : '#ecf0f1',
-                    aspectRatio: '1 / 1',
-                  }}
+                  className={`modal-grid-cell ${cell ? "active" : ""}`}
                 />
               ))
             )}
           </div>
         </div>
 
-        <div style={{ color: '#34495e' }}>
-          <div style={{ marginBottom: '12px' }}>
-            <strong style={{ color: '#2c3e50' }}>ID de la quête :</strong> #{glyphData.id}
+        <div className="modal-details">
+          <div className="detail-item">
+            <strong>ID de la quête :</strong> #{glyphData.id}
           </div>
-          <div style={{ marginBottom: '12px' }}>
-            <strong style={{ color: '#2c3e50' }}>Position dans la grille :</strong> [{glyphData.coords?.[0] ?? 0}, {glyphData.coords?.[1] ?? 0}]
+          <div className="detail-item">
+            <strong>Position dans la grille :</strong> [
+            {glyphData.coords?.[0] ?? 0}, {glyphData.coords?.[1] ?? 0}]
           </div>
-          <div style={{ marginBottom: '12px' }}>
-            <strong style={{ color: '#2c3e50' }}>Trouvé le :</strong> {formatDate(glyphData.found_on)}
+          <div className="detail-item">
+            <strong>Trouvé le :</strong> {formatDate(glyphData.found_on)}
           </div>
-          
-          {/* Afficher d'autres propriétés si elles existent */}
-          {Object.keys(glyphData).map(key => {
-            if (!['quest_title', 'glyph', 'found_on', 'id', 'coords'].includes(key)) {
+
+          {Object.keys(glyphData).map((key) => {
+            if (
+              !["quest_title", "glyph", "found_on", "id", "coords"].includes(
+                key
+              )
+            ) {
               return (
-                <div key={key} style={{ marginBottom: '12px' }}>
-                  <strong style={{ color: '#2c3e50', textTransform: 'capitalize' }}>
-                    {key.replace(/_/g, ' ')} :
-                  </strong> {String(glyphData[key])}
+                <div key={key} className="detail-item">
+                  <strong className="detail-label">
+                    {key.replace(/_/g, " ")} :
+                  </strong>{" "}
+                  {String(glyphData[key])}
                 </div>
               );
             }
@@ -338,14 +226,39 @@ function GlyphModal({
 export default function GlyphGallery({ glyphs, highlight }: GlyphGalleryProps) {
   const [selectedGlyph, setSelectedGlyph] = useState<GlyphData | null>(null);
   const [hoveredGlyphId, setHoveredGlyphId] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Injection des styles pour l'animation
+  let filteredGlyphs = glyphs.filter((g): g is GlyphData => g !== null);
+
+  // S'assurer que le composant est monté côté client
   useEffect(() => {
-    const styleId = 'glyph-gallery-styles';
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
-      style.id = styleId;
-      style.textContent = `
+    setMounted(true);
+  }, []);
+
+  if (!glyphs || glyphs.length === 0) {
+    return (
+      <div className="empty-state">
+        Aucun glyph à afficher
+      </div>
+    );
+  }
+
+  const handleCellClick = (glyphId: number) => {
+    const glyph = filteredGlyphs.find((g) => g.id === glyphId);
+    if (glyph) {
+      setSelectedGlyph(glyph);
+    }
+  };
+
+  const handleGlyphSelect = (glyph: GlyphData) => {
+    setSelectedGlyph(glyph);
+    setHoveredGlyphId(glyph.id);
+    setTimeout(() => setHoveredGlyphId(null), 2000);
+  };
+
+  return (
+    <>
+      <style jsx global>{`
         @keyframes pulse {
           0% {
             opacity: 1;
@@ -360,72 +273,306 @@ export default function GlyphGallery({ glyphs, highlight }: GlyphGalleryProps) {
             transform: scale(1);
           }
         }
-      `;
-      document.head.appendChild(style);
-    }
-  }, []);
 
-  if (!glyphs || glyphs.length === 0) {
-    return (
-      <div style={{
-        textAlign: 'center',
-        padding: '40px',
-        color: '#7f8c8d'
-      }}>
-        Aucun glyph à afficher
+        .gallery-container {
+          display: flex;
+          gap: 20px;
+          padding: 20px;
+          align-items: flex-start;
+          justify-content: flex-start;
+          min-height: 100vh;
+        }
+
+        /* Container de la grille composite */
+        .composite-grid-container {
+          flex: 0 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .composite-grid {
+          display: grid;
+          gap: 1px;
+          grid-template-columns: repeat(29, 1fr);
+          width: min(90vw, 60vh, 600px);
+          height: min(90vw, 60vh, 600px);
+          background-color: #e0e0e0;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cellules de la grille */
+        .grid-cell {
+          background-color: #f8f9fa;
+          aspect-ratio: 1 / 1;
+          transition: all 0.2s ease;
+        }
+
+        .grid-cell.has-glyph {
+          background-color: #2c3e50;
+          cursor: pointer;
+          border: 0.5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .grid-cell.has-glyph:hover:not(.highlighted) {
+          background-color: #34495e;
+          transform: scale(1.1);
+        }
+
+        .grid-cell.highlighted {
+          background-color: #3498db !important;
+          animation: pulse 1s infinite;
+        }
+
+        /* Liste des glyphs */
+        .glyph-list-container {
+          flex: 1;
+          max-width: 400px;
+          min-width: 300px;
+          max-height: 70vh;
+          overflow-y: auto;
+          padding: 10px;
+          border-radius: 8px;
+        }
+
+        .glyph-list-title {
+          margin: 0 0 15px 0;
+          color: #2c3e50;
+          font-size: 20px;
+        }
+
+        .glyph-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .glyph-item {
+          padding: 10px;
+          background-color: white;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: 1px solid #ddd;
+        }
+
+        .glyph-item:hover:not(.highlighted) {
+          background-color: #f0f0f0;
+        }
+
+        .glyph-item.highlighted {
+          background-color: #e3f2fd;
+          border: 2px solid #3498db;
+          animation: pulse 1s infinite;
+        }
+
+        .glyph-item-title {
+          font-weight: bold;
+          color: #2c3e50;
+          margin-bottom: 4px;
+          font-size: 16px;
+        }
+
+        .glyph-item-meta {
+          font-size: 12px;
+          color: #7f8c8d;
+        }
+
+        /* Modal */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 20px;
+        }
+
+        .modal-content {
+          background-color: white;
+          border-radius: 12px;
+          padding: 24px;
+          max-width: 500px;
+          width: 100%;
+          max-height: 90vh;
+          overflow: auto;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: start;
+          margin-bottom: 20px;
+        }
+
+        .modal-title {
+          margin: 0;
+          color: #2c3e50;
+          font-size: 24px;
+          line-height: 1.2;
+          padding-right: 10px;
+        }
+
+        .modal-close {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: #7f8c8d;
+          padding: 0;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+          color: #2c3e50;
+        }
+
+        .modal-glyph-display {
+          margin-bottom: 20px;
+          background-color: #f5f5f5;
+          padding: 15px;
+          border-radius: 8px;
+        }
+
+        .modal-glyph-grid {
+          display: grid;
+          gap: 1px;
+          width: 200px;
+          margin: 0 auto;
+        }
+
+        .modal-grid-cell {
+          background-color: #ecf0f1;
+          aspect-ratio: 1 / 1;
+        }
+
+        .modal-grid-cell.active {
+          background-color: #2c3e50;
+        }
+
+        .modal-details {
+          color: #34495e;
+          font-size: 16px;
+        }
+
+        .detail-item {
+          margin-bottom: 12px;
+        }
+
+        .detail-item strong {
+          color: #2c3e50;
+        }
+
+        .detail-label {
+          text-transform: capitalize;
+        }
+
+        .empty-state {
+          text-align: center;
+          padding: 40px;
+          color: #7f8c8d;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+          .gallery-container {
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+          }
+
+          .composite-grid-container {
+            order: 2;
+          }
+
+          .composite-grid {
+            width: min(90vw, 40vh, 400px);
+            height: min(90vw, 40vh, 400px);
+          }
+
+          .glyph-list-container {
+            order: 1;
+            width: 100%;
+            max-width: 100%;
+            min-width: unset;
+            max-height: 40vh;
+          }
+
+          .glyph-list-title {
+            font-size: 18px;
+          }
+
+          .glyph-item {
+            padding: 8px;
+          }
+
+          .glyph-item-title {
+            font-size: 14px;
+          }
+
+          .glyph-item-meta {
+            font-size: 11px;
+          }
+
+          .modal-content {
+            padding: 16px;
+          }
+
+          .modal-title {
+            font-size: 20px;
+          }
+
+          .modal-close {
+            font-size: 20px;
+          }
+
+          .modal-glyph-grid {
+            width: 150px;
+          }
+
+          .modal-details {
+            font-size: 14px;
+          }
+
+          .modal-overlay {
+            padding: 10px;
+          }
+        }
+      `}</style>
+
+      <div className="gallery-container">
+        <CompositeGlyphDisplay
+          glyphs={filteredGlyphs}
+          highlightedId={highlight || hoveredGlyphId || undefined}
+          onCellClick={handleCellClick}
+        />
+
+        <GlyphList
+          glyphs={filteredGlyphs}
+          highlightedId={highlight || hoveredGlyphId || undefined}
+          onGlyphSelect={handleGlyphSelect}
+        />
       </div>
-    );
-  }
 
-  const handleCellClick = (glyphId: number) => {
-    const glyph = glyphs.find(g => g.id === glyphId);
-    if (glyph) {
-      setSelectedGlyph(glyph);
-    }
-  };
-
-  const handleGlyphSelect = (glyph: GlyphData) => {
-    setSelectedGlyph(glyph);
-    setHoveredGlyphId(glyph.id);
-    // Reset hover after a short delay
-    setTimeout(() => setHoveredGlyphId(null), 2000);
-  };
-
-  return (
-    <>
-      <div style={{
-        display: 'flex',
-        gap: '20px',
-        padding: '20px',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-      }}>
-        {/* Grille composite principale */}
-        <div>
-          <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#2c3e50' }}>
-            Grille Composite
-          </h2>
-          <CompositeGlyphDisplay
-            glyphs={glyphs}
-            highlightedId={highlight || hoveredGlyphId || undefined}
-            onCellClick={handleCellClick}
-          />
-        </div>
-
-        {/* Liste des glyphs */}
-        <div style={{ minWidth: '300px', maxWidth: '400px' }}>
-          <GlyphList
-            glyphs={glyphs}
-            highlightedId={highlight || hoveredGlyphId || undefined}
-            onGlyphSelect={handleGlyphSelect}
-          />
-        </div>
-      </div>
-
-      <GlyphModal
-        glyphData={selectedGlyph}
-        onClose={() => setSelectedGlyph(null)}
-      />
+      {mounted && (
+        <GlyphModal
+          glyphData={selectedGlyph}
+          onClose={() => setSelectedGlyph(null)}
+        />
+      )}
     </>
   );
 }
