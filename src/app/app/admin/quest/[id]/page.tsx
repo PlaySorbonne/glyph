@@ -51,6 +51,7 @@ export default async function EditQuestPage(props: {
   }
 
   let isWrapperQuest = quest.subQuests.length > 0;
+  let isSecondary = quest.secondary;
 
   const submitEdit = async (formData: FormData) => {
     "use server";
@@ -61,6 +62,19 @@ export default async function EditQuestPage(props: {
       coords: [glyphPositionX, glyphPositionY],
     } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
     const glyphStr = glyphArrayToString(glyphArr) || null;
+
+
+    let glyphCheckRawStr = formData.get("glyph_check") as string;
+    let glyphCheckStr: string | null = null;
+    if (!glyphCheckRawStr || glyphCheckRawStr.trim() === "") {
+      glyphCheckStr = glyphInput;
+    } else {
+      const { matrix: glyphCheckArr } =
+        smallestContainingAllOnes(
+          glyphStringToArray(formData.get("glyph_check") as string) || []
+        ) ?? [];
+      glyphCheckStr = glyphArrayToString(glyphCheckArr) || null;
+    }
 
     const questData: NormalQuestInput = {
       title: formData.get("title") as string,
@@ -87,6 +101,7 @@ export default async function EditQuestPage(props: {
       glyphPositionY,
       clickable: formData.get("clickable") === "on",
       hidden: formData.get("hidden") === "on",
+      glyphCheck: glyphCheckStr,
     };
 
     try {
@@ -338,7 +353,7 @@ export default async function EditQuestPage(props: {
             </div>
           )}
 
-          {!isWrapperQuest && (
+          {!isWrapperQuest && !isSecondary && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Glyph Pattern
@@ -352,6 +367,23 @@ export default async function EditQuestPage(props: {
                     quest.glyphPositionY ?? 0,
                   ]}
                   name="glyph"
+                />
+              </div>
+            </div>
+          )}
+
+          {!isWrapperQuest && !isSecondary && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Glyph check Pattern
+              </label>
+              <div className="mt-1">
+                <PixelMatch
+                  size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
+                  defaultGlyph={
+                    glyphStringToArray(quest.glyphCheck) || undefined
+                  }
+                  name="glyph_check"
                 />
               </div>
             </div>

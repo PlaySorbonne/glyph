@@ -95,6 +95,7 @@ export const normalQuestSchema = z
       .max(29)
       .default(0)
       .optional(),
+    glyphCheck: z.string().optional().nullable(),
   })
   .refine((data) => !data.starts || !data.ends || data.starts < data.ends, {
     message: "End date must be after start date",

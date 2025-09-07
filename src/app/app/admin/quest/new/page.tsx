@@ -44,6 +44,19 @@ export default async function NewQuestPage() {
     } = smallestContainingAllOnes(glyphStringToArray(glyphInput) || []) ?? [];
     const glyphStr = glyphArrayToString(glyphArr) || null;
 
+
+    let glyphCheckRawStr = formData.get("glyph_check") as string;
+    let glyphCheckStr: string | null = null;
+    if (!glyphCheckRawStr || glyphCheckRawStr.trim() === "") {
+      glyphCheckStr = glyphInput;
+    } else {
+      const { matrix: glyphCheckArr } =
+        smallestContainingAllOnes(
+          glyphStringToArray(formData.get("glyph_check") as string) || []
+        ) ?? [];
+      glyphCheckStr = glyphArrayToString(glyphCheckArr) || null;
+    }
+
     const questData: NormalQuestInput = {
       title: formData.get("title") as string,
       mission: (formData.get("mission") as string) || null,
@@ -69,6 +82,7 @@ export default async function NewQuestPage() {
       glyphPositionY: glyphPositionY,
       clickable: formData.get("clickable") === "on",
       hidden: formData.get("hidden") === "on",
+      glyphCheck: glyphCheckStr,
     };
 
     const code = (formData.get("code") as string) || generateCode();
@@ -331,6 +345,18 @@ export default async function NewQuestPage() {
               <PixelMatch
                 size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
                 name="glyph"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Glyph Check Pattern
+            </label>
+            <div className="mt-1">
+              <PixelMatch
+                size={[GLYPH_MAX_SIZE, GLYPH_MAX_SIZE]}
+                name="glyph_check"
               />
             </div>
           </div>
