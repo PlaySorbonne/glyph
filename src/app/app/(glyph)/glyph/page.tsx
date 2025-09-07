@@ -1,11 +1,9 @@
-import { getSession, getUserFromSession } from "@/actions/auth";
+import { getUserFromSession } from "@/actions/auth";
 import {
-  getFinishedMainQuests,
   getFinishedOnMainHistory,
 } from "@/actions/quests";
 import { glyphStringToArray } from "@/utils";
 import GlyphGallery from "./GlyphGallery";
-import { randomInt } from "crypto";
 
 export default async function Page() {
   const user = (await getUserFromSession())!;
@@ -20,7 +18,7 @@ export default async function Page() {
     return {
       quest_title: h.quest.title,
       glyph: glyphArray,
-      id: randomInt(1, 1000000),
+      id: h.quest.id,
       found_on: h.date,
       coords: [h.quest.glyphPositionX, h.quest.glyphPositionY] as [
         number,
@@ -43,7 +41,7 @@ export default async function Page() {
       }}
     >
       {galleryProps.length > 0 ? (
-        <GlyphGallery glyphs={[...galleryProps, ...galleryProps]} />
+        <GlyphGallery glyphs={galleryProps} />
       ) : (
         <p>Page vérouillée</p>
       )}
