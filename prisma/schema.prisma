@@ -104,6 +104,7 @@ model Quest {
   glyphPositionX Int?    @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   glyphPositionY Int?    @default(0) // Position du glyph dans la grille, par défaut 0, max 29
   glyph          String? // must be smth like 01010101,010101011,... Doit être un rectangle
+  glyphCheck     String? // same format as glyph, but for the checkmark
   // Maximum 29 * 29
   img            String? // DEPRECATED . may not be used, is replaced by the glyph
 
