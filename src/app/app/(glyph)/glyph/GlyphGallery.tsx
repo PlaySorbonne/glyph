@@ -280,7 +280,6 @@ export default function GlyphGallery({ glyphs, highlight }: GlyphGalleryProps) {
           padding: 20px;
           align-items: flex-start;
           justify-content: flex-start;
-          min-height: 100vh;
         }
 
         /* Container de la grille composite */
@@ -492,10 +491,6 @@ export default function GlyphGallery({ glyphs, highlight }: GlyphGalleryProps) {
             flex-direction: column;
             align-items: center;
             padding: 10px;
-          }
-
-          .composite-grid-container {
-            order: 2;
           }
 
           .composite-grid {
