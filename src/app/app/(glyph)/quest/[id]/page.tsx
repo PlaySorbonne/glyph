@@ -36,7 +36,7 @@ export default async function QuestPage({
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
 
-  let glyph = glyphStringToArray(quest.glyph) ?? [[]];
+  let glyphCheck = glyphStringToArray(quest.glyphCheck) ?? [[]];
 
   let [nonFinishedSubQuests, finishedSubQuests] = await getSubQuests(
     quest.id,
@@ -259,8 +259,8 @@ export default async function QuestPage({
             <GlyphMatch
               questId={quest.id.toString()}
               glyphSize={[
-                glyph?.length || GLYPH_MAX_SIZE,
-                glyph?.[0]?.length || GLYPH_MAX_SIZE,
+                glyphCheck?.length || GLYPH_MAX_SIZE,
+                glyphCheck?.[0]?.length || GLYPH_MAX_SIZE,
               ]}
             />
           )}
