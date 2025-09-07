@@ -104,7 +104,7 @@ export async function POST(
     return NextResponse.json({ error: "Quest not found" }, { status: 404 });
   }
 
-  const correctGlyph = quest.glyph;
+  const correctGlyph = quest.glyphCheck;
   if (!correctGlyph) {
     return NextResponse.json(
       { error: "Quest does not have a glyph" },
