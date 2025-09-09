@@ -24,12 +24,12 @@ export default async function Welcome2({
       </h1>{" "}
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <div className="space-y-4">
-        <UsernameForm />
+        <UsernameForm allowLogin={false} />
         <div className="text-center my-4">
           <span className="px-2 text-gray-500">ou</span>
         </div>
-        <DiscordBtn />
-        <GoogleBtn />
+        <DiscordBtn allowLogin={false} />
+        <GoogleBtn allowLogin={false} />
       </div>
     </WelcomePage>
   );
