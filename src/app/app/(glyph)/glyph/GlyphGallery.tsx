@@ -1,5 +1,7 @@
 "use client";
 
+import { appUrl } from "@/utils";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 
 // Type pour les données d'un glyph
@@ -228,19 +230,22 @@ export default function GlyphGallery({ glyphs, highlight }: GlyphGalleryProps) {
   const [hoveredGlyphId, setHoveredGlyphId] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  const router = useRouter();
+
   let filteredGlyphs = glyphs.filter((g): g is GlyphData => g !== null);
 
   // S'assurer que le composant est monté côté client
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (highlight) {
+      setTimeout(() => {
+        router.push(appUrl(`/quest/${highlight}`));
+      }, 3000);
+    }
+  }, [highlight, router]);
 
   if (!glyphs || glyphs.length === 0) {
-    return (
-      <div className="empty-state">
-        Aucun glyph à afficher
-      </div>
-    );
+    return <div className="empty-state">Aucun glyph à afficher</div>;
   }
 
   const handleCellClick = (glyphId: number) => {

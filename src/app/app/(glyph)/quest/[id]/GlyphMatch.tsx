@@ -1,7 +1,7 @@
 "use client";
 
 import PixelMatch from "@/app/app/components/PixelMatch";
-import { glyphArrayToString } from "@/utils";
+import { appUrl, glyphArrayToString } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useState, useCallback } from "react";
 
@@ -37,7 +37,7 @@ export default function GlyphMatch({
             } else {
               console.log("Glyph check result:", data);
               if (data.success) {
-                router.refresh();
+                router.push(appUrl(`/glyph?highlight=${questId}`));
               }
             }
             setLastCheckedCoords(undefined);

@@ -51,3 +51,12 @@ export async function getHistoryByCodeId(codeId: number) {
     },
   });
 }
+
+export async function getHistoryByQuestId(questId: number, userId: string) {
+  return await prisma.history.findFirst({
+    where: {
+      questId,
+      userId,
+    },
+  });
+}

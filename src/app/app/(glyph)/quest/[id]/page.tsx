@@ -5,7 +5,6 @@ import {
   GLYPH_MAX_SIZE,
   glyphStringToArray,
   isQuestAvailable,
-  NB_MAIN_QUESTS,
 } from "@/utils";
 import { redirect } from "next/navigation";
 import icons from "@/assets/icons";
@@ -13,7 +12,7 @@ import Image from "next/image";
 import GlyphMatch from "./GlyphMatch";
 import PixelMatch from "@/app/app/components/PixelMatch";
 import QuestList from "../../components/QuestList";
-import TutoNew from "./TutoNew";
+import { getHistoryByQuestId } from "@/actions/history";
 
 export default async function QuestPage({
   params,
@@ -31,6 +30,8 @@ export default async function QuestPage({
     parseInt(paramsA.id)
   );
   let quest = await getQuest({ id: paramsA.id });
+
+  let history = await getHistoryByQuestId(questId, user!.id);
 
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
@@ -141,6 +142,30 @@ export default async function QuestPage({
         >
           {quest.title}
         </p>
+        {hasFinishedQuest && (
+          <>
+            <p
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                color: "green",
+              }}
+            >
+              Quête validée !
+            </p>
+            <p>
+              Vous avez trouvé le fragment le{" "}
+              {history?.date.toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          </>
+        )}
       </section>
 
       <section

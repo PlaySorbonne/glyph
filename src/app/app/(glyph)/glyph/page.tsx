@@ -1,18 +1,28 @@
 import { getUserFromSession } from "@/actions/auth";
-import {
-  getFinishedOnMainHistory,
-} from "@/actions/quests";
+import { getFinishedOnMainHistory } from "@/actions/quests";
 import { glyphStringToArray } from "@/utils";
 import GlyphGallery from "./GlyphGallery";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ highlight?: string }>;
+}) {
+  const highlightRaw = (await searchParams).highlight;
+  const highlight = highlightRaw ? parseInt(highlightRaw) : undefined;
   const user = (await getUserFromSession())!;
 
   const finishedHistory = await getFinishedOnMainHistory(user.id);
 
   const galleryProps = finishedHistory.map((h) => {
     if (!h.quest || !h.quest.glyph) return null;
-    if (!h.quest.glyphPositionX || !h.quest.glyphPositionY) return null;
+    if (
+      h.quest.glyphPositionX === null ||
+      h.quest.glyphPositionX === undefined ||
+      h.quest.glyphPositionY === null ||
+      h.quest.glyphPositionY === undefined
+    )
+      return null;
     let glyphArray = glyphStringToArray(h.quest.glyph);
     if (!glyphArray) glyphArray = [];
     return {
@@ -41,7 +51,7 @@ export default async function Page() {
       }}
     >
       {galleryProps.length > 0 ? (
-        <GlyphGallery glyphs={galleryProps} />
+        <GlyphGallery glyphs={galleryProps} highlight={highlight} />
       ) : (
         <p>Page vérouillée</p>
       )}
