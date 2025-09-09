@@ -196,6 +196,21 @@ export async function recalculateScore() {
     },
   });
 
+  // delete duplicate quest histories
+  await prisma.$executeRaw`
+    DELETE FROM history
+    WHERE id IN (
+        SELECT id FROM (
+            SELECT 
+                id,
+                ROW_NUMBER() OVER (PARTITION BY "userId", "questId" ORDER BY "createdAt" ASC) AS rn
+            FROM history
+            WHERE "questId" IS NOT NULL
+        ) t
+        WHERE t.rn > 1
+    );
+  `;
+
   await Promise.all(
     users.map(async (user) => {
       let score =
