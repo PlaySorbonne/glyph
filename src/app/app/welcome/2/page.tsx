@@ -2,7 +2,6 @@ import { getSession, getUserFromSession } from "@/actions/auth";
 import {
   joinFraternity,
   joinRandomFraternity,
-  updateUserSelf,
 } from "@/actions/users";
 import Fraternities from "@/assets/fraternities";
 import { appUrl } from "@/utils";
@@ -16,10 +15,6 @@ export default async function Welcome1Page() {
     redirect(appUrl(`/welcome/3?fraternityId=${user.fraternityId}`));
   }
 
-  let awaitedCookie = await cookies();
-
-  let alreadyCookie = awaitedCookie.get("fraternityId")?.value;
-
   async function handleSubmit() {
     "use server";
     if (user?.fraternityId) {
@@ -30,11 +25,7 @@ export default async function Welcome1Page() {
 
     let fraternityId: number;
     try {
-      if (alreadyCookie) {
-        // If cookie already exists, probably same player so same fraternity hihi
-        fraternityId = parseInt(alreadyCookie);
-        await joinFraternity(user!.id, fraternityId);
-      } else fraternityId = await joinRandomFraternity(user!.id);
+      fraternityId = await joinRandomFraternity(user!.id);
     } catch (error) {
       awaitedCookie.delete("fraternityId");
       if (error instanceof Error) {
@@ -46,7 +37,7 @@ export default async function Welcome1Page() {
       }
     }
     awaitedCookie.set("fraternityId", fraternityId.toString());
-    redirect(appUrl(`/welcome/3?fraternityId=${fraternityId}`));
+    redirect(appUrl(`/welcome/3`));
   }
 
   return (

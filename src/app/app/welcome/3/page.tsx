@@ -1,24 +1,16 @@
 import Link from "next/link";
-import Fraternities, {
+import {
   getBackground,
   getName,
   getLogo,
 } from "@/assets/fraternities";
 import Image from "next/image";
-import { cookies } from "next/headers";
 import { getUserFromSession } from "@/actions/auth";
 
-export default async function WelcomePage(props: {
-  searchParams: Promise<{ fraternityId: string }>;
-}) {
-  let searchParams = await props.searchParams;
-  let fraternityString =
-    searchParams.fraternityId ?? (await cookies()).get("fraternityId")?.value;
-  const fraternityId = (
-    fraternityString
-      ? parseInt(fraternityString)
-      : await getUserFromSession().then((user) => user!.fraternityId!)
-  ) as 1 | 2 | 3;
+export default async function WelcomePage() {
+  const fraternityId = await getUserFromSession().then(
+    (user) => user!.fraternityId! as 1 | 2 | 3
+  );
   const background = getBackground(fraternityId);
   const fraternity = getName(fraternityId);
   return (
