@@ -37,6 +37,7 @@ export function glyphStringToArray(glyph: string | null | undefined) {
 }
 
 export function glyphArrayToString(glyph: boolean[][] | null | undefined) {
+  if (glyph && glyph.length === 0) return "";
   return glyph
     ?.map((line) => line.map((char) => (char ? "1" : "0")).join(""))
     .join(",");
@@ -46,6 +47,9 @@ export function smallestContainingAllOnes(matrix: boolean[][]): {
   matrix: boolean[][];
   coords: [number, number];
 } {
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
+    return { matrix: [], coords: [0, 0] };
+  }
   const rows = matrix.length;
   const cols = matrix[0].length;
 
