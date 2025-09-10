@@ -14,6 +14,75 @@ export const HeroGlyphString =
   "00100000,01110000,11101000,01110100,11110011,10110000,00010000";
 export const HeroGlyphBool = glyphStringToArray(HeroGlyphString)!;
 
+// Cache for keepRandomPercentOfGlyph function
+const glyphCache = new Map<string, boolean[][]>();
+
+export function keepRandomPercentOfGlyph(glyph: boolean[][], percent = 30) {
+  if (!glyph || glyph.length === 0 || glyph[0].length === 0) {
+    return glyph;
+  }
+
+  // Create cache key from glyph content and percent
+  const glyphString = glyphArrayToString(glyph);
+  const cacheKey = `${glyphString}-${percent}`;
+
+  // Check cache first
+  if (glyphCache.has(cacheKey)) {
+    return glyphCache.get(cacheKey)!;
+  }
+
+  // Create a deterministic seed based on the glyph content and percent
+  const seed = createHash("sha256")
+    .update(`${glyphString}-${percent}`)
+    .digest("hex");
+
+  // Convert seed to a number for seeded random generation
+  let seedValue = parseInt(seed.substring(0, 8), 16);
+
+  // Simple seeded random number generator (Linear Congruential Generator)
+  const seededRandom = () => {
+    seedValue = (seedValue * 1664525 + 1013904223) % Math.pow(2, 32);
+    return seedValue / Math.pow(2, 32);
+  };
+
+  // Find all true pixels and their positions
+  const truePixels: [number, number][] = [];
+  for (let row = 0; row < glyph.length; row++) {
+    for (let col = 0; col < glyph[row].length; col++) {
+      if (glyph[row][col]) {
+        truePixels.push([row, col]);
+      }
+    }
+  }
+
+  // Calculate how many pixels to keep
+  const pixelsToKeep = Math.floor((truePixels.length * percent) / 100);
+
+  // Shuffle the true pixels array using seeded random
+  const shuffledPixels = [...truePixels];
+  for (let i = shuffledPixels.length - 1; i > 0; i--) {
+    const j = Math.floor(seededRandom() * (i + 1));
+    [shuffledPixels[i], shuffledPixels[j]] = [shuffledPixels[j], shuffledPixels[i]];
+  }
+
+  // Keep only the first pixelsToKeep pixels
+  const pixelsToKeepSet = new Set(
+    shuffledPixels.slice(0, pixelsToKeep).map(([row, col]) => `${row},${col}`)
+  );
+
+  // Create the result glyph
+  const result: boolean[][] = glyph.map((row, rowIndex) =>
+    row.map((pixel, colIndex) => {
+      if (!pixel) return false; // Keep false pixels as false
+      return pixelsToKeepSet.has(`${rowIndex},${colIndex}`);
+    })
+  );
+
+  // Cache the result before returning
+  glyphCache.set(cacheKey, result);
+  return result;
+}
+
 export function keepKeysFromObject<T extends object, K extends keyof T>(
   obj: T,
   keys: K[] | readonly K[]

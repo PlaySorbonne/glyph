@@ -9,9 +9,11 @@ import { useState, useCallback } from "react";
 export default function GlyphMatch({
   questId,
   glyphSize,
+  defaultGlyph,
 }: {
   questId: string;
   glyphSize: [number, number];
+  defaultGlyph?: boolean[][];
 }) {
   const router = useRouter();
   const [lastCheckedCoords, setLastCheckedCoords] = useState<
@@ -57,6 +59,7 @@ export default function GlyphMatch({
         size={glyphSize}
         onChange={handleGlyphChange}
         lastCheckedCoords={lastCheckedCoords}
+        defaultGlyph={defaultGlyph}
       />
     </div>
   );

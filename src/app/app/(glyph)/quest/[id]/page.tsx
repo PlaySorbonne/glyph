@@ -5,6 +5,7 @@ import {
   GLYPH_MAX_SIZE,
   glyphStringToArray,
   isQuestAvailable,
+  keepRandomPercentOfGlyph,
 } from "@/utils";
 import { redirect } from "next/navigation";
 import icons from "@/assets/icons";
@@ -33,10 +34,10 @@ export default async function QuestPage({
 
   let history = await getHistoryByQuestId(questId, user!.id);
 
+  
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
-
   let glyphCheck = glyphStringToArray(quest.glyphCheck) ?? [[]];
 
   let [nonFinishedSubQuests, finishedSubQuests] = await getSubQuests(
@@ -287,6 +288,7 @@ export default async function QuestPage({
                 glyphCheck?.length || GLYPH_MAX_SIZE,
                 glyphCheck?.[0]?.length || GLYPH_MAX_SIZE,
               ]}
+              defaultGlyph={keepRandomPercentOfGlyph(glyphCheck, 30)}
             />
           )}
         </section>
