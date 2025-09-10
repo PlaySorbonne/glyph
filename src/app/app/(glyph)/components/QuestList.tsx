@@ -9,6 +9,25 @@ interface Quest {
   hidden?: boolean;
 }
 
+function LinkOrDiv({
+  children,
+  style,
+  isClickable,
+  questId
+}: {
+  children: React.ReactNode;
+  style: React.CSSProperties;
+  isClickable: boolean;
+  questId: number;
+}) {
+  if (isClickable) {
+    return (
+      <Link href={`/app/quest/${questId}`} style={style}>{children}</Link>
+    );
+  }
+  return <div style={style}>{children}</div>;
+}
+
 export default function QuestList({
   quests,
   unavailableQuests,
@@ -74,7 +93,9 @@ function QuestCard({
   if (!quest) return null;
 
   return (
-    <Link
+    <LinkOrDiv
+      isClickable={Boolean(quest.clickable && !isUnavailable)}
+      questId={quest.id}
       style={{
         width: "100%",
         display: "flex",
@@ -83,9 +104,7 @@ function QuestCard({
         margin: "0.5rem 0",
         padding: "1rem",
         border: "1px solid #000",
-        cursor: quest.clickable ? "pointer" : "default",
       }}
-      href={quest.clickable && !isUnavailable ? `/app/quest/${quest.id}` : ""}
     >
       <h1
         style={{
@@ -117,6 +136,6 @@ function QuestCard({
           ? "TERMINE"
           : ""}
       </p>
-    </Link>
+    </LinkOrDiv>
   );
 }
