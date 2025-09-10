@@ -118,7 +118,7 @@ function QuestCard({
           flex: "1",
         }}
       >
-        {isUnavailable
+        {!isUnavailable
           ? quest.title
           : Array.from(
               { length: 4 + Math.floor(Math.random() * 9) },
