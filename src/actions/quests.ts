@@ -220,7 +220,7 @@ export async function getFinishedOnMainHistory(userId: string) {
       userId: userId,
       quest: {
         secondary: false,
-      }
+      },
     },
     include: {
       quest: true,
@@ -349,7 +349,7 @@ export async function userValidatedQuest(user: User, quest: Quest) {
 export async function getSubQuests(
   questId: number,
   userId?: string
-): Promise<[Quest[], undefined | Quest[]]> {
+): Promise<[Quest[], Quest[], Quest[]]> {
   if (!userId) userId = undefined;
   return Promise.all([
     prisma.quest.findMany({
@@ -379,6 +379,25 @@ export async function getSubQuests(
             userId: userId,
           },
         },
+      },
+      orderBy: {
+        starts: "desc",
+      },
+    }),
+    prisma.quest.findMany({
+      where: {
+        parentId: questId,
+        secondary: true,
+        NOT: [
+          dateCheck(),
+          {
+            History: {
+              some: {
+                userId: userId,
+              },
+            },
+          },
+        ],
       },
       orderBy: {
         starts: "desc",

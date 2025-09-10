@@ -40,10 +40,9 @@ export default async function QuestPage({
   }
   let glyphCheck = glyphStringToArray(quest.glyphCheck) ?? [[]];
 
-  let [nonFinishedSubQuests, finishedSubQuests] = await getSubQuests(
-    quest.id,
-    user!.id
-  );
+  let [nonFinishedSubQuests, finishedSubQuests, unavailableSubQuests] =
+    await getSubQuests(quest.id, user!.id);
+  
 
   nonFinishedSubQuests = nonFinishedSubQuests
     .map((sq) => {
@@ -248,11 +247,14 @@ export default async function QuestPage({
         )}
 
         {((finishedSubQuests?.length ?? 0) > 0 ||
-          nonFinishedSubQuests?.length > 0) && (
+          (nonFinishedSubQuests?.length > 0) ||
+          (unavailableSubQuests?.length > 0)
+        ) && (
           <div id="sub-quests">
             <QuestList
               quests={nonFinishedSubQuests}
               finishedQuests={finishedSubQuests}
+              unavailableQuests={unavailableSubQuests}
               name="TÂCHES"
             />
           </div>

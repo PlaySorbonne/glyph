@@ -13,7 +13,7 @@ function LinkOrDiv({
   children,
   style,
   isClickable,
-  questId
+  questId,
 }: {
   children: React.ReactNode;
   style: React.CSSProperties;
@@ -22,7 +22,9 @@ function LinkOrDiv({
 }) {
   if (isClickable) {
     return (
-      <Link href={`/app/quest/${questId}`} style={style}>{children}</Link>
+      <Link href={`/app/quest/${questId}`} style={style}>
+        {children}
+      </Link>
     );
   }
   return <div style={style}>{children}</div>;
@@ -41,6 +43,7 @@ export default function QuestList({
 }) {
   if (
     (!quests || quests.length === 0) &&
+    (!finishedQuests || finishedQuests.length === 0) &&
     (!unavailableQuests || unavailableQuests.length === 0)
   )
     return null;
@@ -115,7 +118,12 @@ function QuestCard({
           flex: "1",
         }}
       >
-        {quest.title}
+        {isUnavailable
+          ? quest.title
+          : Array.from(
+              { length: 4 + Math.floor(Math.random() * 9) },
+              () => "█"
+            ).join("")}
       </h1>
       <p
         style={{
@@ -130,7 +138,7 @@ function QuestCard({
               month: "numeric",
               day: "numeric",
             })}`
-          : quest.clickable
+          : quest.clickable && !isUnavailable
           ? "PLUS DE DÉTAILS"
           : isFinished
           ? "TERMINE"
