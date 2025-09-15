@@ -10,7 +10,6 @@ import MainQuestSlider from "./MainQuestSlider";
 import icons from "@/assets/icons";
 import QuestList from "../components/QuestList";
 import { appUrl, keepKeysFromObjectArray } from "@/utils";
-import TutoNew from "./TutoNew";
 import TopFraternities from "../components/TopFraternities";
 import { getClassement } from "@/actions/fraternity";
 import Link from "next/link";
@@ -67,27 +66,6 @@ export default async function Home() {
         width: "100%",
       }}
     >
-      {/* {nbFinishedMainQuests === 0 && <TutoNew />} */}
-      {nbFinishedMainQuests > 0 && (
-        <div
-          style={{
-            textAlign: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            borderRadius: "0.5rem",
-            padding: "1rem",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            fontSize: "1.5rem",
-            fontWeight: "600",
-          }}
-        >
-          <p>
-            Retrouvez-nous à nos permanences devant la maison de vie étudiante
-            pour plus de quêtes !
-          </p>
-        </div>
-      )}
-
       {mainQuests && mainQuests.length > 0 && (
         <section
           id="main-quests-section"
