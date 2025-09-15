@@ -9,6 +9,9 @@
   font-family: "DCC-Ash";
   font-size: 2rem;
   font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .quests {
