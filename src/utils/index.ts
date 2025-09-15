@@ -17,7 +17,7 @@ export const HeroGlyphBool = glyphStringToArray(HeroGlyphString)!;
 // Cache for keepRandomPercentOfGlyph function
 const glyphCache = new Map<string, boolean[][]>();
 
-export function keepRandomPercentOfGlyph(glyph: boolean[][], percent = 30) {
+export function keepRandomPercentOfGlyph(glyph: boolean[][], percent = 50) {
   if (!glyph || glyph.length === 0 || glyph[0].length === 0) {
     return glyph;
   }

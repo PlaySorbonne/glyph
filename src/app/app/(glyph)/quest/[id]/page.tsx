@@ -290,7 +290,7 @@ export default async function QuestPage({
                 glyphCheck?.length || GLYPH_MAX_SIZE,
                 glyphCheck?.[0]?.length || GLYPH_MAX_SIZE,
               ]}
-              defaultGlyph={keepRandomPercentOfGlyph(glyphCheck, 30)}
+              defaultGlyph={keepRandomPercentOfGlyph(glyphCheck)}
             />
           )}
         </section>
