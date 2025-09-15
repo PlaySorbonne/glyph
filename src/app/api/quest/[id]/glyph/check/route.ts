@@ -117,7 +117,7 @@ export async function POST(
   if (isEqual) {
     try {
       await userValidatedQuest(user, quest);
-      revalidatePath(`/app/quest/${questId}`);
+      revalidatePath(`/app`);
     } catch (error: any) {
       return NextResponse.json(
         { error: error.message || "Failed to validate quest" },
