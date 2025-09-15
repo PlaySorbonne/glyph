@@ -90,7 +90,7 @@ export default async function Welcome() {
                 paddingLeft: "1rem",
               }}
             >
-              <WelcomeButton link="/welcome/2">Continuer</WelcomeButton>
+              <WelcomeButton link="/welcome/2">Commencer</WelcomeButton>
             </div>
           </div>
         </>
