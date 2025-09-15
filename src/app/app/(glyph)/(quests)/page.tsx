@@ -9,7 +9,7 @@ import { getUserFromSession } from "@/actions/auth";
 import MainQuestSlider from "./MainQuestSlider";
 import icons from "@/assets/icons";
 import QuestList from "../components/QuestList";
-import { keepKeysFromObjectArray } from "@/utils";
+import { appUrl, keepKeysFromObjectArray } from "@/utils";
 import TutoNew from "./TutoNew";
 import TopFraternities from "../components/TopFraternities";
 import { getClassement } from "@/actions/fraternity";
@@ -154,7 +154,7 @@ export default async function Home() {
             fontWeight: "600",
           }}
         >
-          <p>Cliquez sur la quête du héros pour commencer votre aventure !</p>
+          <Link href={appUrl("/quest/12")}>Cliquez sur la quête du héros pour commencer votre aventure !</Link>
         </div>
       )}
 
