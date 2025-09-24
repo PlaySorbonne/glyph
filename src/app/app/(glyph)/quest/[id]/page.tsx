@@ -14,6 +14,7 @@ import GlyphMatch from "./GlyphMatch";
 import PixelMatch from "@/app/app/components/PixelMatch";
 import QuestList from "../../components/QuestList";
 import { getHistoryByQuestId } from "@/actions/history";
+import Indice from "./Indice";
 
 export default async function QuestPage({
   params,
@@ -34,7 +35,6 @@ export default async function QuestPage({
 
   let history = await getHistoryByQuestId(questId, user!.id);
 
-  
   if (!quest) {
     return redirect(appUrl("/?error=Cette quête n'existe pas"));
   }
@@ -42,7 +42,6 @@ export default async function QuestPage({
 
   let [nonFinishedSubQuests, finishedSubQuests, unavailableSubQuests] =
     await getSubQuests(quest.id, user!.id);
-  
 
   nonFinishedSubQuests = nonFinishedSubQuests
     .map((sq) => {
@@ -96,12 +95,10 @@ export default async function QuestPage({
     };
   }
 
-  let indices =
-    quest.indice &&
-    quest.indice
-      .split("\n")
-      .filter((e) => e)
-      .map((e) => e.trim());
+  let indices = quest?.indice
+    ?.split("\n")
+    .map((e) => e.trim())
+    .filter((e) => e && e.length > 0 && e !== "");
 
   return (
     <div
@@ -246,10 +243,17 @@ export default async function QuestPage({
           </div>
         )}
 
+        {(indices?.length ?? 0) > 0 && (
+          <div style={{ marginTop: "1rem" }}>
+            {indices!.map((indice, idx) => (
+              <Indice key={idx} title={`INDICE ${idx + 1}`} indice={indice} />
+            ))}
+          </div>
+        )}
+
         {((finishedSubQuests?.length ?? 0) > 0 ||
-          (nonFinishedSubQuests?.length > 0) ||
-          (unavailableSubQuests?.length > 0)
-        ) && (
+          nonFinishedSubQuests?.length > 0 ||
+          unavailableSubQuests?.length > 0) && (
           <div id="sub-quests">
             <QuestList
               quests={nonFinishedSubQuests}
