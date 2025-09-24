@@ -243,7 +243,7 @@ export default async function QuestPage({
           </div>
         )}
 
-        {(indices?.length ?? 0) > 0 && (
+        {(indices?.length ?? 0) > 0 && !hasFinishedQuest && (
           <div style={{ marginTop: "1rem" }}>
             {indices!.map((indice, idx) => (
               <Indice key={idx} title={`INDICE ${idx + 1}`} indice={indice} />
